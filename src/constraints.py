@@ -560,18 +560,56 @@ class ConstraintEngine:
             for j in range(i + 1, n):
                 p1 = prep_placements[i]
                 p2 = prep_placements[j]
-                if not check_bbox_overlap(p1["bbox"], p2["bbox"]):
-                    gap = get_bbox_distance(p1["bbox"], p2["bbox"])
-                    if 0 < gap < val_001:
-                        aff = sorted([p1["placement_id"], p2["placement_id"]])
-                        raw_violations.append({
-                            "rule_id": "RB-GEO-001",
-                            "message": msg_001,
-                            "affected_placement_ids": aff,
-                            "measured": {"walkway_gap_mm": gap},
-                            "required": {"min_walkway_gap_mm": val_001},
-                            "repair_options": [],
-                        })
+
+                # Exclude paired desk + chair workstation relationship (governed by GEO-004 / GEO-008)
+                f1, f2 = p1["family"], p2["family"]
+                if (f1 == "desk" and f2 == "chair") or (f1 == "chair" and f2 == "desk"):
+                    desk_p = p1 if f1 == "desk" else p2
+                    chair_p = p2 if f1 == "desk" else p1
+
+                    dx1, dy1, dx2, dy2 = desk_p["bbox"]
+                    cx1, cy1, cx2, cy2 = chair_p["bbox"]
+
+                    # Check if chair is aligned horizontally with desk and located in rear/front zone
+                    x_over = max(0, min(dx2, cx2) - max(dx1, cx1))
+                    if x_over > 0:
+                        if (dy2 <= cy1 <= dy2 + 1500) or (cy2 <= dy1 <= cy2 + 1500):
+                            continue
+
+                x1a, y1a, x1b, y1b = p1["bbox"]
+                x2a, y2a, x2b, y2b = p2["bbox"]
+
+                # Calculate axis-parallel projection overlaps
+                x_overlap = max(0, min(x1b, x2b) - max(x1a, x2a))
+                y_overlap = max(0, min(y1b, y2b) - max(y1a, y2a))
+
+                gap = 0
+                is_walkway_violation = False
+
+                # Facing parallel channel in X (if Y overlaps > 0)
+                if y_overlap > 0 and x_overlap == 0:
+                    gap_x = max(x1a, x2a) - min(x1b, x2b)
+                    if 0 < gap_x < val_001:
+                        is_walkway_violation = True
+                        gap = gap_x
+
+                # Facing parallel channel in Y (if X overlaps > 0)
+                elif x_overlap > 0 and y_overlap == 0:
+                    gap_y = max(y1a, y2a) - min(y1b, y2b)
+                    if 0 < gap_y < val_001:
+                        is_walkway_violation = True
+                        gap = gap_y
+
+                if is_walkway_violation:
+                    aff = sorted([p1["placement_id"], p2["placement_id"]])
+                    raw_violations.append({
+                        "rule_id": "RB-GEO-001",
+                        "message": msg_001,
+                        "affected_placement_ids": aff,
+                        "measured": {"walkway_gap_mm": gap},
+                        "required": {"min_walkway_gap_mm": val_001},
+                        "repair_options": [],
+                    })
 
         # Sort violations deterministically by (rule_id, affected_placement_ids)
         sorted_raw = sorted(

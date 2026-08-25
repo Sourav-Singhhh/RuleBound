@@ -46,20 +46,48 @@ Control passes irreversibly from the generative layer to deterministic enforceme
 - **Model Decision Space**: The model reads plain-English briefs and room geometry to propose candidate SKU placements and initial 2D top-down coordinates.
 - **Irreversible Control Pass**: Once `ProposedLayout` enters arbitration, control passes **100% irreversibly** to deterministic python code (`arbitration.py` and `constraints.py`). No LLM, probabilistic model, network API, or timestamp call executes inside arbitration or pricing.
 
-### 2.4 Rule Precedence Policy Statement
-The released RuleBound challenge files (`rules.json` / `rules.yaml`) define individual constraints but do **not** specify official precedence or priority rankings among simultaneous violations. 
-- Rule precedence in arbitration is an **implementation-level deterministic tie-break policy**.
-- It is transparent, fully reproducible, and **never presented as an official LV8 rule**.
-- Deterministic candidate selection ranks candidates by:
-  $$\text{SortKey} = (\text{OpTypeRank}, \text{rule\_id}, \text{target\_placement\_id}, \text{CanonicalParams})$$
+### 2.4 Lexicographic Objective Model & Acceptance Policy
+Mandatory requirement feasibility is the primary lexicographic objective. Spatial optimization occurs only among capacity-feasible candidates.
+
+Arbitration uses a deterministic **Lexicographic Objective Model** for candidate evaluation, state transitions, and candidate selection:
+```python
+candidate_objective = (
+    capacity_shortfall,
+    spatial_violation_count,
+    distinct_placements_touched,
+    total_displacement,
+    operation_rank,
+    target_placement_id,
+    canonical_parameters
+)
+```
+where:
+- `capacity_shortfall = max(0, required_capacity - achieved_seating_capacity)`
+- `spatial_violation_count = len(spatial_violations)` (violations returned by `constraints.py`)
+- `distinct_placements_touched`: number of placements modified relative to initial proposal
+- `total_displacement`: total displacement in mm of modified placements relative to initial proposal
+- `operation_rank`: integer rank of repair operation (MOVE_WORKSTATION_POD=0, NUDGE=1, ROTATE=2, SUBSTITUTE_SKU=3, REMOVE_PLACEMENT=4)
+- `target_placement_id`: placement ID string (e.g. `"P001"`)
+- `canonical_parameters`: parameter string (e.g. `"POD_P001_P002_DX_100_DY_100"`)
+
+**Rationale for Lexicographic Ordering vs. Weighted Sums**:
+- Seating capacity (`room_spec.capacity`) is a mandatory requirement. Spatial violations represent layout defects.
+- Arbitrary weighted sums (such as `score = 10 * spatial + 5 * capacity`) risk allowing a large capacity violation (e.g. deleting a required chair) to trade off against several spatial improvements.
+- Lexicographic ordering establishes a strict requirement hierarchy without inventing subjective numerical weights.
+- This is an implementation acceptance policy derived from the distinction between mandatory requirements and spatial optimization (not an official LV8 priority rule).
+
+**Atomic `MOVE_WORKSTATION_POD` Operator**:
+- Single-placement repairs can become trapped when a workstation is governed by coupled desk/chair geometry. `MOVE_WORKSTATION_POD` provides a bounded atomic repair that preserves the mandatory workstation relationship while remaining deterministic and fully revalidated.
+- Translates a paired desk and task-chair together by identical $(\Delta x, \Delta y)$ on the $100\text{ mm}$ grid.
+- Note: `MOVE_WORKSTATION_POD` is an implementation-level arbitration operator, not an official LV8 rule.
 
 ### 2.5 Three Evaluation Levels & Capacity Model
 Every repaired candidate layout must be evaluated against three distinct criteria:
 1. **Spatial Validity**: `constraints.py` returns 0 violations (`status: "valid"`).
 2. **Seating Capacity Feasibility**: Seating count $S = \text{count}(\text{family == 'chair'}) \ge \text{room\_spec.capacity}$. Non-seating equipment (storage, tables, accessories) is not counted as seating.
-3. **Final Acceptance**: Both Spatial Validity AND Seating Capacity Feasibility are satisfied.
+3. **Final Acceptance**: Both Spatial Validity AND Seating Capacity Feasibility are satisfied (`capacity_shortfall == 0` AND `spatial_violation_count == 0`).
 
-If a repair operation (`REMOVE_PLACEMENT`) resolves all spatial violations but causes seating count $S < \text{room\_spec.capacity}$, it cannot be accepted as valid and is escalated to trade-off accounting.
+Removing a required task chair creates positive `capacity_shortfall`, making the operation lexicographically worse than preserving the chair. Non-seating furniture removals remain eligible if they improve spatial violations while preserving capacity feasibility.
 
 ### 2.6 Bounded Local Repair Semantics & Termination
 - **Architecture B (Bounded Local Repair)**: Arbitration follows a single deterministic repair trajectory. Candidates are generated from the active violation set.

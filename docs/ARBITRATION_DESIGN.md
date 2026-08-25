@@ -213,16 +213,56 @@ Therefore:
 - It is transparent, fully reproducible, and **never presented as an official LV8 rule**.
 
 ### 6.2 Deterministic Ranking Key
-To guarantee **100% byte-identical repeatability**, all generated repair candidates in an iteration are sorted by a composite deterministic key:
+### 6.1 Deterministic Lexicographic Objective Model
 
-$$\text{SortKey} = (\text{OpTypeRank}, \text{rule\_id}, \text{target\_placement\_id}, \text{CanonicalParams})$$
+Arbitration uses a deterministic **Lexicographic Objective Model** for candidate evaluation, state transitions, and candidate ranking.
 
-- **OpTypeRank**: `NUDGE` (1) < `ROTATE` (2) < `SUBSTITUTE_SKU` (3) < `REMOVE_PLACEMENT` (4).
-- **rule_id**: Alphabetical string sort (e.g. `RB-GEO-002` < `RB-GEO-003` < `RB-GEO-005` < `RB-GEO-007`).
-- **target_placement_id**: Alphabetical string sort (e.g. `P01` < `P02`).
-- **CanonicalParams**: Alphabetical string representation of parameters (e.g. `"DX_+100_DY_0"`).
+Mandatory requirement feasibility is the primary lexicographic objective. Spatial optimization occurs only among capacity-feasible candidates.
 
-The candidate with the **smallest `SortKey`** is selected for execution.
+The candidate objective is defined by the tuple:
+```python
+candidate_objective = (
+    capacity_shortfall,
+    spatial_violation_count,
+    distinct_placements_touched,
+    total_displacement,
+    operation_rank,
+    target_placement_id,
+    canonical_parameters
+)
+```
+
+where:
+- `capacity_shortfall = max(0, required_capacity - achieved_seating_capacity)`
+- `spatial_violation_count = len(spatial_violations)` (violations returned by `constraints.py`)
+- `distinct_placements_touched`: number of placements modified relative to initial proposal
+- `total_displacement`: total displacement in mm of modified placements relative to initial proposal
+- `operation_rank`: integer rank of repair operation (MOVE_WORKSTATION_POD=0, NUDGE=1, ROTATE=2, SUBSTITUTE_SKU=3, REMOVE_PLACEMENT=4)
+- `target_placement_id`: placement ID string (e.g. `"P001"`)
+- `canonical_parameters`: parameter string (e.g. `"POD_P001_P002_DX_100_DY_100"`)
+
+### 6.2 Rationale for Lexicographic Ordering vs. Weighted Sums
+- **Mandatory Requirements vs. Optimization**: Seating capacity is a mandatory brief requirement (`room_spec.capacity`). Spatial violations represent layout defects.
+- **No Arbitrary Trade-offs**: Arbitrary weighted sums (such as `score = 10 * spatial + 5 * capacity`) risk allowing a large capacity violation (e.g. deleting a required chair) to trade off against several spatial improvements.
+- **No Invented Weights**: Lexicographic ordering establishes a strict requirement hierarchy (`capacity_shortfall` $\to$ `spatial_violation_count` $\to$ tie-breakers) without inventing subjective numerical weights.
+- **Implementation Acceptance Policy**: This is an implementation acceptance policy derived from the distinction between mandatory requirements and spatial optimization (not an official LV8 priority rule).
+
+### 6.2.1 Atomic `MOVE_WORKSTATION_POD` Operator
+Single-placement repairs can become trapped when a workstation is governed by coupled desk/chair geometry. `MOVE_WORKSTATION_POD` provides a bounded atomic repair that preserves the mandatory workstation relationship while remaining deterministic and fully revalidated.
+
+- **Operator Details**:
+  - Translates a paired desk and task-chair together by identical $(\Delta x, \Delta y)$ on the $100\text{ mm}$ grid.
+  - Preserves exact relative geometry, rotation, SKUs, finishes, and seating capacity.
+  - Formatted canonically as `POD_P001_P002_DX_+100_DY_+0`.
+  - Assigned implementation-level operation rank `0` to prioritize atomic pod moves before single-placement breakdown.
+  - Note: `MOVE_WORKSTATION_POD` is an implementation-level arbitration operator, not an official LV8 rule.
+
+### 6.3 Strict Improvement Gate
+A candidate operation is eligible ONLY if:
+$$\text{candidate\_objective} < \text{current\_objective}$$
+using standard Python lexicographic tuple comparison.
+
+Candidates that produce $\text{candidate\_objective} \ge \text{current\_objective}$ fail strict improvement and are recorded in the session-local tabu memory set (`tabu_candidates`), preventing non-improving repetitions.
 
 ---
 

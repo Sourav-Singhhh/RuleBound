@@ -353,6 +353,88 @@ class TestConstraintEngine(unittest.TestCase):
 
         self.assertEqual(layout_json_before, layout_json_after)
 
+    # --- Focused RB-GEO-001 Parallel Projection Clearance Tests ---
+    def test_geo_001_parallel_corridor_under_900_triggers_violation(self) -> None:
+        # Two desks placed in parallel facing Y channel at y=1000 and y=2200 (desk depth 600mm -> gap 600mm < 900mm)
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "P01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0}, # size 1200x600 -> y ends at 1600
+                {"placement_id": "P02", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 2200, "rotation_deg": 0}, # y starts at 2200 -> gap 600mm
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_parallel_corridor_over_900_no_violation(self) -> None:
+        # Two desks placed in parallel facing Y channel at y=1000 and y=3000 (gap 1000mm >= 900mm)
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "P01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0}, # y ends at 2000
+                {"placement_id": "P02", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 3000, "rotation_deg": 0}, # y starts at 3000 -> gap 1000mm
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_diagonal_corner_neighbor_no_false_violation(self) -> None:
+        # Desk at (1000, 1000) ending at (2200, 2000). Second desk at (2500, 2300) ending at (3700, 3300).
+        # Diagonal bounding-box distance is ~424mm (< 900mm), but projections along X and Y do NOT overlap!
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "P01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+                {"placement_id": "P02", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 2500, "y_mm": 2300, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_workstation_desk_chair_relationship(self) -> None:
+        # Desk at (1000, 1000) and paired task chair at (1300, 2000) behind desk.
+        # Governed by RB-GEO-004/RB-GEO-008, must NOT trigger RB-GEO-001 walkway violation.
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "P01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+                {"placement_id": "P02", "sku": "NW-CHA-001", "finish_id": "F02", "x_mm": 1300, "y_mm": 2000, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_touching_furniture_preserved_semantics(self) -> None:
+        # Two desks placed side-by-side touching with 0mm gap (x=1000 and x=2200).
+        # Gap == 0mm does NOT trigger RB-GEO-001 walkway violation.
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "P01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+                {"placement_id": "P02", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 2200, "y_mm": 1000, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_unrelated_separate_zones_no_false_violation(self) -> None:
+        # Furniture in separate room zones (storage at north-west, desk at south-east, gap > 900mm)
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "P01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 4000, "y_mm": 4000, "rotation_deg": 0},
+                {"placement_id": "P02", "sku": "NW-STO-001", "finish_id": "F03", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
 
 if __name__ == "__main__":
     unittest.main()

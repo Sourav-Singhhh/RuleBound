@@ -171,5 +171,116 @@ class TestGeneratorEngine(unittest.TestCase):
             self.assertEqual(set(p.keys()), {"placement_id", "sku", "finish_id", "x_mm", "y_mm", "rotation_deg"})
 
 
+    # ── Tests for generalized chair placement fixes (A–F) ──────────────────────
+
+    def test_15_fallback_chair_egress_avoidance(self) -> None:
+        """A. Fallback/unattached chairs reject or rank behind egress corridor candidates."""
+        for r_id in ["ROOM-01", "ROOM-02", "ROOM-03", "ROOM-04", "ROOM-05"]:
+            room_spec = self.rooms[r_id]
+            proposal = self.generator.generate_proposal(room_spec, self.briefs[r_id])
+            chairs = [
+                p for p in proposal["placements"]
+                if self.generator.catalog_by_sku[p["sku"]]["family"] == "chair"
+            ]
+            c_dims = self.generator.catalog_by_sku[chairs[0]["sku"]]["dimensions_mm"]
+            cw, cd = c_dims["width"], c_dims["depth"]
+
+            egress_chairs = [
+                c for c in chairs
+                if self.generator.intersects_egress_corridor(
+                    (c["x_mm"], c["y_mm"], c["x_mm"] + cw, c["y_mm"] + cd),
+                    room_spec
+                )
+            ]
+            # Fallback/unattached chairs must avoid egress corridor when alternative space exists
+            self.assertEqual(
+                len(egress_chairs), 0,
+                f"{r_id}: found {len(egress_chairs)} chairs inside egress corridor: {egress_chairs}"
+            )
+
+    def test_16_standalone_chair_walkway_spacing(self) -> None:
+        """B. Standalone chair candidates prefer positions that avoid sub-900mm walkway gaps."""
+        # Create a scenario where position A (300, 300) creates a 300mm gap with existing chair (300, 1100),
+        # but position B (300, 2500) has >900mm clearance.
+        boundary = [[0, 0], [5000, 0], [5000, 5000], [0, 5000]]
+        existing_chairs = [(300, 1100, 820, 1620)]  # Chair at y=1100..1620
+        occupied = [(300, 1100, 820, 1620)]
+
+        chosen = self.generator._find_valid_placement(
+            item_w=520, item_d=520,
+            boundary=boundary,
+            min_x=0, max_x=5000,
+            min_y=0, max_y=5000,
+            occupied_boxes=occupied,
+            chair_boxes=existing_chairs
+        )
+        self.assertIsNotNone(chosen)
+        # Verify chosen Y coordinate leaves >= 900mm gap to existing chair at y=1100..1620
+        c_x, c_y = chosen
+        gap_y = max(c_y, 1100) - min(c_y + 520, 1620)
+        self.assertGreaterEqual(gap_y, 900)
+
+    def test_17_arbitrary_room_geometry_support(self) -> None:
+        """C. Egress and walkway spacing logic works on synthetic arbitrary room geometry."""
+        synthetic_room = {
+            "room_id": "SYNTH-01",
+            "capacity": 6,
+            "boundary_mm": [[0, 0], [7000, 0], [7000, 5000], [0, 5000]],
+            "doors": [{"door_id": "D1", "wall": "south", "offset_mm": 1000, "width_mm": 900}],
+            "egress": {"from_door_id": "D1", "to_point_mm": [3500, 2500], "min_width_mm": 1100}
+        }
+        synthetic_brief = "Standard open workspace for 6 people."
+        proposal = self.generator.generate_proposal(synthetic_room, synthetic_brief)
+        self.assertEqual(proposal["room_id"], "SYNTH-01")
+        chairs = [
+            p for p in proposal["placements"]
+            if self.generator.catalog_by_sku[p["sku"]]["family"] == "chair"
+        ]
+        self.assertEqual(len(chairs), 6)
+
+    def test_18_no_hardcoded_room_ids_in_generator(self) -> None:
+        """D. Verify generator engine source code contains zero room-ID string literals."""
+        import inspect
+        from src import generator
+        source = inspect.getsource(generator)
+        for r_name in ["ROOM-01", "ROOM-02", "ROOM-03", "ROOM-04", "ROOM-05"]:
+            self.assertNotIn(
+                r_name, source,
+                f"Hardcoded room ID '{r_name}' found in src/generator.py!"
+            )
+
+    def test_19_all_rooms_preserve_exact_chair_counts(self) -> None:
+        """E. All five released rooms preserve exact required seating counts."""
+        expected_counts = {
+            "ROOM-01": 12,
+            "ROOM-02": 16,
+            "ROOM-03": 10,
+            "ROOM-04": 14,
+            "ROOM-05": 18,
+        }
+        for r_id, exp in expected_counts.items():
+            proposal = self.generator.generate_proposal(self.rooms[r_id], self.briefs[r_id])
+            chairs = [
+                p for p in proposal["placements"]
+                if self.generator.catalog_by_sku[p["sku"]]["family"] == "chair"
+            ]
+            self.assertEqual(
+                len(chairs), exp,
+                f"{r_id}: expected {exp} chairs, got {len(chairs)}"
+            )
+
+    def test_20_deterministic_repeatability(self) -> None:
+        """F. Generator output is byte-identical across multiple invocations for all 5 rooms."""
+        for r_id in ["ROOM-01", "ROOM-02", "ROOM-03", "ROOM-04", "ROOM-05"]:
+            p1 = self.generator.generate_proposal(self.rooms[r_id], self.briefs[r_id])
+            p2 = self.generator.generate_proposal(self.rooms[r_id], self.briefs[r_id])
+            self.assertEqual(
+                json.dumps(p1, sort_keys=True),
+                json.dumps(p2, sort_keys=True),
+                f"{r_id}: proposals were not byte-identical across runs"
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
+
