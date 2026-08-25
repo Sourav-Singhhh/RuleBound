@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rulebound.lv8.tech/schemas/room_spec.schema.json",
+  "type": "object",
+  "required": [
+    "room_id",
+    "name",
+    "boundary_mm",
+    "doors",
+    "egress",
+    "capacity"
+  ],
+  "properties": {
+    "room_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "boundary_mm": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "items": false
+      }
+    },
+    "doors": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "windows": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "egress": {
+      "type": "object"
+    },
+    "capacity": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}

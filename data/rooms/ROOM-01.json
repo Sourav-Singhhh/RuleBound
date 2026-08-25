@@ -1,0 +1,47 @@
+{
+  "room_id": "ROOM-01",
+  "name": "Harbour Design Studio",
+  "boundary_mm": [
+    [
+      0,
+      0
+    ],
+    [
+      7200,
+      0
+    ],
+    [
+      7200,
+      5400
+    ],
+    [
+      0,
+      5400
+    ]
+  ],
+  "doors": [
+    {
+      "door_id": "D1",
+      "wall": "south",
+      "offset_mm": 500,
+      "width_mm": 1000,
+      "swing": "inward_left"
+    }
+  ],
+  "windows": [
+    {
+      "wall": "north",
+      "offset_mm": 1200,
+      "width_mm": 3600
+    }
+  ],
+  "egress": {
+    "from_door_id": "D1",
+    "to_point_mm": [
+      6600,
+      4800
+    ],
+    "min_width_mm": 1100
+  },
+  "capacity": 12
+}

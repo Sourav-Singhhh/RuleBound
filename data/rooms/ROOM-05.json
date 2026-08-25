@@ -1,0 +1,54 @@
+{
+  "room_id": "ROOM-05",
+  "name": "Summit Project Hub",
+  "boundary_mm": [
+    [
+      0,
+      0
+    ],
+    [
+      8400,
+      0
+    ],
+    [
+      8400,
+      7600
+    ],
+    [
+      0,
+      7600
+    ]
+  ],
+  "doors": [
+    {
+      "door_id": "D1",
+      "wall": "west",
+      "offset_mm": 900,
+      "width_mm": 1200,
+      "swing": "inward_right"
+    },
+    {
+      "door_id": "D2",
+      "wall": "east",
+      "offset_mm": 5600,
+      "width_mm": 1000,
+      "swing": "outward_left"
+    }
+  ],
+  "windows": [
+    {
+      "wall": "north",
+      "offset_mm": 1000,
+      "width_mm": 5200
+    }
+  ],
+  "egress": {
+    "from_door_id": "D1",
+    "to_point_mm": [
+      7900,
+      6200
+    ],
+    "min_width_mm": 1100
+  },
+  "capacity": 18
+}

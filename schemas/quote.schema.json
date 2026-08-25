@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "quote_id",
+    "room_id",
+    "currency",
+    "lines",
+    "summary",
+    "status"
+  ],
+  "properties": {
+    "quote_id": {
+      "type": "string"
+    },
+    "room_id": {
+      "type": "string"
+    },
+    "currency": {
+      "const": "INR"
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "grand_total_inr"
+      ]
+    },
+    "summary_trace": {
+      "type": "array"
+    },
+    "status": {
+      "enum": [
+        "priced",
+        "blocked"
+      ]
+    },
+    "blocking_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

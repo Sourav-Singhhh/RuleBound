@@ -1,0 +1,47 @@
+{
+  "room_id": "ROOM-04",
+  "name": "Orchard Focus Library",
+  "boundary_mm": [
+    [
+      0,
+      0
+    ],
+    [
+      10200,
+      0
+    ],
+    [
+      10200,
+      4200
+    ],
+    [
+      0,
+      4200
+    ]
+  ],
+  "doors": [
+    {
+      "door_id": "D1",
+      "wall": "south",
+      "offset_mm": 800,
+      "width_mm": 1000,
+      "swing": "outward_right"
+    }
+  ],
+  "windows": [
+    {
+      "wall": "north",
+      "offset_mm": 1200,
+      "width_mm": 7000
+    }
+  ],
+  "egress": {
+    "from_door_id": "D1",
+    "to_point_mm": [
+      9500,
+      3400
+    ],
+    "min_width_mm": 1100
+  },
+  "capacity": 14
+}

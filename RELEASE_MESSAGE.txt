@@ -1,0 +1,7 @@
+RuleBound Round 1 is now live.
+
+The complete official release pack is attached. It contains the sealed problem statement, 120-SKU synthetic catalog, 18 finishes, 14-rule pack, five room briefs, six historical jobs, two worked reference quotes, JSON Schemas, Python and TypeScript starter loaders, runner stubs, output validator and determinism checker.
+
+Start with README.md and PROBLEM.md. Run `python3 tools/verify_pack.py` before development.
+
+Deadline: 27 August 2026, 10:00 AM IST. Individual submissions only. All material clarifications will be posted in the common participant channel.

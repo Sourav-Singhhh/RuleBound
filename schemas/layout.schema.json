@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "room_id",
+    "placements",
+    "violations",
+    "status"
+  ],
+  "properties": {
+    "room_id": {
+      "type": "string"
+    },
+    "placements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "placement_id",
+          "sku",
+          "finish_id",
+          "x_mm",
+          "y_mm",
+          "rotation_deg"
+        ]
+      }
+    },
+    "violations": {
+      "type": "array",
+      "items": {
+        "$ref": "violation.schema.json"
+      }
+    },
+    "status": {
+      "enum": [
+        "valid",
+        "invalid",
+        "unsatisfiable"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

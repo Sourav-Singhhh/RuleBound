@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "sku",
+    "family",
+    "dimensions_mm",
+    "list_price_inr",
+    "labour_minutes",
+    "compatible_finish_ids"
+  ],
+  "properties": {
+    "sku": {
+      "type": "string"
+    },
+    "family": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "dimensions_mm": {
+      "type": "object"
+    },
+    "list_price_inr": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "labour_minutes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "lead_time_days": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "compatible_finish_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

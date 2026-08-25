@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "violation_id",
+    "rule_id",
+    "message",
+    "affected_placement_ids",
+    "repair_options"
+  ],
+  "properties": {
+    "violation_id": {
+      "type": "string"
+    },
+    "rule_id": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "affected_placement_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "measured": {
+      "type": "object"
+    },
+    "required": {
+      "type": "object"
+    },
+    "repair_options": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": false
+}

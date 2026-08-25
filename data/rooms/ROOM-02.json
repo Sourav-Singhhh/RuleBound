@@ -1,0 +1,47 @@
+{
+  "room_id": "ROOM-02",
+  "name": "Cedar Client Workshop",
+  "boundary_mm": [
+    [
+      0,
+      0
+    ],
+    [
+      9000,
+      0
+    ],
+    [
+      9000,
+      6200
+    ],
+    [
+      0,
+      6200
+    ]
+  ],
+  "doors": [
+    {
+      "door_id": "D1",
+      "wall": "west",
+      "offset_mm": 700,
+      "width_mm": 1100,
+      "swing": "inward_right"
+    }
+  ],
+  "windows": [
+    {
+      "wall": "east",
+      "offset_mm": 900,
+      "width_mm": 4200
+    }
+  ],
+  "egress": {
+    "from_door_id": "D1",
+    "to_point_mm": [
+      8200,
+      5400
+    ],
+    "min_width_mm": 1100
+  },
+  "capacity": 16
+}

@@ -1,0 +1,55 @@
+{
+  "room_id": "ROOM-03",
+  "name": "Nimbus Hybrid Team Room",
+  "boundary_mm": [
+    [
+      0,
+      0
+    ],
+    [
+      6600,
+      0
+    ],
+    [
+      6600,
+      4800
+    ],
+    [
+      4200,
+      4800
+    ],
+    [
+      4200,
+      6200
+    ],
+    [
+      0,
+      6200
+    ]
+  ],
+  "doors": [
+    {
+      "door_id": "D1",
+      "wall": "south",
+      "offset_mm": 2600,
+      "width_mm": 900,
+      "swing": "inward_left"
+    }
+  ],
+  "windows": [
+    {
+      "wall": "north",
+      "offset_mm": 400,
+      "width_mm": 2400
+    }
+  ],
+  "egress": {
+    "from_door_id": "D1",
+    "to_point_mm": [
+      500,
+      5500
+    ],
+    "min_width_mm": 1100
+  },
+  "capacity": 10
+}

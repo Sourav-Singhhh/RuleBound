@@ -1,0 +1,143 @@
+{
+  "version": "1.0.0",
+  "units": {
+    "distance": "millimetre",
+    "currency": "INR",
+    "percentage": "basis_points"
+  },
+  "rules": [
+    {
+      "rule_id": "RB-GEO-001",
+      "kind": "min_clearance",
+      "target": "walkway",
+      "value_mm": 900,
+      "severity": "error",
+      "message": "Primary walkways require 900 mm clear width."
+    },
+    {
+      "rule_id": "RB-GEO-002",
+      "kind": "min_clearance",
+      "target": "egress",
+      "value_mm": 1100,
+      "severity": "error",
+      "message": "The marked egress path requires 1100 mm clear width."
+    },
+    {
+      "rule_id": "RB-GEO-003",
+      "kind": "door_swing_clearance",
+      "value_mm": 850,
+      "severity": "error",
+      "message": "No furniture may enter the door-swing clearance zone."
+    },
+    {
+      "rule_id": "RB-GEO-004",
+      "kind": "family_rear_clearance",
+      "family": "desk",
+      "value_mm": 900,
+      "severity": "error",
+      "message": "Occupied desks require 900 mm rear clearance."
+    },
+    {
+      "rule_id": "RB-GEO-005",
+      "kind": "min_wall_offset",
+      "value_mm": 100,
+      "severity": "error",
+      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted."
+    },
+    {
+      "rule_id": "RB-GEO-006",
+      "kind": "no_overlap",
+      "severity": "error",
+      "message": "Furniture footprints may not overlap."
+    },
+    {
+      "rule_id": "RB-GEO-007",
+      "kind": "inside_room_boundary",
+      "severity": "error",
+      "message": "Every placement footprint must remain inside the room polygon."
+    },
+    {
+      "rule_id": "RB-GEO-008",
+      "kind": "family_rear_clearance",
+      "family": "chair",
+      "value_mm": 750,
+      "severity": "error",
+      "message": "Task chairs require a 750 mm pull-out zone."
+    },
+    {
+      "rule_id": "RB-PRC-009",
+      "kind": "quantity_discount",
+      "tiers": [
+        {
+          "min_qty": 5,
+          "discount_bps": 300
+        },
+        {
+          "min_qty": 10,
+          "discount_bps": 700
+        },
+        {
+          "min_qty": 20,
+          "discount_bps": 1000
+        }
+      ],
+      "severity": "pricing"
+    },
+    {
+      "rule_id": "RB-PRC-010",
+      "kind": "finish_uplift",
+      "source": "finishes.json:uplift_bps",
+      "severity": "pricing"
+    },
+    {
+      "rule_id": "RB-PRC-011",
+      "kind": "labour_band",
+      "tiers": [
+        {
+          "max_minutes": 240,
+          "rate_inr_per_hour": 900
+        },
+        {
+          "max_minutes": 480,
+          "rate_inr_per_hour": 800
+        },
+        {
+          "max_minutes": null,
+          "rate_inr_per_hour": 750
+        }
+      ],
+      "severity": "pricing"
+    },
+    {
+      "rule_id": "RB-PRC-012",
+      "kind": "freight_band",
+      "tiers": [
+        {
+          "max_goods_inr": 100000,
+          "flat_inr": 5000
+        },
+        {
+          "max_goods_inr": 250000,
+          "flat_inr": 9000
+        },
+        {
+          "max_goods_inr": null,
+          "percent_bps": 400
+        }
+      ],
+      "severity": "pricing"
+    },
+    {
+      "rule_id": "RB-PRC-013",
+      "kind": "block_unpriced_line",
+      "severity": "error",
+      "message": "A quote containing any unpriced line must not be saved."
+    },
+    {
+      "rule_id": "RB-PRC-014",
+      "kind": "trace_required",
+      "severity": "error",
+      "message": "Every price component must cite its rule_id and source inputs."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "version",
+    "units",
+    "rules"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "units": {
+      "type": "object"
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 14,
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "kind",
+          "severity"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,3146 @@
+[
+  {
+    "sku": "NW-DES-001",
+    "family": "desk",
+    "name": "Northwind Desk 01",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 600,
+      "height": 740
+    },
+    "list_price_inr": 18500,
+    "labour_minutes": 24,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-002",
+    "family": "desk",
+    "name": "Northwind Desk 02",
+    "dimensions_mm": {
+      "width": 1400,
+      "depth": 600,
+      "height": 760
+    },
+    "list_price_inr": 19160,
+    "labour_minutes": 27,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-003",
+    "family": "desk",
+    "name": "Northwind Desk 03",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 600,
+      "height": 780
+    },
+    "list_price_inr": 19820,
+    "labour_minutes": 30,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-004",
+    "family": "desk",
+    "name": "Northwind Desk 04",
+    "dimensions_mm": {
+      "width": 1800,
+      "depth": 600,
+      "height": 740
+    },
+    "list_price_inr": 20480,
+    "labour_minutes": 33,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-005",
+    "family": "desk",
+    "name": "Northwind Desk 05",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 700,
+      "height": 760
+    },
+    "list_price_inr": 21140,
+    "labour_minutes": 24,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-006",
+    "family": "desk",
+    "name": "Northwind Desk 06",
+    "dimensions_mm": {
+      "width": 1400,
+      "depth": 700,
+      "height": 780
+    },
+    "list_price_inr": 21800,
+    "labour_minutes": 27,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-007",
+    "family": "desk",
+    "name": "Northwind Desk 07",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 700,
+      "height": 740
+    },
+    "list_price_inr": 22460,
+    "labour_minutes": 30,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-008",
+    "family": "desk",
+    "name": "Northwind Desk 08",
+    "dimensions_mm": {
+      "width": 1800,
+      "depth": 700,
+      "height": 760
+    },
+    "list_price_inr": 23120,
+    "labour_minutes": 33,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-009",
+    "family": "desk",
+    "name": "Northwind Desk 09",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 750,
+      "height": 780
+    },
+    "list_price_inr": 23780,
+    "labour_minutes": 24,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-010",
+    "family": "desk",
+    "name": "Northwind Desk 10",
+    "dimensions_mm": {
+      "width": 1400,
+      "depth": 750,
+      "height": 740
+    },
+    "list_price_inr": 24440,
+    "labour_minutes": 27,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-011",
+    "family": "desk",
+    "name": "Northwind Desk 11",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 750,
+      "height": 760
+    },
+    "list_price_inr": 25100,
+    "labour_minutes": 30,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-012",
+    "family": "desk",
+    "name": "Northwind Desk 12",
+    "dimensions_mm": {
+      "width": 1800,
+      "depth": 750,
+      "height": 780
+    },
+    "list_price_inr": 25760,
+    "labour_minutes": 33,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-013",
+    "family": "desk",
+    "name": "Northwind Desk 13",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 600,
+      "height": 740
+    },
+    "list_price_inr": 26420,
+    "labour_minutes": 24,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-014",
+    "family": "desk",
+    "name": "Northwind Desk 14",
+    "dimensions_mm": {
+      "width": 1400,
+      "depth": 600,
+      "height": 760
+    },
+    "list_price_inr": 27080,
+    "labour_minutes": 27,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-015",
+    "family": "desk",
+    "name": "Northwind Desk 15",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 600,
+      "height": 780
+    },
+    "list_price_inr": 27740,
+    "labour_minutes": 30,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-016",
+    "family": "desk",
+    "name": "Northwind Desk 16",
+    "dimensions_mm": {
+      "width": 1800,
+      "depth": 600,
+      "height": 740
+    },
+    "list_price_inr": 28400,
+    "labour_minutes": 33,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-017",
+    "family": "desk",
+    "name": "Northwind Desk 17",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 700,
+      "height": 760
+    },
+    "list_price_inr": 29060,
+    "labour_minutes": 24,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-018",
+    "family": "desk",
+    "name": "Northwind Desk 18",
+    "dimensions_mm": {
+      "width": 1400,
+      "depth": 700,
+      "height": 780
+    },
+    "list_price_inr": 29720,
+    "labour_minutes": 27,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-019",
+    "family": "desk",
+    "name": "Northwind Desk 19",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 700,
+      "height": 740
+    },
+    "list_price_inr": 30380,
+    "labour_minutes": 30,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-020",
+    "family": "desk",
+    "name": "Northwind Desk 20",
+    "dimensions_mm": {
+      "width": 1800,
+      "depth": 700,
+      "height": 760
+    },
+    "list_price_inr": 31040,
+    "labour_minutes": 33,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-021",
+    "family": "desk",
+    "name": "Northwind Desk 21",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 750,
+      "height": 780
+    },
+    "list_price_inr": 31700,
+    "labour_minutes": 24,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-022",
+    "family": "desk",
+    "name": "Northwind Desk 22",
+    "dimensions_mm": {
+      "width": 1400,
+      "depth": 750,
+      "height": 740
+    },
+    "list_price_inr": 32360,
+    "labour_minutes": 27,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-023",
+    "family": "desk",
+    "name": "Northwind Desk 23",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 750,
+      "height": 760
+    },
+    "list_price_inr": 33020,
+    "labour_minutes": 30,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-DES-024",
+    "family": "desk",
+    "name": "Northwind Desk 24",
+    "dimensions_mm": {
+      "width": 1800,
+      "depth": 750,
+      "height": 780
+    },
+    "list_price_inr": 33680,
+    "labour_minutes": 33,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-CHA-001",
+    "family": "chair",
+    "name": "Northwind Chair 01",
+    "dimensions_mm": {
+      "width": 520,
+      "depth": 520,
+      "height": 980
+    },
+    "list_price_inr": 9200,
+    "labour_minutes": 12,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-002",
+    "family": "chair",
+    "name": "Northwind Chair 02",
+    "dimensions_mm": {
+      "width": 560,
+      "depth": 520,
+      "height": 1000
+    },
+    "list_price_inr": 9945,
+    "labour_minutes": 15,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-003",
+    "family": "chair",
+    "name": "Northwind Chair 03",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 520,
+      "height": 1020
+    },
+    "list_price_inr": 10690,
+    "labour_minutes": 18,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-004",
+    "family": "chair",
+    "name": "Northwind Chair 04",
+    "dimensions_mm": {
+      "width": 640,
+      "depth": 520,
+      "height": 980
+    },
+    "list_price_inr": 11435,
+    "labour_minutes": 21,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-005",
+    "family": "chair",
+    "name": "Northwind Chair 05",
+    "dimensions_mm": {
+      "width": 520,
+      "depth": 560,
+      "height": 1000
+    },
+    "list_price_inr": 12180,
+    "labour_minutes": 12,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-006",
+    "family": "chair",
+    "name": "Northwind Chair 06",
+    "dimensions_mm": {
+      "width": 560,
+      "depth": 560,
+      "height": 1020
+    },
+    "list_price_inr": 12925,
+    "labour_minutes": 15,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-007",
+    "family": "chair",
+    "name": "Northwind Chair 07",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 560,
+      "height": 980
+    },
+    "list_price_inr": 13670,
+    "labour_minutes": 18,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-008",
+    "family": "chair",
+    "name": "Northwind Chair 08",
+    "dimensions_mm": {
+      "width": 640,
+      "depth": 560,
+      "height": 1000
+    },
+    "list_price_inr": 14415,
+    "labour_minutes": 21,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-009",
+    "family": "chair",
+    "name": "Northwind Chair 09",
+    "dimensions_mm": {
+      "width": 520,
+      "depth": 600,
+      "height": 1020
+    },
+    "list_price_inr": 15160,
+    "labour_minutes": 12,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-010",
+    "family": "chair",
+    "name": "Northwind Chair 10",
+    "dimensions_mm": {
+      "width": 560,
+      "depth": 600,
+      "height": 980
+    },
+    "list_price_inr": 15905,
+    "labour_minutes": 15,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-011",
+    "family": "chair",
+    "name": "Northwind Chair 11",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 600,
+      "height": 1000
+    },
+    "list_price_inr": 16650,
+    "labour_minutes": 18,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-012",
+    "family": "chair",
+    "name": "Northwind Chair 12",
+    "dimensions_mm": {
+      "width": 640,
+      "depth": 600,
+      "height": 1020
+    },
+    "list_price_inr": 17395,
+    "labour_minutes": 21,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-013",
+    "family": "chair",
+    "name": "Northwind Chair 13",
+    "dimensions_mm": {
+      "width": 520,
+      "depth": 520,
+      "height": 980
+    },
+    "list_price_inr": 18140,
+    "labour_minutes": 12,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-014",
+    "family": "chair",
+    "name": "Northwind Chair 14",
+    "dimensions_mm": {
+      "width": 560,
+      "depth": 520,
+      "height": 1000
+    },
+    "list_price_inr": 18885,
+    "labour_minutes": 15,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-015",
+    "family": "chair",
+    "name": "Northwind Chair 15",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 520,
+      "height": 1020
+    },
+    "list_price_inr": 19630,
+    "labour_minutes": 18,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-016",
+    "family": "chair",
+    "name": "Northwind Chair 16",
+    "dimensions_mm": {
+      "width": 640,
+      "depth": 520,
+      "height": 980
+    },
+    "list_price_inr": 20375,
+    "labour_minutes": 21,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-017",
+    "family": "chair",
+    "name": "Northwind Chair 17",
+    "dimensions_mm": {
+      "width": 520,
+      "depth": 560,
+      "height": 1000
+    },
+    "list_price_inr": 21120,
+    "labour_minutes": 12,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-018",
+    "family": "chair",
+    "name": "Northwind Chair 18",
+    "dimensions_mm": {
+      "width": 560,
+      "depth": 560,
+      "height": 1020
+    },
+    "list_price_inr": 21865,
+    "labour_minutes": 15,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-019",
+    "family": "chair",
+    "name": "Northwind Chair 19",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 560,
+      "height": 980
+    },
+    "list_price_inr": 22610,
+    "labour_minutes": 18,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-020",
+    "family": "chair",
+    "name": "Northwind Chair 20",
+    "dimensions_mm": {
+      "width": 640,
+      "depth": 560,
+      "height": 1000
+    },
+    "list_price_inr": 23355,
+    "labour_minutes": 21,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-021",
+    "family": "chair",
+    "name": "Northwind Chair 21",
+    "dimensions_mm": {
+      "width": 520,
+      "depth": 600,
+      "height": 1020
+    },
+    "list_price_inr": 24100,
+    "labour_minutes": 12,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-022",
+    "family": "chair",
+    "name": "Northwind Chair 22",
+    "dimensions_mm": {
+      "width": 560,
+      "depth": 600,
+      "height": 980
+    },
+    "list_price_inr": 24845,
+    "labour_minutes": 15,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-023",
+    "family": "chair",
+    "name": "Northwind Chair 23",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 600,
+      "height": 1000
+    },
+    "list_price_inr": 25590,
+    "labour_minutes": 18,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-CHA-024",
+    "family": "chair",
+    "name": "Northwind Chair 24",
+    "dimensions_mm": {
+      "width": 640,
+      "depth": 600,
+      "height": 1020
+    },
+    "list_price_inr": 26335,
+    "labour_minutes": 21,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F02",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F13",
+      "F14",
+      "F15",
+      "F18"
+    ]
+  },
+  {
+    "sku": "NW-STO-001",
+    "family": "storage",
+    "name": "Northwind Storage 01",
+    "dimensions_mm": {
+      "width": 800,
+      "depth": 400,
+      "height": 1200
+    },
+    "list_price_inr": 14800,
+    "labour_minutes": 30,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-002",
+    "family": "storage",
+    "name": "Northwind Storage 02",
+    "dimensions_mm": {
+      "width": 1000,
+      "depth": 400,
+      "height": 1220
+    },
+    "list_price_inr": 15630,
+    "labour_minutes": 33,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-003",
+    "family": "storage",
+    "name": "Northwind Storage 03",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 400,
+      "height": 1240
+    },
+    "list_price_inr": 16460,
+    "labour_minutes": 36,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-004",
+    "family": "storage",
+    "name": "Northwind Storage 04",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 400,
+      "height": 1200
+    },
+    "list_price_inr": 17290,
+    "labour_minutes": 39,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-005",
+    "family": "storage",
+    "name": "Northwind Storage 05",
+    "dimensions_mm": {
+      "width": 800,
+      "depth": 450,
+      "height": 1220
+    },
+    "list_price_inr": 18120,
+    "labour_minutes": 30,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-006",
+    "family": "storage",
+    "name": "Northwind Storage 06",
+    "dimensions_mm": {
+      "width": 1000,
+      "depth": 450,
+      "height": 1240
+    },
+    "list_price_inr": 18950,
+    "labour_minutes": 33,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-007",
+    "family": "storage",
+    "name": "Northwind Storage 07",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 450,
+      "height": 1200
+    },
+    "list_price_inr": 19780,
+    "labour_minutes": 36,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-008",
+    "family": "storage",
+    "name": "Northwind Storage 08",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 450,
+      "height": 1220
+    },
+    "list_price_inr": 20610,
+    "labour_minutes": 39,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-009",
+    "family": "storage",
+    "name": "Northwind Storage 09",
+    "dimensions_mm": {
+      "width": 800,
+      "depth": 500,
+      "height": 1240
+    },
+    "list_price_inr": 21440,
+    "labour_minutes": 30,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-010",
+    "family": "storage",
+    "name": "Northwind Storage 10",
+    "dimensions_mm": {
+      "width": 1000,
+      "depth": 500,
+      "height": 1200
+    },
+    "list_price_inr": 22270,
+    "labour_minutes": 33,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-011",
+    "family": "storage",
+    "name": "Northwind Storage 11",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 500,
+      "height": 1220
+    },
+    "list_price_inr": 23100,
+    "labour_minutes": 36,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-012",
+    "family": "storage",
+    "name": "Northwind Storage 12",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 500,
+      "height": 1240
+    },
+    "list_price_inr": 23930,
+    "labour_minutes": 39,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-013",
+    "family": "storage",
+    "name": "Northwind Storage 13",
+    "dimensions_mm": {
+      "width": 800,
+      "depth": 400,
+      "height": 1200
+    },
+    "list_price_inr": 24760,
+    "labour_minutes": 30,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-014",
+    "family": "storage",
+    "name": "Northwind Storage 14",
+    "dimensions_mm": {
+      "width": 1000,
+      "depth": 400,
+      "height": 1220
+    },
+    "list_price_inr": 25590,
+    "labour_minutes": 33,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-015",
+    "family": "storage",
+    "name": "Northwind Storage 15",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 400,
+      "height": 1240
+    },
+    "list_price_inr": 26420,
+    "labour_minutes": 36,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-016",
+    "family": "storage",
+    "name": "Northwind Storage 16",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 400,
+      "height": 1200
+    },
+    "list_price_inr": 27250,
+    "labour_minutes": 39,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-017",
+    "family": "storage",
+    "name": "Northwind Storage 17",
+    "dimensions_mm": {
+      "width": 800,
+      "depth": 450,
+      "height": 1220
+    },
+    "list_price_inr": 28080,
+    "labour_minutes": 30,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-018",
+    "family": "storage",
+    "name": "Northwind Storage 18",
+    "dimensions_mm": {
+      "width": 1000,
+      "depth": 450,
+      "height": 1240
+    },
+    "list_price_inr": 28910,
+    "labour_minutes": 33,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-019",
+    "family": "storage",
+    "name": "Northwind Storage 19",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 450,
+      "height": 1200
+    },
+    "list_price_inr": 29740,
+    "labour_minutes": 36,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-020",
+    "family": "storage",
+    "name": "Northwind Storage 20",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 450,
+      "height": 1220
+    },
+    "list_price_inr": 30570,
+    "labour_minutes": 39,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-021",
+    "family": "storage",
+    "name": "Northwind Storage 21",
+    "dimensions_mm": {
+      "width": 800,
+      "depth": 500,
+      "height": 1240
+    },
+    "list_price_inr": 31400,
+    "labour_minutes": 30,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-022",
+    "family": "storage",
+    "name": "Northwind Storage 22",
+    "dimensions_mm": {
+      "width": 1000,
+      "depth": 500,
+      "height": 1200
+    },
+    "list_price_inr": 32230,
+    "labour_minutes": 33,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-023",
+    "family": "storage",
+    "name": "Northwind Storage 23",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 500,
+      "height": 1220
+    },
+    "list_price_inr": 33060,
+    "labour_minutes": 36,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-STO-024",
+    "family": "storage",
+    "name": "Northwind Storage 24",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 500,
+      "height": 1240
+    },
+    "list_price_inr": 33890,
+    "labour_minutes": 39,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F09",
+      "F10",
+      "F11",
+      "F16",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-001",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 01",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 700,
+      "height": 740
+    },
+    "list_price_inr": 26000,
+    "labour_minutes": 36,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-002",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 02",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 700,
+      "height": 760
+    },
+    "list_price_inr": 26915,
+    "labour_minutes": 39,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-003",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 03",
+    "dimensions_mm": {
+      "width": 2000,
+      "depth": 700,
+      "height": 780
+    },
+    "list_price_inr": 27830,
+    "labour_minutes": 42,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-004",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 04",
+    "dimensions_mm": {
+      "width": 2400,
+      "depth": 700,
+      "height": 740
+    },
+    "list_price_inr": 28745,
+    "labour_minutes": 45,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-005",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 05",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 900,
+      "height": 760
+    },
+    "list_price_inr": 29660,
+    "labour_minutes": 36,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-006",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 06",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 900,
+      "height": 780
+    },
+    "list_price_inr": 30575,
+    "labour_minutes": 39,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-007",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 07",
+    "dimensions_mm": {
+      "width": 2000,
+      "depth": 900,
+      "height": 740
+    },
+    "list_price_inr": 31490,
+    "labour_minutes": 42,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-008",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 08",
+    "dimensions_mm": {
+      "width": 2400,
+      "depth": 900,
+      "height": 760
+    },
+    "list_price_inr": 32405,
+    "labour_minutes": 45,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-009",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 09",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 1100,
+      "height": 780
+    },
+    "list_price_inr": 33320,
+    "labour_minutes": 36,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-010",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 10",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 1100,
+      "height": 740
+    },
+    "list_price_inr": 34235,
+    "labour_minutes": 39,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-011",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 11",
+    "dimensions_mm": {
+      "width": 2000,
+      "depth": 1100,
+      "height": 760
+    },
+    "list_price_inr": 35150,
+    "labour_minutes": 42,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-012",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 12",
+    "dimensions_mm": {
+      "width": 2400,
+      "depth": 1100,
+      "height": 780
+    },
+    "list_price_inr": 36065,
+    "labour_minutes": 45,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-013",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 13",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 700,
+      "height": 740
+    },
+    "list_price_inr": 36980,
+    "labour_minutes": 36,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-014",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 14",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 700,
+      "height": 760
+    },
+    "list_price_inr": 37895,
+    "labour_minutes": 39,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-015",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 15",
+    "dimensions_mm": {
+      "width": 2000,
+      "depth": 700,
+      "height": 780
+    },
+    "list_price_inr": 38810,
+    "labour_minutes": 42,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-016",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 16",
+    "dimensions_mm": {
+      "width": 2400,
+      "depth": 700,
+      "height": 740
+    },
+    "list_price_inr": 39725,
+    "labour_minutes": 45,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-017",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 17",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 900,
+      "height": 760
+    },
+    "list_price_inr": 40640,
+    "labour_minutes": 36,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-018",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 18",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 900,
+      "height": 780
+    },
+    "list_price_inr": 41555,
+    "labour_minutes": 39,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-019",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 19",
+    "dimensions_mm": {
+      "width": 2000,
+      "depth": 900,
+      "height": 740
+    },
+    "list_price_inr": 42470,
+    "labour_minutes": 42,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-020",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 20",
+    "dimensions_mm": {
+      "width": 2400,
+      "depth": 900,
+      "height": 760
+    },
+    "list_price_inr": 43385,
+    "labour_minutes": 45,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-021",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 21",
+    "dimensions_mm": {
+      "width": 1200,
+      "depth": 1100,
+      "height": 780
+    },
+    "list_price_inr": 44300,
+    "labour_minutes": 36,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-022",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 22",
+    "dimensions_mm": {
+      "width": 1600,
+      "depth": 1100,
+      "height": 740
+    },
+    "list_price_inr": 45215,
+    "labour_minutes": 39,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-023",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 23",
+    "dimensions_mm": {
+      "width": 2000,
+      "depth": 1100,
+      "height": 760
+    },
+    "list_price_inr": 46130,
+    "labour_minutes": 42,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-COL-024",
+    "family": "collaboration",
+    "name": "Northwind Collaboration 24",
+    "dimensions_mm": {
+      "width": 2400,
+      "depth": 1100,
+      "height": 780
+    },
+    "list_price_inr": 47045,
+    "labour_minutes": 45,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F17"
+    ]
+  },
+  {
+    "sku": "NW-ACC-001",
+    "family": "accessory",
+    "name": "Northwind Accessorie 01",
+    "dimensions_mm": {
+      "width": 300,
+      "depth": 180,
+      "height": 450
+    },
+    "list_price_inr": 4200,
+    "labour_minutes": 8,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-002",
+    "family": "accessory",
+    "name": "Northwind Accessorie 02",
+    "dimensions_mm": {
+      "width": 450,
+      "depth": 180,
+      "height": 470
+    },
+    "list_price_inr": 5200,
+    "labour_minutes": 11,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-003",
+    "family": "accessory",
+    "name": "Northwind Accessorie 03",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 180,
+      "height": 490
+    },
+    "list_price_inr": 6200,
+    "labour_minutes": 14,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-004",
+    "family": "accessory",
+    "name": "Northwind Accessorie 04",
+    "dimensions_mm": {
+      "width": 900,
+      "depth": 180,
+      "height": 450
+    },
+    "list_price_inr": 7200,
+    "labour_minutes": 17,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-005",
+    "family": "accessory",
+    "name": "Northwind Accessorie 05",
+    "dimensions_mm": {
+      "width": 300,
+      "depth": 250,
+      "height": 470
+    },
+    "list_price_inr": 8200,
+    "labour_minutes": 8,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-006",
+    "family": "accessory",
+    "name": "Northwind Accessorie 06",
+    "dimensions_mm": {
+      "width": 450,
+      "depth": 250,
+      "height": 490
+    },
+    "list_price_inr": 9200,
+    "labour_minutes": 11,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-007",
+    "family": "accessory",
+    "name": "Northwind Accessorie 07",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 250,
+      "height": 450
+    },
+    "list_price_inr": 10200,
+    "labour_minutes": 14,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-008",
+    "family": "accessory",
+    "name": "Northwind Accessorie 08",
+    "dimensions_mm": {
+      "width": 900,
+      "depth": 250,
+      "height": 470
+    },
+    "list_price_inr": 11200,
+    "labour_minutes": 17,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-009",
+    "family": "accessory",
+    "name": "Northwind Accessorie 09",
+    "dimensions_mm": {
+      "width": 300,
+      "depth": 320,
+      "height": 490
+    },
+    "list_price_inr": 12200,
+    "labour_minutes": 8,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-010",
+    "family": "accessory",
+    "name": "Northwind Accessorie 10",
+    "dimensions_mm": {
+      "width": 450,
+      "depth": 320,
+      "height": 450
+    },
+    "list_price_inr": 13200,
+    "labour_minutes": 11,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-011",
+    "family": "accessory",
+    "name": "Northwind Accessorie 11",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 320,
+      "height": 470
+    },
+    "list_price_inr": 14200,
+    "labour_minutes": 14,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-012",
+    "family": "accessory",
+    "name": "Northwind Accessorie 12",
+    "dimensions_mm": {
+      "width": 900,
+      "depth": 320,
+      "height": 490
+    },
+    "list_price_inr": 15200,
+    "labour_minutes": 17,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-013",
+    "family": "accessory",
+    "name": "Northwind Accessorie 13",
+    "dimensions_mm": {
+      "width": 300,
+      "depth": 180,
+      "height": 450
+    },
+    "list_price_inr": 16200,
+    "labour_minutes": 8,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-014",
+    "family": "accessory",
+    "name": "Northwind Accessorie 14",
+    "dimensions_mm": {
+      "width": 450,
+      "depth": 180,
+      "height": 470
+    },
+    "list_price_inr": 17200,
+    "labour_minutes": 11,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-015",
+    "family": "accessory",
+    "name": "Northwind Accessorie 15",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 180,
+      "height": 490
+    },
+    "list_price_inr": 18200,
+    "labour_minutes": 14,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-016",
+    "family": "accessory",
+    "name": "Northwind Accessorie 16",
+    "dimensions_mm": {
+      "width": 900,
+      "depth": 180,
+      "height": 450
+    },
+    "list_price_inr": 19200,
+    "labour_minutes": 17,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-017",
+    "family": "accessory",
+    "name": "Northwind Accessorie 17",
+    "dimensions_mm": {
+      "width": 300,
+      "depth": 250,
+      "height": 470
+    },
+    "list_price_inr": 20200,
+    "labour_minutes": 8,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-018",
+    "family": "accessory",
+    "name": "Northwind Accessorie 18",
+    "dimensions_mm": {
+      "width": 450,
+      "depth": 250,
+      "height": 490
+    },
+    "list_price_inr": 21200,
+    "labour_minutes": 11,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-019",
+    "family": "accessory",
+    "name": "Northwind Accessorie 19",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 250,
+      "height": 450
+    },
+    "list_price_inr": 22200,
+    "labour_minutes": 14,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-020",
+    "family": "accessory",
+    "name": "Northwind Accessorie 20",
+    "dimensions_mm": {
+      "width": 900,
+      "depth": 250,
+      "height": 470
+    },
+    "list_price_inr": 23200,
+    "labour_minutes": 17,
+    "lead_time_days": 7,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-021",
+    "family": "accessory",
+    "name": "Northwind Accessorie 21",
+    "dimensions_mm": {
+      "width": 300,
+      "depth": 320,
+      "height": 490
+    },
+    "list_price_inr": 24200,
+    "labour_minutes": 8,
+    "lead_time_days": 10,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-022",
+    "family": "accessory",
+    "name": "Northwind Accessorie 22",
+    "dimensions_mm": {
+      "width": 450,
+      "depth": 320,
+      "height": 450
+    },
+    "list_price_inr": 25200,
+    "labour_minutes": 11,
+    "lead_time_days": 13,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-023",
+    "family": "accessory",
+    "name": "Northwind Accessorie 23",
+    "dimensions_mm": {
+      "width": 600,
+      "depth": 320,
+      "height": 470
+    },
+    "list_price_inr": 26200,
+    "labour_minutes": 14,
+    "lead_time_days": 16,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  },
+  {
+    "sku": "NW-ACC-024",
+    "family": "accessory",
+    "name": "Northwind Accessorie 24",
+    "dimensions_mm": {
+      "width": 900,
+      "depth": 320,
+      "height": 490
+    },
+    "list_price_inr": 27200,
+    "labour_minutes": 17,
+    "lead_time_days": 19,
+    "compatible_finish_ids": [
+      "F01",
+      "F02",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F16"
+    ]
+  }
+]

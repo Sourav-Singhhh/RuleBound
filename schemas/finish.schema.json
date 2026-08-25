@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "finish_id",
+    "name",
+    "uplift_bps",
+    "compatible_families"
+  ],
+  "properties": {
+    "finish_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "uplift_bps": {
+      "type": "integer"
+    },
+    "compatible_families": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

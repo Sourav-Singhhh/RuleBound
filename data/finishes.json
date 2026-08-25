@@ -1,0 +1,184 @@
+[
+  {
+    "finish_id": "F01",
+    "name": "Arctic White",
+    "uplift_bps": 0,
+    "compatible_families": [
+      "desk",
+      "storage",
+      "collaboration",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F02",
+    "name": "Graphite",
+    "uplift_bps": 250,
+    "compatible_families": [
+      "desk",
+      "chair",
+      "storage",
+      "collaboration",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F03",
+    "name": "Natural Oak",
+    "uplift_bps": 500,
+    "compatible_families": [
+      "desk",
+      "storage",
+      "collaboration"
+    ]
+  },
+  {
+    "finish_id": "F04",
+    "name": "Walnut",
+    "uplift_bps": 850,
+    "compatible_families": [
+      "desk",
+      "storage",
+      "collaboration"
+    ]
+  },
+  {
+    "finish_id": "F05",
+    "name": "Ash Grey",
+    "uplift_bps": 350,
+    "compatible_families": [
+      "desk",
+      "storage",
+      "collaboration",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F06",
+    "name": "Midnight Blue",
+    "uplift_bps": 600,
+    "compatible_families": [
+      "chair",
+      "storage",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F07",
+    "name": "Forest Green",
+    "uplift_bps": 650,
+    "compatible_families": [
+      "chair",
+      "storage",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F08",
+    "name": "Terracotta",
+    "uplift_bps": 700,
+    "compatible_families": [
+      "chair",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F09",
+    "name": "Sand",
+    "uplift_bps": 300,
+    "compatible_families": [
+      "desk",
+      "chair",
+      "storage",
+      "collaboration",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F10",
+    "name": "Black Powder Coat",
+    "uplift_bps": 450,
+    "compatible_families": [
+      "desk",
+      "chair",
+      "storage",
+      "collaboration",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F11",
+    "name": "Silver Powder Coat",
+    "uplift_bps": 400,
+    "compatible_families": [
+      "desk",
+      "chair",
+      "storage",
+      "collaboration",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F12",
+    "name": "Brushed Brass",
+    "uplift_bps": 1200,
+    "compatible_families": [
+      "collaboration",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F13",
+    "name": "Ocean Fabric",
+    "uplift_bps": 900,
+    "compatible_families": [
+      "chair",
+      "collaboration"
+    ]
+  },
+  {
+    "finish_id": "F14",
+    "name": "Moss Fabric",
+    "uplift_bps": 950,
+    "compatible_families": [
+      "chair",
+      "collaboration"
+    ]
+  },
+  {
+    "finish_id": "F15",
+    "name": "Charcoal Fabric",
+    "uplift_bps": 750,
+    "compatible_families": [
+      "chair",
+      "collaboration"
+    ]
+  },
+  {
+    "finish_id": "F16",
+    "name": "Recycled PET Grey",
+    "uplift_bps": 1050,
+    "compatible_families": [
+      "storage",
+      "accessory"
+    ]
+  },
+  {
+    "finish_id": "F17",
+    "name": "Clear Coat Birch",
+    "uplift_bps": 650,
+    "compatible_families": [
+      "desk",
+      "storage",
+      "collaboration"
+    ]
+  },
+  {
+    "finish_id": "F18",
+    "name": "Premium Leather Black",
+    "uplift_bps": 1800,
+    "compatible_families": [
+      "chair"
+    ]
+  }
+]

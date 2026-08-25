@@ -1,0 +1,137 @@
+[
+  {
+    "job_id": "HIST-001",
+    "room_id": "ROOM-01",
+    "completed_on": "2026-02-15",
+    "line_items": [
+      {
+        "sku": "NW-DES-001",
+        "finish_id": "F01",
+        "quantity": 8
+      },
+      {
+        "sku": "NW-CHA-002",
+        "finish_id": "F15",
+        "quantity": 8
+      }
+    ],
+    "labour_minutes": 312,
+    "freight_inr": 9000,
+    "grand_total_inr": 239860
+  },
+  {
+    "job_id": "HIST-002",
+    "room_id": "ROOM-02",
+    "completed_on": "2026-03-15",
+    "line_items": [
+      {
+        "sku": "NW-COL-002",
+        "finish_id": "F03",
+        "quantity": 3
+      },
+      {
+        "sku": "NW-CHA-006",
+        "finish_id": "F13",
+        "quantity": 14
+      }
+    ],
+    "labour_minutes": 327,
+    "freight_inr": 10774,
+    "grand_total_inr": 284485
+  },
+  {
+    "job_id": "HIST-003",
+    "room_id": "ROOM-03",
+    "completed_on": "2026-04-15",
+    "line_items": [
+      {
+        "sku": "NW-DES-006",
+        "finish_id": "F05",
+        "quantity": 8
+      },
+      {
+        "sku": "NW-CHA-008",
+        "finish_id": "F02",
+        "quantity": 10
+      },
+      {
+        "sku": "NW-ACC-003",
+        "finish_id": "F16",
+        "quantity": 6
+      }
+    ],
+    "labour_minutes": 510,
+    "freight_inr": 14117,
+    "grand_total_inr": 373417
+  },
+  {
+    "job_id": "HIST-004",
+    "room_id": "ROOM-04",
+    "completed_on": "2026-05-15",
+    "line_items": [
+      {
+        "sku": "NW-DES-009",
+        "finish_id": "F17",
+        "quantity": 14
+      },
+      {
+        "sku": "NW-CHA-012",
+        "finish_id": "F18",
+        "quantity": 14
+      },
+      {
+        "sku": "NW-STO-011",
+        "finish_id": "F04",
+        "quantity": 4
+      }
+    ],
+    "labour_minutes": 774,
+    "freight_inr": 28073,
+    "grand_total_inr": 739576
+  },
+  {
+    "job_id": "HIST-005",
+    "room_id": "ROOM-05",
+    "completed_on": "2026-06-15",
+    "line_items": [
+      {
+        "sku": "NW-DES-014",
+        "finish_id": "F02",
+        "quantity": 12
+      },
+      {
+        "sku": "NW-CHA-018",
+        "finish_id": "F14",
+        "quantity": 18
+      },
+      {
+        "sku": "NW-COL-004",
+        "finish_id": "F09",
+        "quantity": 2
+      }
+    ],
+    "labour_minutes": 684,
+    "freight_inr": 30918,
+    "grand_total_inr": 812429
+  },
+  {
+    "job_id": "HIST-006",
+    "room_id": "ROOM-05",
+    "completed_on": "2026-07-15",
+    "line_items": [
+      {
+        "sku": "NW-STO-018",
+        "finish_id": "F16",
+        "quantity": 5
+      },
+      {
+        "sku": "NW-ACC-020",
+        "finish_id": "F10",
+        "quantity": 10
+      }
+    ],
+    "labour_minutes": 335,
+    "freight_inr": 15264,
+    "grand_total_inr": 401322
+  }
+]
