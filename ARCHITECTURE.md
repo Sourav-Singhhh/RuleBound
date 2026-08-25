@@ -66,7 +66,7 @@ where:
 - `spatial_violation_count = len(spatial_violations)` (violations returned by `constraints.py`)
 - `distinct_placements_touched`: number of placements modified relative to initial proposal
 - `total_displacement`: total displacement in mm of modified placements relative to initial proposal
-- `operation_rank`: integer rank of repair operation (MOVE_WORKSTATION_POD=0, NUDGE=1, ROTATE=2, SUBSTITUTE_SKU=3, REMOVE_PLACEMENT=4)
+- `operation_rank`: integer rank of repair operation (ROW_GROUP_SHIFT=-1, MOVE_WORKSTATION_POD=0, NUDGE=1, ROTATE=2, SUBSTITUTE_SKU=3, REMOVE_PLACEMENT=4). Note: These operation ranks represent an implementation-level deterministic tie-break policy and are NOT official LV8 rule precedence.
 - `target_placement_id`: placement ID string (e.g. `"P001"`)
 - `canonical_parameters`: parameter string (e.g. `"POD_P001_P002_DX_100_DY_100"`)
 
