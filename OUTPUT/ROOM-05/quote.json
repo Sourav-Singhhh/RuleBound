@@ -1,0 +1,14 @@
+{
+  "blocking_reasons": [
+    "Layout unsatisfiable due to local_repair_exhausted.",
+    "Layout unsatisfiable due to local_repair_exhausted."
+  ],
+  "currency": "INR",
+  "lines": [],
+  "quote_id": "QUOTE-ROOM-05",
+  "room_id": "ROOM-05",
+  "status": "blocked",
+  "summary": {
+    "grand_total_inr": 0
+  }
+}

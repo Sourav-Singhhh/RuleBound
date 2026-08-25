@@ -1,0 +1,267 @@
+{
+  "placements": [
+    {
+      "finish_id": "F01",
+      "placement_id": "P001",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 3300,
+      "y_mm": 300
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P002",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 3600,
+      "y_mm": 1800
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P003",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 4500,
+      "y_mm": 300
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P004",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 5100,
+      "y_mm": 1800
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P005",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 5700,
+      "y_mm": 300
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P006",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 6000,
+      "y_mm": 1800
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P007",
+      "rotation_deg": 270,
+      "sku": "NW-DES-001",
+      "x_mm": 6900,
+      "y_mm": 300
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P008",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 7500,
+      "y_mm": 1800
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P010",
+      "rotation_deg": 180,
+      "sku": "NW-CHA-001",
+      "x_mm": 1400,
+      "y_mm": 5500
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P012",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 1400,
+      "y_mm": 3000
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P014",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 3100,
+      "y_mm": 4300
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P016",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 2300,
+      "y_mm": 4200
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P018",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 3800,
+      "y_mm": 4200
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P020",
+      "rotation_deg": 180,
+      "sku": "NW-CHA-001",
+      "x_mm": 5700,
+      "y_mm": 5500
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P022",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 6800,
+      "y_mm": 3400
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P024",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 8100,
+      "y_mm": 4100
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P025",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 1900,
+      "y_mm": 900
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P026",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 8400,
+      "y_mm": 600
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P027",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 600,
+      "y_mm": 4400
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P028",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 8300,
+      "y_mm": 2600
+    }
+  ],
+  "room_id": "ROOM-02",
+  "status": "unsatisfiable",
+  "violations": [
+    {
+      "affected_placement_ids": [
+        "P004",
+        "P006"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 16,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4,
+        "walkway_gap_mm": 380
+      },
+      "message": "Primary walkways require 900 mm clear width.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 16 seats vs required 16."
+        }
+      ],
+      "required": {
+        "min_walkway_gap_mm": 900,
+        "required_seating_capacity": 16
+      },
+      "rule_id": "RB-GEO-001",
+      "violation_id": "V001"
+    },
+    {
+      "affected_placement_ids": [
+        "P014",
+        "P016"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 16,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4,
+        "walkway_gap_mm": 280
+      },
+      "message": "Primary walkways require 900 mm clear width.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 16 seats vs required 16."
+        }
+      ],
+      "required": {
+        "min_walkway_gap_mm": 900,
+        "required_seating_capacity": 16
+      },
+      "rule_id": "RB-GEO-001",
+      "violation_id": "V002"
+    },
+    {
+      "affected_placement_ids": [
+        "P014",
+        "P018"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 16,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4,
+        "walkway_gap_mm": 180
+      },
+      "message": "Primary walkways require 900 mm clear width.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 16 seats vs required 16."
+        }
+      ],
+      "required": {
+        "min_walkway_gap_mm": 900,
+        "required_seating_capacity": 16
+      },
+      "rule_id": "RB-GEO-001",
+      "violation_id": "V003"
+    },
+    {
+      "affected_placement_ids": [
+        "P026"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 16,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4,
+        "wall_offset_mm": 80
+      },
+      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 16 seats vs required 16."
+        }
+      ],
+      "required": {
+        "min_wall_offset_mm": 100,
+        "required_seating_capacity": 16
+      },
+      "rule_id": "RB-GEO-005",
+      "violation_id": "V004"
+    }
+  ]
+}

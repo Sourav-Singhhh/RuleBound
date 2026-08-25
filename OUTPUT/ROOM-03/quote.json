@@ -1,0 +1,109 @@
+{
+  "currency": "INR",
+  "lines": [
+    {
+      "base_amount_inr": 92000,
+      "finish_id": "F02",
+      "finish_uplift_inr": 2300,
+      "line_id": "L001",
+      "net_goods_inr": 87860,
+      "quantity": 10,
+      "quantity_discount_inr": 6440,
+      "sku": "NW-CHA-001",
+      "trace": [
+        {
+          "amount_inr": 92000,
+          "inputs": {
+            "quantity": 10,
+            "unit_price": 9200
+          },
+          "rule_id": "CATALOG"
+        },
+        {
+          "amount_inr": 2300,
+          "inputs": {
+            "base_amount_inr": 92000,
+            "uplift_bps": 250
+          },
+          "rule_id": "RB-PRC-010"
+        },
+        {
+          "amount_inr": -6440,
+          "inputs": {
+            "base_amount_inr": 92000,
+            "discount_bps": 700
+          },
+          "rule_id": "RB-PRC-009"
+        }
+      ],
+      "unit_list_price_inr": 9200
+    },
+    {
+      "base_amount_inr": 74000,
+      "finish_id": "F01",
+      "finish_uplift_inr": 0,
+      "line_id": "L002",
+      "net_goods_inr": 74000,
+      "quantity": 4,
+      "quantity_discount_inr": 0,
+      "sku": "NW-DES-001",
+      "trace": [
+        {
+          "amount_inr": 74000,
+          "inputs": {
+            "quantity": 4,
+            "unit_price": 18500
+          },
+          "rule_id": "CATALOG"
+        },
+        {
+          "amount_inr": 0,
+          "inputs": {
+            "base_amount_inr": 74000,
+            "uplift_bps": 0
+          },
+          "rule_id": "RB-PRC-010"
+        },
+        {
+          "amount_inr": 0,
+          "inputs": {
+            "base_amount_inr": 74000,
+            "discount_bps": 0
+          },
+          "rule_id": "RB-PRC-009"
+        }
+      ],
+      "unit_list_price_inr": 18500
+    }
+  ],
+  "quote_id": "QUOTE-ROOM-03",
+  "room_id": "ROOM-03",
+  "status": "priced",
+  "summary": {
+    "freight_inr": 9000,
+    "goods_after_adjustments_inr": 161860,
+    "grand_total_inr": 174100,
+    "labour_inr": 3240,
+    "labour_minutes": 216,
+    "labour_rate_inr_per_hour": 900
+  },
+  "summary_trace": [
+    {
+      "amount_inr": 3240,
+      "inputs": {
+        "rate_inr_per_hour": 900,
+        "total_labour_minutes": 216
+      },
+      "rule_id": "RB-PRC-011"
+    },
+    {
+      "amount_inr": 9000,
+      "inputs": {
+        "band": "100001_to_250000",
+        "flat_inr": 9000,
+        "goods_inr": 161860
+      },
+      "rule_id": "RB-PRC-012"
+    }
+  ]
+}

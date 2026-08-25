@@ -1,0 +1,119 @@
+{
+  "placements": [
+    {
+      "finish_id": "F01",
+      "placement_id": "P001",
+      "rotation_deg": 180,
+      "sku": "NW-DES-001",
+      "x_mm": 2600,
+      "y_mm": 2700
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P002",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 2900,
+      "y_mm": 4200
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P003",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 3800,
+      "y_mm": 2700
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P004",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 4400,
+      "y_mm": 4200
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P005",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 5000,
+      "y_mm": 2700
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P006",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 5900,
+      "y_mm": 4200
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P007",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 300,
+      "y_mm": 300
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P008",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 600,
+      "y_mm": 1800
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P010",
+      "rotation_deg": 180,
+      "sku": "NW-CHA-001",
+      "x_mm": 4000,
+      "y_mm": 1800
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P012",
+      "rotation_deg": 180,
+      "sku": "NW-CHA-001",
+      "x_mm": 5500,
+      "y_mm": 1800
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P014",
+      "rotation_deg": 180,
+      "sku": "NW-CHA-001",
+      "x_mm": 1200,
+      "y_mm": 5500
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P016",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 2300,
+      "y_mm": 3300
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P017",
+      "rotation_deg": 180,
+      "sku": "NW-CHA-001",
+      "x_mm": 3600,
+      "y_mm": 5500
+    },
+    {
+      "finish_id": "F02",
+      "placement_id": "P018",
+      "rotation_deg": 0,
+      "sku": "NW-CHA-001",
+      "x_mm": 4700,
+      "y_mm": 900
+    }
+  ],
+  "room_id": "ROOM-03",
+  "status": "valid",
+  "violations": []
+}
