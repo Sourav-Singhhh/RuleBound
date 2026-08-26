@@ -49,8 +49,8 @@ Deterministic Pricing
 layout.json + quote.json
 ```
 
-- **Generator**: Parses customer briefs and room specifications to extract quantitative requirements and finish preferences, placing catalog items on a 100mm grid inside room boundaries while preferring open walkways.
-- **ProposedLayout**: Typed, schema-compliant handoff object passing initial placement proposals irreversibly to the deterministic engine.
+- **Generator**: Parses customer briefs and room specifications to extract quantitative requirements and finish preferences, placing catalog items on a 100mm grid inside room boundaries while using deterministic spacing, door, and egress heuristics to construct sensible starting proposals.
+- **ProposedLayout**: Typed internal handoff object carrying the generator's deterministic placement proposal into arbitration.
 - **Constraint Engine**: Authoritatively evaluates layouts against official spatial rules (`RB-GEO-001` through `RB-GEO-008`), returning exact violation payloads.
 - **Bounded Arbitration**: Implements local candidate repair search (`ROW_GROUP_SHIFT`, `MOVE_WORKSTATION_POD`, `NUDGE`, `ROTATE`, `SUBSTITUTE_SKU`, `REMOVE_PLACEMENT`) under strict lexicographic acceptance gates and tabu memory.
 - **Final Validation**: Confirms spatial validity (`status: "valid"`) and seating capacity feasibility.
@@ -67,7 +67,7 @@ layout.json + quote.json
 
 ## Pricing Engine
 
-- **Integer INR Arithmetic**: All pricing calculations use exact integer Rupee arithmetic and integer basis points ($1\% = 100\text{ bps}$).
+- **Integer INR Arithmetic**: All monetary calculations use integer Rupee arithmetic, with percentage adjustments represented using integer basis points.
 - **Finish Uplifts**: Evaluates `RB-PRC-010` basis-point uplifts per product family and finish combination.
 - **Quantity Discounts**: Applies `RB-PRC-009` volume discount tiers deterministically.
 - **Labour & Freight**: Calculates assembly labour minutes (`RB-PRC-011`) and tier-based freight bands (`RB-PRC-012`).
