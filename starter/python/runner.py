@@ -54,7 +54,12 @@ def main() -> None:
         proposal = generator_engine.generate_proposal(room, brief_text)
 
         # 2. Bounded Local Repair Arbitration
-        arbitrated_layout = arbitration_engine.arbitrate(proposal, room)
+        room_with_meta = dict(room)
+        item_counts = generator_engine.parse_furniture_counts(brief_text, room.get("capacity", 1))
+        req_desks = item_counts.get("desk", room.get("capacity", 1))
+        room_with_meta["required_workstations"] = req_desks
+        room_with_meta["brief_text"] = brief_text
+        arbitrated_layout = arbitration_engine.arbitrate(proposal, room_with_meta)
 
         # 3. Final Authoritative Revalidation Safety Gate
         if arbitrated_layout.get("status") == "valid":

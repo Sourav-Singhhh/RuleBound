@@ -457,6 +457,40 @@ class TestArbitrationEngine(unittest.TestCase):
         # Non-group member unchanged
         self.assertEqual(p_map["P05"].y_mm, 1000)
 
+    def test_aa_workstation_preservation_cannot_delete_desks(self) -> None:
+        """
+        Verify hard semantic precondition: REMOVE_PLACEMENT cannot delete desks
+        below the room's required workstation count, even if doing so would eliminate
+        spatial violations.
+        """
+        placements = [
+            {"placement_id": "P01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 50, "y_mm": 3000, "rotation_deg": 0},
+            {"placement_id": "P02", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 2000, "y_mm": 3000, "rotation_deg": 0},
+            {"placement_id": "P03", "sku": "NW-CHA-001", "finish_id": "F02", "x_mm": 500, "y_mm": 2000, "rotation_deg": 0},
+            {"placement_id": "P04", "sku": "NW-CHA-001", "finish_id": "F02", "x_mm": 2500, "y_mm": 2000, "rotation_deg": 0},
+        ]
+        r_spec = dict(self.room_01)
+        r_spec["capacity"] = 2
+        r_spec["required_workstations"] = 2
+        layout = {"room_id": "ROOM-01", "placements": placements}
+
+        res = self.arbitrator.arbitrate(layout, r_spec)
+        p_res = ProposedLayout.from_dict(res)
+        desks_remaining = self.arbitrator.count_workstation_capacity(p_res)
+        self.assertGreaterEqual(desks_remaining, 2, "Mandatory workstations must NOT be deleted below required count.")
+
+    def test_ab_integer_displacement_guarantee(self) -> None:
+        """
+        Verify that displacement calculation produces exact integer values.
+        """
+        init_layout = ProposedLayout(room_id="ROOM-01", placements=[
+            PlacementProposal("P01", "NW-DES-001", "F01", 1000, 1000, 0),
+        ])
+        repair = RepairCandidate("NUDGE", "P01", {"dx_mm": 300, "dy_mm": 400}, (1, "NUDGE", "P01", "test"))
+        cand_layout = self.arbitrator.apply_repair(init_layout, repair)
+        self.assertEqual(cand_layout.placements[0].x_mm, 1300)
+        self.assertEqual(cand_layout.placements[0].y_mm, 1400)
+
 
 if __name__ == "__main__":
     unittest.main()

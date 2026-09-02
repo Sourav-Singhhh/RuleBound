@@ -115,6 +115,7 @@ class TestPricingEngine(unittest.TestCase):
         result = self.engine.calculate_quote("Q-BLOCK-1", "ROOM-01", line_inputs)
         self.assertEqual(result["status"], "blocked")
         self.assertTrue(len(result["blocking_reasons"]) > 0)
+        self.assertTrue(any("RB-PRC-013" in r for r in result["blocking_reasons"]))
         self.assertEqual(result["lines"], [])
 
     def test_incompatible_finish_blocks_quote(self) -> None:
@@ -125,6 +126,7 @@ class TestPricingEngine(unittest.TestCase):
         result = self.engine.calculate_quote("Q-BLOCK-2", "ROOM-01", line_inputs)
         self.assertEqual(result["status"], "blocked")
         self.assertTrue(len(result["blocking_reasons"]) > 0)
+        self.assertTrue(any("RB-PRC-013" in r for r in result["blocking_reasons"]))
 
     def test_deterministic_repeatability(self) -> None:
         line_inputs = [

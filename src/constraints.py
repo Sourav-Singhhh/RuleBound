@@ -120,69 +120,6 @@ def get_door_swing_box(
         return (offset, 0, offset + width, depth)
 
 
-class ConstraintEngine:
-    """
-    Deterministic constraint engine evaluating Spatial (RB-GEO-*) rules.
-    """
-
-    def __init__(
-        self,
-        catalog: Sequence[Dict[str, Any]],
-        finishes: Sequence[Dict[str, Any]],
-        rules: Sequence[Dict[str, Any]]
-    ):
-        self.catalog_by_sku = {item["sku"]: item for item in catalog}
-        self.finishes_by_id = {f["finish_id"]: f for f in finishes}
-        self.rules_by_id = {r["rule_id"]: r for r in rules}
-
-    def validate_layout(
-        self,
-        layout: Dict[str, Any],
-        room_spec: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """
-        Validates layout against spatial and catalog constraints.
-        Returns a new layout dictionary with populated violations and status.
-        Does NOT mutate input layout.
-        """
-        room_id = layout["room_id"]
-        placements = layout.get("placements", [])
-
-        raw_violations: List[Dict[str, Any]] = []
-
-        # Room boundary bounds
-        boundary_coords = room_spec.get("boundary_mm", [])
-        if boundary_coords:
-            max_x = max(pt[0] for pt in boundary_coords)
-            max_y = max(pt[1] for pt in boundary_coords)
-        else:
-            max_x, max_y = 100000, 100000
-
-        room_w, room_h = int(max_x), int(max_y)
-
-        # Prepared placement info
-        prep_placements = []
-        for p in placements:
-            pid = p["placement_id"]
-            sku = p["sku"]
-            cat_item = self.catalog_by_sku.get(sku, {})
-            dims = cat_item.get("dimensions_mm", {"width": 1000, "depth": 600})
-            w_mm = dims.get("width", 1000)
-            d_mm = dims.get("depth", 600)
-            rot = p.get("rotation_deg", 0)
-            bbox = get_placement_bbox(p["x_mm"], p["y_mm"], w_mm, d_mm, rot)
-
-            prep_placements.append({
-                "placement_id": pid,
-                "sku": sku,
-                "family": cat_item.get("family", ""),
-                "is_wall_mounted": cat_item.get("wall_mounted", False),
-                "bbox": bbox,
-                "rot": rot,
-                "w_mm": w_mm,
-                "d_mm": d_mm,
-            })
-
 def is_point_on_segment(px: int, py: int, x1: int, y1: int, x2: int, y2: int) -> bool:
     """Returns True if point (px, py) lies on line segment (x1, y1)-(x2, y2)."""
     if not (min(x1, x2) <= px <= max(x1, x2) and min(y1, y2) <= py <= max(y1, y2)):

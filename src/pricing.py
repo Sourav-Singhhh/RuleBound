@@ -106,10 +106,10 @@ class PricingEngine:
         Returns (line_dict, None) if successful, or (None, error_message) if unpriced/incompatible.
         """
         if sku not in self.catalog_by_sku:
-            return None, f"SKU '{sku}' not found in catalog"
+            return None, f"RB-PRC-013: SKU '{sku}' not found in catalog"
 
         if finish_id not in self.finishes_by_id:
-            return None, f"Finish '{finish_id}' not found in finishes"
+            return None, f"RB-PRC-013: Finish '{finish_id}' not found in finishes"
 
         catalog_item = self.catalog_by_sku[sku]
         finish_item = self.finishes_by_id[finish_id]
@@ -119,7 +119,7 @@ class PricingEngine:
         compatible_families = finish_item.get("compatible_families", [])
 
         if finish_id not in compatible_finish_ids or family not in compatible_families:
-            return None, f"Finish '{finish_id}' is incompatible with catalog SKU '{sku}'"
+            return None, f"RB-PRC-013: Finish '{finish_id}' is incompatible with catalog SKU '{sku}'"
 
         unit_list_price = catalog_item["list_price_inr"]
         uplift_bps = finish_item["uplift_bps"]

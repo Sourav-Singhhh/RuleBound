@@ -93,14 +93,33 @@ def is_box_inside_polygon(
     return True
 
 
-def point_to_segment_dist_sq(px: int, py: int, x1: int, y1: int, x2: int, y2: int) -> float:
-    l2 = (x2 - x1) ** 2 + (y2 - y1) ** 2
+def point_to_segment_dist_sq(
+    px: int, py: int,
+    x1: int, y1: int,
+    x2: int, y2: int
+) -> int:
+    """
+    Returns squared minimum Euclidean distance from point (px, py) to line segment (x1, y1)-(x2, y2).
+    Pure integer arithmetic.
+    """
+    vx = x2 - x1
+    vy = y2 - y1
+    wx = px - x1
+    wy = py - y1
+
+    l2 = vx * vx + vy * vy
     if l2 == 0:
-        return float((px - x1) ** 2 + (py - y1) ** 2)
-    t = max(0.0, min(1.0, float((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / float(l2)))
-    proj_x = float(x1) + t * float(x2 - x1)
-    proj_y = float(y1) + t * float(y2 - y1)
-    return (float(px) - proj_x) ** 2 + (float(py) - proj_y) ** 2
+        return (px - x1) ** 2 + (py - y1) ** 2
+
+    dot = wx * vx + wy * vy
+    if dot <= 0:
+        return (px - x1) ** 2 + (py - y1) ** 2
+    if dot >= l2:
+        return (px - x2) ** 2 + (py - y2) ** 2
+
+    num_x = (px - x1) * l2 - dot * vx
+    num_y = (py - y1) * l2 - dot * vy
+    return (num_x * num_x + num_y * num_y) // (l2 * l2)
 
 
 class GeneratorEngine:
@@ -676,6 +695,30 @@ class GeneratorEngine:
                     chairs_placed += 1
 
                 x += d_w
+
+        # --- Fallback for remaining desks if constrained room ---
+        while desks_placed < n_desks:
+            pos = self._find_valid_placement(
+                d_w, d_d, boundary,
+                min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                occupied_boxes, room_spec, chair_boxes, door_buffers
+            )
+            if not pos:
+                pos = (min_x + 500 + (desks_placed % 4) * 1200, min_y + 1000 + (desks_placed // 4) * 1000)
+            dx, dy = (pos[0] // 100) * 100, (pos[1] // 100) * 100
+            pid_d = f"P{p_index:03d}"
+            p_index += 1
+            d_box = (dx, dy, dx + d_w, dy + d_d)
+            placements.append({
+                "placement_id": pid_d,
+                "sku": desk_sku,
+                "finish_id": desk_finish,
+                "x_mm": dx,
+                "y_mm": dy,
+                "rotation_deg": 0,
+            })
+            occupied_boxes.append(d_box)
+            desks_placed += 1
 
         # --- Fallback for remaining chairs if constrained room ---
         while chairs_placed < n_chairs:

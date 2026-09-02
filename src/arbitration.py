@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
@@ -156,6 +157,17 @@ class ArbitrationEngine:
         for p in layout.placements:
             cat_item = self.catalog_by_sku.get(p.sku, {})
             if cat_item.get("family") == "chair":
+                count += 1
+        return count
+
+    def count_workstation_capacity(self, layout: ProposedLayout) -> int:
+        """
+        Returns the number of active placements whose catalog family is 'desk'.
+        """
+        count = 0
+        for p in layout.placements:
+            cat_item = self.catalog_by_sku.get(p.sku, {})
+            if cat_item.get("family") == "desk":
                 count += 1
         return count
 
@@ -459,6 +471,15 @@ class ArbitrationEngine:
                         ))
 
                 # 4. REMOVE_PLACEMENT candidates (op_type_rank = 4)
+                # Hard semantic precondition: mandatory seating and workstations cannot be deleted below required minimums
+                target_fam = self.catalog_by_sku.get(target_prop.sku, {}).get("family", "")
+                if target_fam == "chair":
+                    if self.count_seating_capacity(layout) <= getattr(self, "_active_required_capacity", 0):
+                        continue
+                elif target_fam == "desk":
+                    if self.count_workstation_capacity(layout) <= getattr(self, "_active_required_workstations", 0):
+                        continue
+
                 param_str = "REMOVE"
                 key = (4, rule_id, pid, param_str)
                 if key not in seen_keys:
@@ -638,6 +659,15 @@ class ArbitrationEngine:
         initial_layout = ProposedLayout.from_dict(initial_layout_dict)
         current_layout = initial_layout
         required_capacity = int(room_spec.get("capacity", 1))
+        required_workstations = room_spec.get("required_workstations")
+        if required_workstations is None:
+            required_workstations = room_spec.get("required_desks")
+        if required_workstations is None:
+            required_workstations = self.count_workstation_capacity(initial_layout)
+        required_workstations = int(required_workstations)
+
+        self._active_required_capacity = required_capacity
+        self._active_required_workstations = required_workstations
         n_placements = len(current_layout.placements)
         k_max = min(50, max(10, 10 * n_placements))
 
@@ -645,7 +675,10 @@ class ArbitrationEngine:
         validation_res = self.constraint_engine.validate_layout(current_layout.to_dict(), room_spec)
         current_violations = validation_res.get("violations", [])
         current_seating = self.count_seating_capacity(current_layout)
-        current_shortfall = max(0, required_capacity - current_seating)
+        current_desks = self.count_workstation_capacity(current_layout)
+        current_seating_shortfall = max(0, required_capacity - current_seating)
+        current_workstation_shortfall = max(0, required_workstations - current_desks)
+        current_shortfall = current_seating_shortfall + current_workstation_shortfall
         current_spatial_count = len(current_violations)
 
         if current_shortfall == 0 and current_spatial_count == 0:
@@ -687,15 +720,15 @@ class ArbitrationEngine:
                 return "REMOVE"
             return ""
 
-        def calc_displacement(init_lay: ProposedLayout, cand_lay: ProposedLayout) -> float:
+        def calc_displacement(init_lay: ProposedLayout, cand_lay: ProposedLayout) -> int:
             init_map = {p.placement_id: (p.x_mm, p.y_mm) for p in init_lay.placements}
-            tot_disp = 0.0
+            tot_disp = 0
             for p in cand_lay.placements:
                 if p.placement_id in init_map:
                     ix, iy = init_map[p.placement_id]
                     dx = p.x_mm - ix
                     dy = p.y_mm - iy
-                    tot_disp += (dx * dx + dy * dy) ** 0.5
+                    tot_disp += int(math.isqrt(dx * dx + dy * dy))
             return tot_disp
 
         def calc_distinct_placements(init_lay: ProposedLayout, cand_lay: ProposedLayout) -> int:
@@ -714,7 +747,7 @@ class ArbitrationEngine:
             current_shortfall,
             current_spatial_count,
             0,
-            0.0,
+            0,
             0,
             "",
             ""
@@ -743,12 +776,21 @@ class ArbitrationEngine:
                 if tabu_key in tabu_candidates:
                     continue
 
+                # Hard semantic precondition gate: reject any removal that violates seating or workstation requirements
                 cand_layout = self.apply_repair(current_layout, cand)
+                if cand.op_type == "REMOVE_PLACEMENT":
+                    cand_seating = self.count_seating_capacity(cand_layout)
+                    cand_desks = self.count_workstation_capacity(cand_layout)
+                    if cand_seating < required_capacity or cand_desks < required_workstations:
+                        tabu_candidates.add(tabu_key)
+                        continue
+
                 cand_val_res = self.constraint_engine.validate_layout(cand_layout.to_dict(), room_spec)
                 cand_violations = cand_val_res.get("violations", [])
                 cand_seating = self.count_seating_capacity(cand_layout)
+                cand_desks = self.count_workstation_capacity(cand_layout)
 
-                cand_shortfall = max(0, required_capacity - cand_seating)
+                cand_shortfall = max(0, required_capacity - cand_seating) + max(0, required_workstations - cand_desks)
                 cand_spatial_count = len(cand_violations)
                 cand_disp = calc_displacement(initial_layout, cand_layout)
                 cand_touched = calc_distinct_placements(initial_layout, cand_layout)
@@ -805,46 +847,51 @@ class ArbitrationEngine:
         # Construct schema-valid unsatisfiable output
         final_violations = []
         achieved_seating = self.count_seating_capacity(best_layout)
+        achieved_desks = self.count_workstation_capacity(best_layout)
 
         if best_violations:
             for idx, v in enumerate(best_violations):
                 v_copy = dict(v)
                 m = dict(v_copy.get("measured", {}))
                 m["achieved_seating_capacity"] = achieved_seating
+                m["achieved_workstation_capacity"] = achieved_desks
                 m["termination_reason"] = termination_reason
                 m["unresolved_spatial_violations"] = len(best_violations)
                 v_copy["measured"] = m
 
                 req = dict(v_copy.get("required", {}))
                 req["required_seating_capacity"] = required_capacity
+                req["required_workstation_capacity"] = required_workstations
                 v_copy["required"] = req
 
                 opts = list(v_copy.get("repair_options", []))
                 opts.append({
                     "action": "human_escalation",
-                    "trade_off": f"Unresolvable room requirements: achieved {achieved_seating} seats vs required {required_capacity}."
+                    "trade_off": f"Unresolvable room requirements: achieved {achieved_seating}/{required_capacity} seats, {achieved_desks}/{required_workstations} workstations with {len(best_violations)} unresolved spatial violations."
                 })
                 v_copy["repair_options"] = opts
                 final_violations.append(v_copy)
         else:
-            # Seating capacity unsatisfied despite 0 spatial violations (e.g. via REMOVE_PLACEMENT)
+            # Seating or workstation requirement unsatisfied despite 0 spatial violations
             final_violations.append({
                 "violation_id": "V001",
                 "rule_id": "CAPACITY_FEASIBILITY",
-                "message": f"Unsatisfiable layout: Seating capacity achieved ({achieved_seating}) is less than required ({required_capacity}). Termination reason: {termination_reason}.",
+                "message": f"Unsatisfiable layout: Requirements achieved ({achieved_seating} seats, {achieved_desks} workstations) do not satisfy required ({required_capacity} seats, {required_workstations} workstations). Termination reason: {termination_reason}.",
                 "affected_placement_ids": [p.placement_id for p in best_layout.placements[:1]],
                 "measured": {
                     "achieved_seating_capacity": achieved_seating,
+                    "achieved_workstation_capacity": achieved_desks,
                     "termination_reason": termination_reason,
                     "unresolved_spatial_violations": 0,
                 },
                 "required": {
                     "required_seating_capacity": required_capacity,
+                    "required_workstation_capacity": required_workstations,
                 },
                 "repair_options": [
                     {
                         "action": "human_escalation",
-                        "trade_off": f"Reduce required seating capacity from {required_capacity} to {achieved_seating} seats."
+                        "trade_off": f"Reconcile room requirements: requested {required_capacity} seats and {required_workstations} workstations."
                     }
                 ]
             })

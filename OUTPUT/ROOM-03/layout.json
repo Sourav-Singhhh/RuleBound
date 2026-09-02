@@ -59,10 +59,18 @@
     {
       "finish_id": "F02",
       "placement_id": "P008",
-      "rotation_deg": 0,
+      "rotation_deg": 180,
       "sku": "NW-CHA-001",
       "x_mm": 600,
       "y_mm": 1800
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P009",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 3700,
+      "y_mm": 300
     },
     {
       "finish_id": "F02",
@@ -73,6 +81,14 @@
       "y_mm": 1800
     },
     {
+      "finish_id": "F01",
+      "placement_id": "P011",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 4900,
+      "y_mm": 300
+    },
+    {
       "finish_id": "F02",
       "placement_id": "P012",
       "rotation_deg": 180,
@@ -81,12 +97,28 @@
       "y_mm": 1800
     },
     {
+      "finish_id": "F01",
+      "placement_id": "P013",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 300,
+      "y_mm": 2700
+    },
+    {
       "finish_id": "F02",
       "placement_id": "P014",
       "rotation_deg": 180,
       "sku": "NW-CHA-001",
       "x_mm": 1200,
       "y_mm": 5500
+    },
+    {
+      "finish_id": "F01",
+      "placement_id": "P015",
+      "rotation_deg": 0,
+      "sku": "NW-DES-001",
+      "x_mm": 1800,
+      "y_mm": 900
     },
     {
       "finish_id": "F02",
@@ -114,6 +146,111 @@
     }
   ],
   "room_id": "ROOM-03",
-  "status": "valid",
-  "violations": []
+  "status": "unsatisfiable",
+  "violations": [
+    {
+      "affected_placement_ids": [
+        "P013"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 10,
+        "achieved_workstation_capacity": 8,
+        "egress_clearance_mm": 550,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4
+      },
+      "message": "The marked egress path requires 1100 mm clear width.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 10/10 seats, 8/8 workstations with 4 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "min_egress_width_mm": 1100,
+        "required_seating_capacity": 10,
+        "required_workstation_capacity": 8
+      },
+      "rule_id": "RB-GEO-002",
+      "violation_id": "V001"
+    },
+    {
+      "affected_placement_ids": [
+        "P015"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 10,
+        "achieved_workstation_capacity": 8,
+        "egress_clearance_mm": 550,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4
+      },
+      "message": "The marked egress path requires 1100 mm clear width.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 10/10 seats, 8/8 workstations with 4 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "min_egress_width_mm": 1100,
+        "required_seating_capacity": 10,
+        "required_workstation_capacity": 8
+      },
+      "rule_id": "RB-GEO-002",
+      "violation_id": "V002"
+    },
+    {
+      "affected_placement_ids": [
+        "P009"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 10,
+        "achieved_workstation_capacity": 8,
+        "rear_clearance_mm": 0,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4
+      },
+      "message": "Occupied desks require 900 mm rear clearance.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 10/10 seats, 8/8 workstations with 4 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "rear_clearance_mm": 900,
+        "required_seating_capacity": 10,
+        "required_workstation_capacity": 8
+      },
+      "rule_id": "RB-GEO-004",
+      "violation_id": "V003"
+    },
+    {
+      "affected_placement_ids": [
+        "P011"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 10,
+        "achieved_workstation_capacity": 8,
+        "rear_clearance_mm": 0,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 4
+      },
+      "message": "Occupied desks require 900 mm rear clearance.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 10/10 seats, 8/8 workstations with 4 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "rear_clearance_mm": 900,
+        "required_seating_capacity": 10,
+        "required_workstation_capacity": 8
+      },
+      "rule_id": "RB-GEO-004",
+      "violation_id": "V004"
+    }
+  ]
 }
