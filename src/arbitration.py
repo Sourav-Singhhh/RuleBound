@@ -149,27 +149,22 @@ class ArbitrationEngine:
         candidates.sort(key=lambda pair: (pair[0], pair[1]))
         return [pair[1] for pair in candidates]
 
-    def count_seating_capacity(self, layout: ProposedLayout) -> int:
+    def count_family_capacity(self, layout: ProposedLayout, family: str) -> int:
         """
-        Returns the number of active placements whose catalog family is 'chair'.
+        Returns the number of active placements whose catalog family is `family`.
         """
         count = 0
         for p in layout.placements:
             cat_item = self.catalog_by_sku.get(p.sku, {})
-            if cat_item.get("family") == "chair":
+            if cat_item.get("family") == family:
                 count += 1
         return count
 
+    def count_seating_capacity(self, layout: ProposedLayout) -> int:
+        return self.count_family_capacity(layout, "chair")
+
     def count_workstation_capacity(self, layout: ProposedLayout) -> int:
-        """
-        Returns the number of active placements whose catalog family is 'desk'.
-        """
-        count = 0
-        for p in layout.placements:
-            cat_item = self.catalog_by_sku.get(p.sku, {})
-            if cat_item.get("family") == "desk":
-                count += 1
-        return count
+        return self.count_family_capacity(layout, "desk")
 
     def _get_placement_dims(self, placement: PlacementProposal) -> Tuple[int, int]:
         cat_item = self.catalog_by_sku.get(placement.sku, {})
@@ -471,14 +466,11 @@ class ArbitrationEngine:
                         ))
 
                 # 4. REMOVE_PLACEMENT candidates (op_type_rank = 4)
-                # Hard semantic precondition: mandatory seating and workstations cannot be deleted below required minimums
+                # Hard semantic precondition: mandatory furniture cannot be deleted below required minimums
                 target_fam = self.catalog_by_sku.get(target_prop.sku, {}).get("family", "")
-                if target_fam == "chair":
-                    if self.count_seating_capacity(layout) <= getattr(self, "_active_required_capacity", 0):
-                        continue
-                elif target_fam == "desk":
-                    if self.count_workstation_capacity(layout) <= getattr(self, "_active_required_workstations", 0):
-                        continue
+                req_fam = getattr(self, f"_active_required_{target_fam}", 0)
+                if req_fam > 0 and self.count_family_capacity(layout, target_fam) <= req_fam:
+                    continue
 
                 param_str = "REMOVE"
                 key = (4, rule_id, pid, param_str)
@@ -663,22 +655,45 @@ class ArbitrationEngine:
         if required_workstations is None:
             required_workstations = room_spec.get("required_desks")
         if required_workstations is None:
-            required_workstations = self.count_workstation_capacity(initial_layout)
+            if required_capacity == 0:
+                required_workstations = 0
+            else:
+                required_workstations = self.count_workstation_capacity(initial_layout)
         required_workstations = int(required_workstations)
 
+        required_storage = int(room_spec.get("required_storage", 0))
+        required_collaboration = int(room_spec.get("required_collaboration", 0))
+        required_accessory = int(room_spec.get("required_accessory", 0))
+
+        self._active_required_chair = required_capacity
+        self._active_required_desk = required_workstations
+        self._active_required_storage = required_storage
+        self._active_required_collaboration = required_collaboration
+        self._active_required_accessory = required_accessory
         self._active_required_capacity = required_capacity
         self._active_required_workstations = required_workstations
+
         n_placements = len(current_layout.placements)
         k_max = min(50, max(10, 10 * n_placements))
+
+        def calc_total_shortfall(lay: ProposedLayout) -> int:
+            ach_chairs = self.count_family_capacity(lay, "chair")
+            ach_desks = self.count_family_capacity(lay, "desk")
+            ach_storage = self.count_family_capacity(lay, "storage")
+            ach_collab = self.count_family_capacity(lay, "collaboration")
+            ach_acc = self.count_family_capacity(lay, "accessory")
+            return (
+                max(0, required_capacity - ach_chairs) +
+                max(0, required_workstations - ach_desks) +
+                max(0, required_storage - ach_storage) +
+                max(0, required_collaboration - ach_collab) +
+                max(0, required_accessory - ach_acc)
+            )
 
         # Initial full revalidation
         validation_res = self.constraint_engine.validate_layout(current_layout.to_dict(), room_spec)
         current_violations = validation_res.get("violations", [])
-        current_seating = self.count_seating_capacity(current_layout)
-        current_desks = self.count_workstation_capacity(current_layout)
-        current_seating_shortfall = max(0, required_capacity - current_seating)
-        current_workstation_shortfall = max(0, required_workstations - current_desks)
-        current_shortfall = current_seating_shortfall + current_workstation_shortfall
+        current_shortfall = calc_total_shortfall(current_layout)
         current_spatial_count = len(current_violations)
 
         if current_shortfall == 0 and current_spatial_count == 0:
@@ -776,21 +791,20 @@ class ArbitrationEngine:
                 if tabu_key in tabu_candidates:
                     continue
 
-                # Hard semantic precondition gate: reject any removal that violates seating or workstation requirements
+                # Hard semantic precondition gate: reject any removal that violates required furniture minimums
                 cand_layout = self.apply_repair(current_layout, cand)
                 if cand.op_type == "REMOVE_PLACEMENT":
-                    cand_seating = self.count_seating_capacity(cand_layout)
-                    cand_desks = self.count_workstation_capacity(cand_layout)
-                    if cand_seating < required_capacity or cand_desks < required_workstations:
+                    if (self.count_family_capacity(cand_layout, "chair") < required_capacity or
+                        self.count_family_capacity(cand_layout, "desk") < required_workstations or
+                        self.count_family_capacity(cand_layout, "storage") < required_storage or
+                        self.count_family_capacity(cand_layout, "collaboration") < required_collaboration or
+                        self.count_family_capacity(cand_layout, "accessory") < required_accessory):
                         tabu_candidates.add(tabu_key)
                         continue
 
                 cand_val_res = self.constraint_engine.validate_layout(cand_layout.to_dict(), room_spec)
                 cand_violations = cand_val_res.get("violations", [])
-                cand_seating = self.count_seating_capacity(cand_layout)
-                cand_desks = self.count_workstation_capacity(cand_layout)
-
-                cand_shortfall = max(0, required_capacity - cand_seating) + max(0, required_workstations - cand_desks)
+                cand_shortfall = calc_total_shortfall(cand_layout)
                 cand_spatial_count = len(cand_violations)
                 cand_disp = calc_displacement(initial_layout, cand_layout)
                 cand_touched = calc_distinct_placements(initial_layout, cand_layout)
@@ -848,6 +862,9 @@ class ArbitrationEngine:
         final_violations = []
         achieved_seating = self.count_seating_capacity(best_layout)
         achieved_desks = self.count_workstation_capacity(best_layout)
+        achieved_storage = self.count_family_capacity(best_layout, "storage")
+        achieved_collab = self.count_family_capacity(best_layout, "collaboration")
+        achieved_acc = self.count_family_capacity(best_layout, "accessory")
 
         if best_violations:
             for idx, v in enumerate(best_violations):
@@ -855,6 +872,12 @@ class ArbitrationEngine:
                 m = dict(v_copy.get("measured", {}))
                 m["achieved_seating_capacity"] = achieved_seating
                 m["achieved_workstation_capacity"] = achieved_desks
+                if required_storage > 0:
+                    m["achieved_storage_units"] = achieved_storage
+                if required_collaboration > 0:
+                    m["achieved_collaboration_units"] = achieved_collab
+                if required_accessory > 0:
+                    m["achieved_accessory_units"] = achieved_acc
                 m["termination_reason"] = termination_reason
                 m["unresolved_spatial_violations"] = len(best_violations)
                 v_copy["measured"] = m
@@ -862,6 +885,12 @@ class ArbitrationEngine:
                 req = dict(v_copy.get("required", {}))
                 req["required_seating_capacity"] = required_capacity
                 req["required_workstation_capacity"] = required_workstations
+                if required_storage > 0:
+                    req["required_storage_units"] = required_storage
+                if required_collaboration > 0:
+                    req["required_collaboration_units"] = required_collaboration
+                if required_accessory > 0:
+                    req["required_accessory_units"] = required_accessory
                 v_copy["required"] = req
 
                 opts = list(v_copy.get("repair_options", []))

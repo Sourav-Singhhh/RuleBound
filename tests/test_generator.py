@@ -43,45 +43,46 @@ class TestGeneratorEngine(unittest.TestCase):
         self.assertEqual(json.dumps(p1, sort_keys=True), json.dumps(p2, sort_keys=True))
 
     def test_2_five_brief_requirement_extraction(self) -> None:
-        # ROOM-01: 12 chairs, 12 desks, 2 storage, 1 collaboration
+        # ROOM-01: 12 chairs, paired desks => 6 physical desks, 2 storage, 1 collaboration
         c01 = self.generator.parse_capacity(self.rooms["ROOM-01"], self.briefs["ROOM-01"])
         f01 = self.generator.parse_furniture_counts(self.briefs["ROOM-01"], c01)
         self.assertEqual(c01, 12)
-        self.assertEqual(f01["desk"], 12)
+        self.assertEqual(f01["desk"], 6)
+        self.assertTrue(f01.get("is_paired", False))
         self.assertEqual(f01["storage"], 2)
         self.assertEqual(f01["collaboration"], 1)
 
-        # ROOM-02: 16 chairs, 16 desks, 0 storage (unquantified), 2 collaboration ("two collaboration tables")
+        # ROOM-02: 16 chairs, collaboration workshop => 0 desks, 4 accessible storage, 2 collaboration tables
         c02 = self.generator.parse_capacity(self.rooms["ROOM-02"], self.briefs["ROOM-02"])
         f02 = self.generator.parse_furniture_counts(self.briefs["ROOM-02"], c02)
         self.assertEqual(c02, 16)
-        self.assertEqual(f02["desk"], 16)
-        self.assertEqual(f02["storage"], 0)
+        self.assertEqual(f02["desk"], 0)
+        self.assertEqual(f02["storage"], 4)
         self.assertEqual(f02["collaboration"], 2)
 
-        # ROOM-03: 10 chairs, 8 desks ("eight fixed work positions"), 0 storage, 1 collaboration ("a four-person touchdown table")
+        # ROOM-03: 10 chairs, 8 fixed work positions => 8 desks, 1 collaboration (touchdown table), 2 accessories
         c03 = self.generator.parse_capacity(self.rooms["ROOM-03"], self.briefs["ROOM-03"])
         f03 = self.generator.parse_furniture_counts(self.briefs["ROOM-03"], c03)
         self.assertEqual(c03, 10)
         self.assertEqual(f03["desk"], 8)
-        self.assertEqual(f03["storage"], 0)
         self.assertEqual(f03["collaboration"], 1)
+        self.assertEqual(f03["accessory"], 2)
 
-        # ROOM-04: 14 chairs, 14 desks, 0 storage ("distributed storage" is unquantified), 0 collaboration
+        # ROOM-04: 14 chairs, 14 individual desks => 14 desks, 2 distributed storage
         c04 = self.generator.parse_capacity(self.rooms["ROOM-04"], self.briefs["ROOM-04"])
         f04 = self.generator.parse_furniture_counts(self.briefs["ROOM-04"], c04)
         self.assertEqual(c04, 14)
         self.assertEqual(f04["desk"], 14)
-        self.assertEqual(f04["storage"], 0)
-        self.assertEqual(f04["collaboration"], 0)
+        self.assertEqual(f04["storage"], 2)
 
-        # ROOM-05: 18 chairs, 12 desks ("twelve desk positions"), 0 storage (unquantified), 0 collaboration ("two collaboration zones" is qualitative)
+        # ROOM-05: 18 chairs, twelve desk positions => 12 desks, 2 storage, 2 collaboration zones, 2 writable accessories
         c05 = self.generator.parse_capacity(self.rooms["ROOM-05"], self.briefs["ROOM-05"])
         f05 = self.generator.parse_furniture_counts(self.briefs["ROOM-05"], c05)
         self.assertEqual(c05, 18)
         self.assertEqual(f05["desk"], 12)
-        self.assertEqual(f05["storage"], 0)
-        self.assertEqual(f05["collaboration"], 0)
+        self.assertEqual(f05["storage"], 2)
+        self.assertEqual(f05["collaboration"], 2)
+        self.assertEqual(f05["accessory"], 2)
 
     def test_3_parser_grammar_cases(self) -> None:
         # Singular vs Plural tables
@@ -102,9 +103,15 @@ class TestGeneratorEngine(unittest.TestCase):
         f_pos12 = self.generator.parse_furniture_counts("Provide twelve desk positions for the hub.", 18)
         self.assertEqual(f_pos12["desk"], 12)
 
-        # Unquantified qualitative phrases do NOT invent quantities
-        f_qual = self.generator.parse_furniture_counts("Provide accessible storage and distributed storage.", 10)
-        self.assertEqual(f_qual["storage"], 0)
+        # Paired desks
+        f_pair = self.generator.parse_furniture_counts("Provide paired desks for a team of 12.", 12)
+        self.assertEqual(f_pair["desk"], 6)
+        self.assertTrue(f_pair["is_paired"])
+
+        # Workshop room with no desks mentioned does not manufacture desks
+        f_ws = self.generator.parse_furniture_counts("Workshop with two collaboration tables and movable task seating.", 16)
+        self.assertEqual(f_ws["desk"], 0)
+        self.assertEqual(f_ws["collaboration"], 2)
 
     def test_4_explicit_finish_selection(self) -> None:
         f_desk = self.generator.select_finish("desk", self.briefs["ROOM-01"])

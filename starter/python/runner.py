@@ -56,8 +56,10 @@ def main() -> None:
         # 2. Bounded Local Repair Arbitration
         room_with_meta = dict(room)
         item_counts = generator_engine.parse_furniture_counts(brief_text, room.get("capacity", 1))
-        req_desks = item_counts.get("desk", room.get("capacity", 1))
-        room_with_meta["required_workstations"] = req_desks
+        room_with_meta["required_workstations"] = item_counts.get("desk", 0)
+        room_with_meta["required_storage"] = item_counts.get("storage", 0)
+        room_with_meta["required_collaboration"] = item_counts.get("collaboration", 0)
+        room_with_meta["required_accessory"] = item_counts.get("accessory", 0)
         room_with_meta["brief_text"] = brief_text
         arbitrated_layout = arbitration_engine.arbitrate(proposal, room_with_meta)
 

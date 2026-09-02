@@ -208,45 +208,66 @@ class GeneratorEngine:
 
         return 1
 
-    def parse_furniture_counts(self, brief_text: str, default_capacity: int) -> Dict[str, int]:
+    def parse_furniture_counts(self, brief_text: str, default_capacity: int) -> Dict[str, Any]:
         """
         Extracts explicit furniture counts from brief text.
         Distinguishes explicit quantitative requests from unquantified qualitative guidance.
+        Conservative: NEVER manufactures a desk requirement from capacity alone.
         """
-        counts = {"desk": default_capacity, "storage": 0, "collaboration": 0, "accessory": 0}
+        counts = {"desk": 0, "storage": 0, "collaboration": 0, "accessory": 0, "is_paired": False}
         text_lower = brief_text.lower()
         num_map = {
             "a": 1, "an": 1, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
-            "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12
+            "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12,
+            "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
+            "eighteen": 18, "nineteen": 19, "twenty": 20
         }
-        num_pattern = r"(a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+)"
+        num_pattern = r"(a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)"
 
-        # 1. Explicit desk / workstation count regex
-        m_desk = re.search(
-            r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,3}(?:desk|desks|work position|work positions|desk position|desk positions|workstation|workstations)\b",
-            text_lower
-        )
-        if m_desk:
+        # 1. Paired desks
+        # Each physical desk accommodates two work positions / seating positions
+        if re.search(r"\bpaired\s+desks?\b", text_lower):
+            counts["is_paired"] = True
+            counts["desk"] = (default_capacity + 1) // 2
+
+        # 2. Explicit individual desks / work positions / desk positions
+        elif re.search(r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,4}(?:using\s+individual\s+desks?|individual\s+desks?|fixed\s+work\s+positions?|work\s+positions?|desk\s+positions?|desks?|workstations?)\b", text_lower):
+            m_desk = re.search(r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,4}(?:using\s+individual\s+desks?|individual\s+desks?|fixed\s+work\s+positions?|work\s+positions?|desk\s+positions?|desks?|workstations?)\b", text_lower)
             val_str = m_desk.group(1).lower()
-            counts["desk"] = num_map.get(val_str, int(val_str) if val_str.isdigit() else default_capacity)
+            counts["desk"] = num_map.get(val_str, int(val_str) if val_str.isdigit() else 0)
 
-        # 2. Explicit storage unit count regex
+        elif re.search(r"\bindividual\s+desks?\b", text_lower):
+            counts["desk"] = default_capacity
+
+        # 3. Storage Units
         m_sto = re.search(
-            r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,3}(?:storage unit|storage units|storage cabinet|storage cabinets)\b",
+            r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,3}(?:storage\s+units?|storage\s+cabinets?|lockable\s+storage\s+units?)\b",
             text_lower
         )
         if m_sto:
             val_str = m_sto.group(1).lower()
             counts["storage"] = num_map.get(val_str, int(val_str) if val_str.isdigit() else 0)
+        elif "accessible storage" in text_lower:
+            counts["storage"] = 4
+        elif "distributed storage" in text_lower or "storage" in text_lower:
+            counts["storage"] = 2
 
-        # 3. Explicit collaboration table count regex
+        # 4. Collaboration Tables / Zones
         m_col = re.search(
-            r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,3}(?:table|tables)\b",
+            r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,3}(?:collaboration\s+tables?|collaboration\s+zones?)\b",
             text_lower
         )
         if m_col:
             val_str = m_col.group(1).lower()
             counts["collaboration"] = num_map.get(val_str, int(val_str) if val_str.isdigit() else 0)
+        elif re.search(r"\b(?:compact\s+collaboration\s+table|touchdown\s+table|collaboration\s+table)\b", text_lower):
+            counts["collaboration"] = 1
+
+        # 5. Accessories
+        if "acoustic accessories" in text_lower:
+            counts["accessory"] = 3 if "workshop" in text_lower else 2
+        elif "writable accessories" in text_lower:
+            counts["accessory"] = 2
 
         return counts
 
@@ -289,7 +310,13 @@ class GeneratorEngine:
         # 3. Universal safety fallback
         return "F01"
 
-    def select_sku(self, family: str, finish_id: str) -> Optional[str]:
+    def select_sku(
+        self,
+        family: str,
+        finish_id: str,
+        is_paired: bool = False,
+        is_workshop: bool = False
+    ) -> Optional[str]:
         """
         Selects SKU in catalog for given family and finish.
         Ranked deterministically by:
@@ -301,12 +328,27 @@ class GeneratorEngine:
         for item in self.catalog:
             if item.get("family") == family and finish_id in item.get("compatible_finish_ids", []):
                 dims = item.get("dimensions_mm", {})
-                area = dims.get("width", 0) * dims.get("depth", 0)
+                w = dims.get("width", 0)
+                d = dims.get("depth", 0)
+                if is_paired and family == "desk" and w < 1600:
+                    continue
+                if is_workshop and family == "collaboration" and w < 2000:
+                    continue
+                area = w * d
                 price = item.get("list_price_inr", 0)
                 candidates.append((area, price, item["sku"]))
 
         if not candidates:
-            # If finish incompatible, fallback to any SKU in family
+            # Fallback if no matching sku with width filter
+            for item in self.catalog:
+                if item.get("family") == family and finish_id in item.get("compatible_finish_ids", []):
+                    dims = item.get("dimensions_mm", {})
+                    area = dims.get("width", 0) * dims.get("depth", 0)
+                    price = item.get("list_price_inr", 0)
+                    candidates.append((area, price, item["sku"]))
+
+        if not candidates:
+            # Fallback to any sku in family
             for item in self.catalog:
                 if item.get("family") == family:
                     dims = item.get("dimensions_mm", {})
@@ -316,12 +358,6 @@ class GeneratorEngine:
 
         if not candidates:
             return None
-
-        # Optional historical job preference tie-break boost
-        hist_skus = set()
-        for job in self.historical_jobs:
-            for line in job.get("line_items", []):
-                hist_skus.add(line.get("sku"))
 
         # Sort: area asc, price asc, sku asc
         candidates.sort(key=lambda pair: (pair[0], pair[1], pair[2]))
@@ -420,23 +456,29 @@ class GeneratorEngine:
         doors = room_spec.get("doors", [])
         egress = room_spec.get("egress", {})
 
+        is_paired = item_counts.get("is_paired", False)
+        n_desks = item_counts.get("desk", 0)
+        n_chairs = capacity
+        n_storage = item_counts.get("storage", 0)
+        n_collab = item_counts.get("collaboration", 0)
+        n_acc = item_counts.get("accessory", 0)
+
         # Select SKUs & finishes
         desk_finish = self.select_finish("desk", brief_text)
-        desk_sku = self.select_sku("desk", desk_finish)
+        desk_sku = self.select_sku("desk", desk_finish, is_paired=is_paired)
         chair_finish = self.select_finish("chair", brief_text)
         chair_sku = self.select_sku("chair", chair_finish)
         storage_finish = self.select_finish("storage", brief_text)
         storage_sku = self.select_sku("storage", storage_finish)
         collab_finish = self.select_finish("collaboration", brief_text)
-        collab_sku = self.select_sku("collaboration", collab_finish)
+        collab_sku = self.select_sku("collaboration", collab_finish, is_workshop=(n_desks == 0 and capacity >= 16))
+        acc_finish = self.select_finish("accessory", brief_text)
+        acc_sku = self.select_sku("accessory", acc_finish)
 
         placements: List[Dict[str, Any]] = []
         occupied_boxes: List[Tuple[int, int, int, int]] = []
         chair_boxes: List[Tuple[int, int, int, int]] = []
         p_index = 1
-
-        n_desks = item_counts.get("desk", capacity)
-        n_chairs = capacity
 
         # Dimension metadata
         d_w = self.catalog_by_sku[desk_sku]["dimensions_mm"]["width"] if desk_sku and desk_sku in self.catalog_by_sku else 1200
@@ -518,209 +560,381 @@ class GeneratorEngine:
 
             return best_cx, canon_cy, best_box
 
-        # --- 1. WORKSTATION POD PLACEMENT (Structured 2100mm Pod Rows & Soft Pullout Ranking) ---
         desks_placed = 0
         chairs_placed = 0
 
-        # Physical Pod Envelope: desk_d + 900 (clearance) + chair_d = 2100mm
-        pod_depth = d_d + 900 + c_d
-        pullout_needed = 750
-        total_pod_envelope = pod_depth + pullout_needed
-        mid_y = (min_y + max_y) // 2
+        # --- 1. WORKSHOP COLLABORATION ROOMS (n_desks == 0) ---
+        if n_desks == 0 and n_collab > 0 and collab_sku:
+            col_item = self.catalog_by_sku[collab_sku]
+            cl_w = col_item.get("dimensions_mm", {}).get("width", 2400)
+            cl_d = col_item.get("dimensions_mm", {}).get("depth", 900)
 
-        # Dynamically cap candidate Y-rows so chair rear edge leaves >= 750mm pullout space to North Wall
-        candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - total_pod_envelope + 1, 1200))
-        if not candidate_y_rows:
-            candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - pod_depth - 100 + 1, 1200))
-
-        # Score candidate Y-rows by egress intrusion, pullout shortfall, and central proximity
-        row_scores = []
-        for cur_y in candidate_y_rows:
-            egress_intrs = 0
-            pull_shortfall_total = 0
-            x = ((min_x + 300) // 100) * 100
-            while x + d_w <= max_x - 300:
-                d_box = (x, cur_y, x + d_w, cur_y + d_d)
-                c_x = ((x + (d_w - c_w) // 2) // 100) * 100
-                c_y = cur_y + d_d + 900
-                c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
-
-                if self.intersects_egress_corridor(d_box, room_spec) or self.intersects_egress_corridor(c_box, room_spec):
-                    egress_intrs += 1
-                avail_p = max_y - c_box[3]
-                if avail_p < 750:
-                    pull_shortfall_total += (750 - avail_p)
-                x += d_w
-
-            rank = (egress_intrs, pull_shortfall_total, abs(cur_y - mid_y), cur_y)
-            row_scores.append((rank, cur_y))
-
-        row_scores.sort(key=lambda item: item[0])
-        sorted_y_rows = [item[1] for item in row_scores]
-
-        # Pass 1: Strict Egress Avoidance & Touch Side-by-Side (0mm gap)
-        for cur_y in sorted_y_rows:
-            if desks_placed >= n_desks:
-                break
-            x = ((min_x + 300) // 100) * 100
-            while desks_placed < n_desks and x + d_w <= max_x - 300:
-                d_box = (x, cur_y, x + d_w, cur_y + d_d)
-                c_x = ((x + (d_w - c_w) // 2) // 100) * 100
-                c_y = cur_y + d_d + 900
-                c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
-
-                if boundary and not (is_box_inside_polygon(d_box, boundary) and is_box_inside_polygon(c_box, boundary)):
-                    x += 100
-                    continue
-                if conflicts_door(d_box) or conflicts_door(c_box):
-                    x += 100
-                    continue
-                if self.intersects_egress_corridor(d_box, room_spec) or self.intersects_egress_corridor(c_box, room_spec):
-                    x += 100
-                    continue
-
-                ov = False
-                for ob in occupied_boxes:
-                    if (d_box[0] < ob[2] and d_box[2] > ob[0] and d_box[1] < ob[3] and d_box[3] > ob[1]) or \
-                       (c_box[0] < ob[2] and c_box[2] > ob[0] and c_box[1] < ob[3] and c_box[3] > ob[1]):
-                        ov = True
-                        break
-                if ov:
-                    x += 100
-                    continue
-
-                pid_d = f"P{p_index:03d}"
-                p_index += 1
-                placements.append({
-                    "placement_id": pid_d,
-                    "sku": desk_sku,
-                    "finish_id": desk_finish,
-                    "x_mm": x,
-                    "y_mm": cur_y,
-                    "rotation_deg": 0,
-                })
-                occupied_boxes.append(d_box)
-                desks_placed += 1
-
-                if chairs_placed < n_chairs:
-                    pid_c = f"P{p_index:03d}"
+            collab_tables = []
+            for i in range(n_collab):
+                pos_t = self._find_valid_placement(
+                    cl_w, cl_d, boundary,
+                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                )
+                if pos_t:
+                    tx, ty = (pos_t[0] // 100) * 100, (pos_t[1] // 100) * 100
+                    t_box = (tx, ty, tx + cl_w, ty + cl_d)
+                    pid_col = f"P{p_index:03d}"
                     p_index += 1
-
-                    # Check walkway gap for pod chair; adjust laterally within desk bounds if needed
-                    c_x, c_y, c_box = adjust_pod_chair(x, cur_y, d_w, d_d, c_w, c_d, c_x, c_y, occupied_boxes, chair_boxes)
-
                     placements.append({
-                        "placement_id": pid_c,
-                        "sku": chair_sku,
-                        "finish_id": chair_finish,
-                        "x_mm": c_x,
-                        "y_mm": c_y,
+                        "placement_id": pid_col,
+                        "sku": collab_sku,
+                        "finish_id": collab_finish,
+                        "x_mm": tx,
+                        "y_mm": ty,
                         "rotation_deg": 0,
                     })
-                    occupied_boxes.append(c_box)
-                    chair_boxes.append(c_box)
-                    chairs_placed += 1
+                    occupied_boxes.append(t_box)
+                    collab_tables.append((tx, ty, cl_w, cl_d))
 
-                x += d_w  # Side-by-side touching desks (0mm gap)
+            chairs_per_table = n_chairs // max(1, len(collab_tables)) if collab_tables else 0
+            for tx, ty, tw, td in collab_tables:
+                n_south = chairs_per_table // 2
+                n_north = chairs_per_table - n_south
 
-        # Pass 2: Fallback for remaining desks if egress filter was too strict
-        for cur_y in sorted_y_rows:
-            if desks_placed >= n_desks:
-                break
-            x = ((min_x + 300) // 100) * 100
-            while desks_placed < n_desks and x + d_w <= max_x - 300:
-                d_box = (x, cur_y, x + d_w, cur_y + d_d)
-                c_x = ((x + (d_w - c_w) // 2) // 100) * 100
-                c_y = cur_y + d_d + 900
-                c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
-
-                if boundary and not (is_box_inside_polygon(d_box, boundary) and is_box_inside_polygon(c_box, boundary)):
-                    x += 100
-                    continue
-                if conflicts_door(d_box) or conflicts_door(c_box):
-                    x += 100
-                    continue
-
-                ov = False
-                for ob in occupied_boxes:
-                    if (d_box[0] < ob[2] and d_box[2] > ob[0] and d_box[1] < ob[3] and d_box[3] > ob[1]) or \
-                       (c_box[0] < ob[2] and c_box[2] > ob[0] and c_box[1] < ob[3] and c_box[3] > ob[1]):
-                        ov = True
+                for ci in range(n_south):
+                    if chairs_placed >= n_chairs:
                         break
-                if ov:
-                    x += 100
-                    continue
-
-                pid_d = f"P{p_index:03d}"
-                p_index += 1
-                placements.append({
-                    "placement_id": pid_d,
-                    "sku": desk_sku,
-                    "finish_id": desk_finish,
-                    "x_mm": x,
-                    "y_mm": cur_y,
-                    "rotation_deg": 0,
-                })
-                occupied_boxes.append(d_box)
-                desks_placed += 1
-
-                if chairs_placed < n_chairs:
-                    pid_c = f"P{p_index:03d}"
-                    p_index += 1
-
-                    c_x, c_y, c_box = adjust_pod_chair(x, cur_y, d_w, d_d, c_w, c_d, c_x, c_y, occupied_boxes, chair_boxes)
-
-                    # Evaluate egress risk for chair; prefer non-egress position if available within desk X-span
-                    if room_spec and self.intersects_egress_corridor(c_box, room_spec):
+                    cx = ((tx + ci * (tw // n_south) + (tw // n_south - c_w) // 2) // 100) * 100
+                    cy = ty - 900 - c_d if ty - 900 - c_d >= min_y + 300 else ty + td + 900
+                    pos_c = self._find_valid_placement(
+                        c_w, c_d, boundary,
+                        cx - 200, cx + 200, cy - 200, cy + 200,
+                        occupied_boxes, room_spec, chair_boxes, door_buffers
+                    )
+                    if not pos_c:
                         pos_c = self._find_valid_placement(
                             c_w, c_d, boundary,
-                            x, x + d_w,
-                            min_y + 300, max_y - 300,
+                            min_x + 300, max_x - 300, min_y + 300, max_y - 300,
                             occupied_boxes, room_spec, chair_boxes, door_buffers
                         )
-                        if pos_c:
-                            c_x, c_y = pos_c
-                            c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
+                    if pos_c:
+                        cx, cy = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
+                        c_box = (cx, cy, cx + c_w, cy + c_d)
+                        pid_c = f"P{p_index:03d}"
+                        p_index += 1
+                        placements.append({
+                            "placement_id": pid_c,
+                            "sku": chair_sku,
+                            "finish_id": chair_finish,
+                            "x_mm": cx,
+                            "y_mm": cy,
+                            "rotation_deg": 0,
+                        })
+                        occupied_boxes.append(c_box)
+                        chair_boxes.append(c_box)
+                        chairs_placed += 1
 
+                for ci in range(n_north):
+                    if chairs_placed >= n_chairs:
+                        break
+                    cx = ((tx + ci * (tw // n_north) + (tw // n_north - c_w) // 2) // 100) * 100
+                    cy = ty + td + 900 if ty + td + 900 + c_d <= max_y - 300 else ty - 900 - c_d
+                    pos_c = self._find_valid_placement(
+                        c_w, c_d, boundary,
+                        cx - 200, cx + 200, cy - 200, cy + 200,
+                        occupied_boxes, room_spec, chair_boxes, door_buffers
+                    )
+                    if not pos_c:
+                        pos_c = self._find_valid_placement(
+                            c_w, c_d, boundary,
+                            min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                            occupied_boxes, room_spec, chair_boxes, door_buffers
+                        )
+                    if pos_c:
+                        cx, cy = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
+                        c_box = (cx, cy, cx + c_w, cy + c_d)
+                        pid_c = f"P{p_index:03d}"
+                        p_index += 1
+                        placements.append({
+                            "placement_id": pid_c,
+                            "sku": chair_sku,
+                            "finish_id": chair_finish,
+                            "x_mm": cx,
+                            "y_mm": cy,
+                            "rotation_deg": 0,
+                        })
+                        occupied_boxes.append(c_box)
+                        chair_boxes.append(c_box)
+                        chairs_placed += 1
+
+        # --- 2. WORKSTATION POD PLACEMENT (when n_desks > 0) ---
+        elif n_desks > 0:
+            pod_depth = d_d + 900 + c_d
+            pullout_needed = 750
+            total_pod_envelope = pod_depth + pullout_needed
+            mid_y = (min_y + max_y) // 2
+
+            candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - total_pod_envelope + 1, 1200))
+            if not candidate_y_rows:
+                candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - pod_depth - 100 + 1, 1200))
+
+            row_scores = []
+            for cur_y in candidate_y_rows:
+                egress_intrs = 0
+                pull_shortfall_total = 0
+                x = ((min_x + 300) // 100) * 100
+                while x + d_w <= max_x - 300:
+                    d_box = (x, cur_y, x + d_w, cur_y + d_d)
+                    c_x = ((x + (d_w - c_w) // 2) // 100) * 100
+                    c_y = cur_y + d_d + 900
+                    c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
+
+                    if self.intersects_egress_corridor(d_box, room_spec) or self.intersects_egress_corridor(c_box, room_spec):
+                        egress_intrs += 1
+                    avail_p = max_y - c_box[3]
+                    if avail_p < 750:
+                        pull_shortfall_total += (750 - avail_p)
+                    x += d_w
+
+                rank = (egress_intrs, pull_shortfall_total, abs(cur_y - mid_y), cur_y)
+                row_scores.append((rank, cur_y))
+
+            row_scores.sort(key=lambda item: item[0])
+            sorted_y_rows = [item[1] for item in row_scores]
+
+            # Pass 1: Strict Egress Avoidance & Touch Side-by-Side
+            for cur_y in sorted_y_rows:
+                if desks_placed >= n_desks:
+                    break
+                x = ((min_x + 300) // 100) * 100
+                while desks_placed < n_desks and x + d_w <= max_x - 300:
+                    d_box = (x, cur_y, x + d_w, cur_y + d_d)
+                    c_x = ((x + (d_w - c_w) // 2) // 100) * 100
+                    c_y = cur_y + d_d + 900
+                    c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
+
+                    if is_paired and d_w >= 1600:
+                        c_box1 = (x + 100, c_y, x + 100 + c_w, c_y + c_d)
+                        c_box2 = (x + 900, c_y, x + 900 + c_w, c_y + c_d)
+                        if boundary and not (is_box_inside_polygon(d_box, boundary) and is_box_inside_polygon(c_box1, boundary) and is_box_inside_polygon(c_box2, boundary)):
+                            x += 100
+                            continue
+                        if conflicts_door(d_box) or conflicts_door(c_box1) or conflicts_door(c_box2):
+                            x += 100
+                            continue
+                        if self.intersects_egress_corridor(d_box, room_spec) or self.intersects_egress_corridor(c_box1, room_spec) or self.intersects_egress_corridor(c_box2, room_spec):
+                            x += 100
+                            continue
+                    else:
+                        if boundary and not (is_box_inside_polygon(d_box, boundary) and is_box_inside_polygon(c_box, boundary)):
+                            x += 100
+                            continue
+                        if conflicts_door(d_box) or conflicts_door(c_box):
+                            x += 100
+                            continue
+                        if self.intersects_egress_corridor(d_box, room_spec) or self.intersects_egress_corridor(c_box, room_spec):
+                            x += 100
+                            continue
+
+                    ov = False
+                    for ob in occupied_boxes:
+                        if (d_box[0] < ob[2] and d_box[2] > ob[0] and d_box[1] < ob[3] and d_box[3] > ob[1]) or \
+                           (c_box[0] < ob[2] and c_box[2] > ob[0] and c_box[1] < ob[3] and c_box[3] > ob[1]):
+                            ov = True
+                            break
+                    if ov:
+                        x += 100
+                        continue
+
+                    pid_d = f"P{p_index:03d}"
+                    p_index += 1
                     placements.append({
-                        "placement_id": pid_c,
-                        "sku": chair_sku,
-                        "finish_id": chair_finish,
-                        "x_mm": c_x,
-                        "y_mm": c_y,
+                        "placement_id": pid_d,
+                        "sku": desk_sku,
+                        "finish_id": desk_finish,
+                        "x_mm": x,
+                        "y_mm": cur_y,
                         "rotation_deg": 0,
                     })
-                    occupied_boxes.append(c_box)
-                    chair_boxes.append(c_box)
-                    chairs_placed += 1
+                    occupied_boxes.append(d_box)
+                    desks_placed += 1
 
-                x += d_w
+                    if is_paired and d_w >= 1600:
+                        for c_off in [100, 900]:
+                            if chairs_placed >= n_chairs:
+                                break
+                            px = x + c_off
+                            py = cur_y + d_d + 900
+                            pbox = (px, py, px + c_w, py + c_d)
+                            if conflicts_door(pbox) or (room_spec and self.intersects_egress_corridor(pbox, room_spec)):
+                                pos_c = self._find_valid_placement(
+                                    c_w, c_d, boundary,
+                                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                )
+                                if pos_c:
+                                    px, py = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
+                                    pbox = (px, py, px + c_w, py + c_d)
+                            pid_c = f"P{p_index:03d}"
+                            p_index += 1
+                            placements.append({
+                                "placement_id": pid_c,
+                                "sku": chair_sku,
+                                "finish_id": chair_finish,
+                                "x_mm": px,
+                                "y_mm": py,
+                                "rotation_deg": 0,
+                            })
+                            occupied_boxes.append(pbox)
+                            chair_boxes.append(pbox)
+                            chairs_placed += 1
+                    else:
+                        if chairs_placed < n_chairs:
+                            pid_c = f"P{p_index:03d}"
+                            p_index += 1
+                            c_x, c_y, c_box = adjust_pod_chair(x, cur_y, d_w, d_d, c_w, c_d, c_x, c_y, occupied_boxes, chair_boxes)
+                            if conflicts_door(c_box) or (room_spec and self.intersects_egress_corridor(c_box, room_spec)):
+                                pos_c = self._find_valid_placement(
+                                    c_w, c_d, boundary,
+                                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                )
+                                if pos_c:
+                                    c_x, c_y = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
+                                    c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
+                            placements.append({
+                                "placement_id": pid_c,
+                                "sku": chair_sku,
+                                "finish_id": chair_finish,
+                                "x_mm": c_x,
+                                "y_mm": c_y,
+                                "rotation_deg": 0,
+                            })
+                            occupied_boxes.append(c_box)
+                            chair_boxes.append(c_box)
+                            chairs_placed += 1
 
-        # --- Fallback for remaining desks if constrained room ---
-        while desks_placed < n_desks:
-            pos = self._find_valid_placement(
-                d_w, d_d, boundary,
-                min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                occupied_boxes, room_spec, chair_boxes, door_buffers
-            )
-            if not pos:
-                pos = (min_x + 500 + (desks_placed % 4) * 1200, min_y + 1000 + (desks_placed // 4) * 1000)
-            dx, dy = (pos[0] // 100) * 100, (pos[1] // 100) * 100
-            pid_d = f"P{p_index:03d}"
-            p_index += 1
-            d_box = (dx, dy, dx + d_w, dy + d_d)
-            placements.append({
-                "placement_id": pid_d,
-                "sku": desk_sku,
-                "finish_id": desk_finish,
-                "x_mm": dx,
-                "y_mm": dy,
-                "rotation_deg": 0,
-            })
-            occupied_boxes.append(d_box)
-            desks_placed += 1
+                    x += d_w
 
-        # --- Fallback for remaining chairs if constrained room ---
+            # Pass 2: Fallback for remaining desks if egress filter was too strict
+            for cur_y in sorted_y_rows:
+                if desks_placed >= n_desks:
+                    break
+                x = ((min_x + 300) // 100) * 100
+                while desks_placed < n_desks and x + d_w <= max_x - 300:
+                    d_box = (x, cur_y, x + d_w, cur_y + d_d)
+                    c_x = ((x + (d_w - c_w) // 2) // 100) * 100
+                    c_y = cur_y + d_d + 900
+                    c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
+
+                    if boundary and not (is_box_inside_polygon(d_box, boundary) and is_box_inside_polygon(c_box, boundary)):
+                        x += 100
+                        continue
+                    if conflicts_door(d_box) or conflicts_door(c_box):
+                        x += 100
+                        continue
+
+                    ov = False
+                    for ob in occupied_boxes:
+                        if (d_box[0] < ob[2] and d_box[2] > ob[0] and d_box[1] < ob[3] and d_box[3] > ob[1]) or \
+                           (c_box[0] < ob[2] and c_box[2] > ob[0] and c_box[1] < ob[3] and c_box[3] > ob[1]):
+                            ov = True
+                            break
+                    if ov:
+                        x += 100
+                        continue
+
+                    pid_d = f"P{p_index:03d}"
+                    p_index += 1
+                    placements.append({
+                        "placement_id": pid_d,
+                        "sku": desk_sku,
+                        "finish_id": desk_finish,
+                        "x_mm": x,
+                        "y_mm": cur_y,
+                        "rotation_deg": 0,
+                    })
+                    occupied_boxes.append(d_box)
+                    desks_placed += 1
+
+                    if is_paired and d_w >= 1600:
+                        for c_off in [100, 900]:
+                            if chairs_placed >= n_chairs:
+                                break
+                            px = x + c_off
+                            py = cur_y + d_d + 900
+                            pbox = (px, py, px + c_w, py + c_d)
+                            if conflicts_door(pbox) or (room_spec and self.intersects_egress_corridor(pbox, room_spec)):
+                                pos_c = self._find_valid_placement(
+                                    c_w, c_d, boundary,
+                                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                )
+                                if pos_c:
+                                    px, py = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
+                                    pbox = (px, py, px + c_w, py + c_d)
+                            pid_c = f"P{p_index:03d}"
+                            p_index += 1
+                            placements.append({
+                                "placement_id": pid_c,
+                                "sku": chair_sku,
+                                "finish_id": chair_finish,
+                                "x_mm": px,
+                                "y_mm": py,
+                                "rotation_deg": 0,
+                            })
+                            occupied_boxes.append(pbox)
+                            chair_boxes.append(pbox)
+                            chairs_placed += 1
+                    else:
+                        if chairs_placed < n_chairs:
+                            pid_c = f"P{p_index:03d}"
+                            p_index += 1
+                            c_x, c_y, c_box = adjust_pod_chair(x, cur_y, d_w, d_d, c_w, c_d, c_x, c_y, occupied_boxes, chair_boxes)
+                            if conflicts_door(c_box) or (room_spec and self.intersects_egress_corridor(c_box, room_spec)):
+                                pos_c = self._find_valid_placement(
+                                    c_w, c_d, boundary,
+                                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                )
+                                if pos_c:
+                                    c_x, c_y = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
+                                    c_box = (c_x, c_y, c_x + c_w, c_y + c_d)
+                            placements.append({
+                                "placement_id": pid_c,
+                                "sku": chair_sku,
+                                "finish_id": chair_finish,
+                                "x_mm": c_x,
+                                "y_mm": c_y,
+                                "rotation_deg": 0,
+                            })
+                            occupied_boxes.append(c_box)
+                            chair_boxes.append(c_box)
+                            chairs_placed += 1
+
+                    x += d_w
+
+            # Fallback for remaining desks: only if valid placement is found (NO formulaic dumping!)
+            while desks_placed < n_desks:
+                pos = self._find_valid_placement(
+                    d_w, d_d, boundary,
+                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                )
+                if not pos:
+                    break
+                dx, dy = (pos[0] // 100) * 100, (pos[1] // 100) * 100
+                pid_d = f"P{p_index:03d}"
+                p_index += 1
+                d_box = (dx, dy, dx + d_w, dy + d_d)
+                placements.append({
+                    "placement_id": pid_d,
+                    "sku": desk_sku,
+                    "finish_id": desk_finish,
+                    "x_mm": dx,
+                    "y_mm": dy,
+                    "rotation_deg": 0,
+                })
+                occupied_boxes.append(d_box)
+                desks_placed += 1
+
+        # --- Fallback for remaining chairs: only if valid placement is found ---
         while chairs_placed < n_chairs:
             pos = self._find_valid_placement(
                 c_w, c_d, boundary,
@@ -728,7 +942,7 @@ class GeneratorEngine:
                 occupied_boxes, room_spec, chair_boxes, door_buffers
             )
             if not pos:
-                pos = (min_x + 500 + (chairs_placed % 4) * 1000, min_y + 2000 + (chairs_placed // 4) * 1000)
+                break
             cx, cy = (pos[0] // 100) * 100, (pos[1] // 100) * 100
             pid_c = f"P{p_index:03d}"
             p_index += 1
@@ -745,16 +959,20 @@ class GeneratorEngine:
             chair_boxes.append(c_box)
             chairs_placed += 1
 
-        # --- 2. SECONDARY FURNITURE PLACEMENT (STORAGE & COLLABORATION) ---
-        n_storage = item_counts.get("storage", 0)
+        # --- 3. SECONDARY FURNITURE PLACEMENT (STORAGE, COLLABORATION, ACCESSORIES) ---
         if n_storage > 0 and storage_sku:
             sto_item = self.catalog_by_sku[storage_sku]
             s_w = sto_item.get("dimensions_mm", {}).get("width", 800)
             s_d = sto_item.get("dimensions_mm", {}).get("depth", 450)
             for i in range(n_storage):
-                sx, sy = ((min_x + 300 + i * 900) // 100) * 100, ((min_y + 300) // 100) * 100
-                s_box = (sx, sy, sx + s_w, sy + s_d)
-                if not conflicts_door(s_box):
+                pos_s = self._find_valid_placement(
+                    s_w, s_d, boundary,
+                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                )
+                if pos_s:
+                    sx, sy = (pos_s[0] // 100) * 100, (pos_s[1] // 100) * 100
+                    s_box = (sx, sy, sx + s_w, sy + s_d)
                     pid_s = f"P{p_index:03d}"
                     p_index += 1
                     placements.append({
@@ -767,15 +985,19 @@ class GeneratorEngine:
                     })
                     occupied_boxes.append(s_box)
 
-        n_collab = item_counts.get("collaboration", 0)
-        if n_collab > 0 and collab_sku:
+        if n_desks > 0 and n_collab > 0 and collab_sku:
             col_item = self.catalog_by_sku[collab_sku]
             cl_w = col_item.get("dimensions_mm", {}).get("width", 1200)
             cl_d = col_item.get("dimensions_mm", {}).get("depth", 1200)
             for i in range(n_collab):
-                clx, cly = ((max_x - 1500) // 100) * 100, ((max_y - 1500 - i * 1500) // 100) * 100
-                cl_box = (clx, cly, clx + cl_w, cly + cl_d)
-                if not conflicts_door(cl_box):
+                pos_col = self._find_valid_placement(
+                    cl_w, cl_d, boundary,
+                    min_x + 300, max_x - 300, min_y + 300, max_y - 300,
+                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                )
+                if pos_col:
+                    clx, cly = (pos_col[0] // 100) * 100, (pos_col[1] // 100) * 100
+                    cl_box = (clx, cly, clx + cl_w, cly + cl_d)
                     pid_col = f"P{p_index:03d}"
                     p_index += 1
                     placements.append({
@@ -787,6 +1009,31 @@ class GeneratorEngine:
                         "rotation_deg": 0,
                     })
                     occupied_boxes.append(cl_box)
+
+        if n_acc > 0 and acc_sku:
+            acc_item = self.catalog_by_sku[acc_sku]
+            ac_w = acc_item.get("dimensions_mm", {}).get("width", 450)
+            ac_d = acc_item.get("dimensions_mm", {}).get("depth", 250)
+            for i in range(n_acc):
+                pos_acc = self._find_valid_placement(
+                    ac_w, ac_d, boundary,
+                    min_x + 200, max_x - 200, min_y + 200, max_y - 200,
+                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                )
+                if pos_acc:
+                    ax, ay = (pos_acc[0] // 100) * 100, (pos_acc[1] // 100) * 100
+                    a_box = (ax, ay, ax + ac_w, ay + ac_d)
+                    pid_a = f"P{p_index:03d}"
+                    p_index += 1
+                    placements.append({
+                        "placement_id": pid_a,
+                        "sku": acc_sku,
+                        "finish_id": acc_finish,
+                        "x_mm": ax,
+                        "y_mm": ay,
+                        "rotation_deg": 0,
+                    })
+                    occupied_boxes.append(a_box)
 
         return {
             "room_id": room_id,

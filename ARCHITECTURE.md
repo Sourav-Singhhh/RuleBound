@@ -78,15 +78,18 @@ where:
 - `target_placement_id`: placement ID string (e.g. `"P001"`)
 - `canonical_parameters`: deterministic parameter string (e.g. `"POD_P001_P002_DX_-200_DY_0"`)
 
-### 2.5 Workstation Preservation & Semantic Preconditions
-To prevent **furniture evaporation** (where an algorithm deletes required desks to artificially satisfy spatial clearance rules):
+### 2.5 Comprehensive Furniture Preservation & Semantic Invariants
+To prevent **furniture evaporation** (where an algorithm deletes required furniture to artificially satisfy spatial clearance rules):
 1. **Hard Semantic Precondition on Candidate Generation**:
-   - For `family == 'chair'`: `REMOVE_PLACEMENT` is strictly barred if `active_chairs <= required_capacity`.
-   - For `family == 'desk'`: `REMOVE_PLACEMENT` is strictly barred if `active_desks <= required_workstations`.
+   - For every required product family (`chair`, `desk`, `storage`, `collaboration`, `accessory`): `REMOVE_PLACEMENT` is strictly barred if `active_count <= required_count`.
 2. **Hard Candidate Acceptance Gate**:
-   - Even if a candidate is generated, arbitration unconditionally rejects any candidate whose execution would leave `achieved_seating < required_capacity` or `achieved_workstations < required_workstations`.
-3. **Honest Unsatisfiable Escalation**:
-   - If a room cannot physically accommodate all required workstations and chairs without violating spatial rules (e.g., tight egress or door swing clearances), the engine terminates and escalates with `status: "unsatisfiable"` and customer-readable trade-offs. It never silently deletes required furniture.
+   - Even if a candidate is generated, arbitration unconditionally rejects any candidate whose execution would drop any product family below its required target: `achieved_count < required_count`.
+3. **Paired Desk & Collaboration Workshop Semantics**:
+   - Differentiates workstation structures based on ground-truth brief specifications rather than assuming capacity equals desks. Paired desks (e.g. ROOM-01) use 1600mm desks (`NW-DES-003`) seating two chairs per physical desk. Collaboration workshops without desk requirements (e.g. ROOM-02) allocate 0 desks and seat users at large collaboration tables (`NW-COL-008`/`003`).
+4. **Clean Non-Overlapping Initial Generation**:
+   - The generator strictly places furniture inside boundary polygons and egress corridors without dumping artificial overlapping boxes just to satisfy numeric counters.
+5. **Honest Unsatisfiable Escalation**:
+   - If a room cannot physically accommodate all required furniture without violating spatial rules (e.g., tight egress corridors or door swing clearances), the engine terminates and escalates with `status: "unsatisfiable"` and customer-readable trade-offs. It never silently deletes required furniture.
 
 ### 2.6 Atomic Composite Operators
 Single-placement repairs frequently become trapped when a workstation is governed by coupled desk/chair clearance geometry:

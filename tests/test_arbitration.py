@@ -491,6 +491,29 @@ class TestArbitrationEngine(unittest.TestCase):
         self.assertEqual(cand_layout.placements[0].x_mm, 1300)
         self.assertEqual(cand_layout.placements[0].y_mm, 1400)
 
+    def test_ac_secondary_furniture_preservation_storage_and_collab(self) -> None:
+        """
+        Verify hard semantic precondition: REMOVE_PLACEMENT cannot delete required storage
+        or collaboration tables below required counts.
+        """
+        placements = [
+            {"placement_id": "P01", "sku": "NW-STO-001", "finish_id": "F01", "x_mm": 50, "y_mm": 1000, "rotation_deg": 0},
+            {"placement_id": "P02", "sku": "NW-COL-001", "finish_id": "F01", "x_mm": 2000, "y_mm": 1000, "rotation_deg": 0},
+        ]
+        r_spec = dict(self.room_01)
+        r_spec["capacity"] = 0
+        r_spec["required_workstations"] = 0
+        r_spec["required_storage"] = 1
+        r_spec["required_collaboration"] = 1
+        layout = {"room_id": "ROOM-01", "placements": placements}
+
+        res = self.arbitrator.arbitrate(layout, r_spec)
+        p_res = ProposedLayout.from_dict(res)
+        storage_count = self.arbitrator.count_family_capacity(p_res, "storage")
+        collab_count = self.arbitrator.count_family_capacity(p_res, "collaboration")
+        self.assertGreaterEqual(storage_count, 1, "Required storage must NOT be deleted.")
+        self.assertGreaterEqual(collab_count, 1, "Required collaboration tables must NOT be deleted.")
+
 
 if __name__ == "__main__":
     unittest.main()

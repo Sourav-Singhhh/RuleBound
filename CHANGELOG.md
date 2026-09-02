@@ -4,6 +4,24 @@ All notable changes to the RuleBound project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-09-03 (Semantic Hardening: Brief Semantics & Universal Furniture Preservation)
+
+### Added
+- **Universal Furniture Preservation Invariant**: Extended `ArbitrationEngine` invariants and candidate preconditions to all 5 catalog families (`chair`, `desk`, `storage`, `collaboration`, `accessory`). `REMOVE_PLACEMENT` is strictly barred from deleting any required furniture below the brief's targets.
+- **Targeted Semantic Tests**:
+  - `test_2_five_brief_requirement_extraction`: Validates ground-truth parsing across all 5 rooms (6 paired desks for ROOM-01, 0 desks for ROOM-02 workshop, 8 desks for ROOM-03, 14 for ROOM-04, 12 for ROOM-05).
+  - `test_ac_secondary_furniture_preservation_storage_and_collab`: Confirms arbitration cannot delete required storage or collaboration tables.
+
+### Changed
+- **Ground-Truth Brief Semantics (No Blind Fallback)**:
+  - Eliminated the blind fallback assumption that unmentioned desks equal room capacity.
+  - Correctly parses "paired desks" in ROOM-01 into 6 physical 1600mm desks (`NW-DES-003`) seating 12 chairs.
+  - Correctly parses flexible client workshop in ROOM-02 into 0 desks, 2 collaboration tables (`NW-COL-003`), and 16 task chairs.
+- **Clean Geometric Initial Placement**: Removed formulaic coordinate dumping in `GeneratorEngine`. Items are only placed when valid, non-overlapping geometric locations within boundary and egress corridors exist.
+- **Regenerated Canonical Outputs**: Re-executed `runner.py` across all 5 test rooms with 100% semantic furniture retention and byte-identical determinism.
+
+---
+
 ## [3.0.0] - 2026-09-03 (Round 3 Final Hardening & Winner Selection)
 
 ### Added
