@@ -405,11 +405,18 @@ class GeneratorEngine:
         room_spec: Optional[Dict[str, Any]] = None,
         chair_boxes: Optional[List[Tuple[int, int, int, int]]] = None,
         door_buffers: Optional[List[Tuple[int, int, int, int]]] = None,
+        clearance_boxes: Optional[List[Tuple[int, int, int, int]]] = None,
+        require_rear_clearance: bool = False,
+        rear_clearance_mm: int = 900,
+        rot: int = 0,
     ) -> Optional[Tuple[int, int]]:
         """
         Finds candidate grid coordinate (x, y) on 100mm grid where item_w x item_d box fits
         strictly inside boundary polygon without overlapping occupied_boxes, door_buffers,
-        or egress corridor.
+        egress corridor, or reserved clearance_boxes.
+        If require_rear_clearance is True, also verifies that the item's rear clearance zone
+        (e.g., RB-GEO-004 900mm) fits inside the boundary polygon and does not collide
+        with existing furniture footprints or door buffers.
         If chair_boxes is provided, prefers positions that avoid creating a sub-900mm
         walkway gap with existing chairs (matching RB-GEO-001).
         """
@@ -439,6 +446,47 @@ class GeneratorEngine:
                         break
                 if overlap:
                     continue
+
+                # Check overlap with existing reserved clearance zones
+                if clearance_boxes:
+                    clearance_conflict = False
+                    for cx1, cy1, cx2, cy2 in clearance_boxes:
+                        if x < cx2 and x + item_w > cx1 and y < cy2 and y + item_d > cy1:
+                            clearance_conflict = True
+                            break
+                    if clearance_conflict:
+                        continue
+
+                # If item requires rear clearance (e.g. desk), check candidate's rear clearance zone
+                if require_rear_clearance:
+                    r = rot % 360
+                    if r == 0:
+                        rear_box = (x, y + item_d, x + item_w, y + item_d + rear_clearance_mm)
+                    elif r == 90:
+                        rear_box = (x - rear_clearance_mm, y, x, y + item_d)
+                    elif r == 180:
+                        rear_box = (x, y - rear_clearance_mm, x + item_w, y)
+                    else:
+                        rear_box = (x + item_w, y, x + item_w + rear_clearance_mm, y + item_d)
+
+                    if boundary and not is_box_inside_polygon(rear_box, boundary):
+                        continue
+
+                    rear_conflict = False
+                    for ox1, oy1, ox2, oy2 in occupied_boxes:
+                        if rear_box[0] < ox2 and rear_box[2] > ox1 and rear_box[1] < oy2 and rear_box[3] > oy1:
+                            rear_conflict = True
+                            break
+                    if rear_conflict:
+                        continue
+
+                    if door_buffers:
+                        for dbx1, dby1, dbx2, dby2 in door_buffers:
+                            if rear_box[0] < dbx2 and rear_box[2] > dbx1 and rear_box[1] < dby2 and rear_box[3] > dby1:
+                                rear_conflict = True
+                                break
+                    if rear_conflict:
+                        continue
 
                 # Check walkway gap score against existing chair_boxes
                 walkway_viols = 0
@@ -509,6 +557,7 @@ class GeneratorEngine:
         placements: List[Dict[str, Any]] = []
         occupied_boxes: List[Tuple[int, int, int, int]] = []
         chair_boxes: List[Tuple[int, int, int, int]] = []
+        clearance_boxes: List[Tuple[int, int, int, int]] = []
         p_index = 1
 
         # Dimension metadata
@@ -605,7 +654,8 @@ class GeneratorEngine:
                 pos_t = self._find_valid_placement(
                     cl_w, cl_d, boundary,
                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                    clearance_boxes=clearance_boxes
                 )
                 if pos_t:
                     tx, ty = (pos_t[0] // 100) * 100, (pos_t[1] // 100) * 100
@@ -636,13 +686,15 @@ class GeneratorEngine:
                     pos_c = self._find_valid_placement(
                         c_w, c_d, boundary,
                         cx - 200, cx + 200, cy - 200, cy + 200,
-                        occupied_boxes, room_spec, chair_boxes, door_buffers
+                        occupied_boxes, room_spec, chair_boxes, door_buffers,
+                        clearance_boxes=clearance_boxes
                     )
                     if not pos_c:
                         pos_c = self._find_valid_placement(
                             c_w, c_d, boundary,
                             min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                            occupied_boxes, room_spec, chair_boxes, door_buffers
+                            occupied_boxes, room_spec, chair_boxes, door_buffers,
+                            clearance_boxes=clearance_boxes
                         )
                     if pos_c:
                         cx, cy = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
@@ -669,13 +721,15 @@ class GeneratorEngine:
                     pos_c = self._find_valid_placement(
                         c_w, c_d, boundary,
                         cx - 200, cx + 200, cy - 200, cy + 200,
-                        occupied_boxes, room_spec, chair_boxes, door_buffers
+                        occupied_boxes, room_spec, chair_boxes, door_buffers,
+                        clearance_boxes=clearance_boxes
                     )
                     if not pos_c:
                         pos_c = self._find_valid_placement(
                             c_w, c_d, boundary,
                             min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                            occupied_boxes, room_spec, chair_boxes, door_buffers
+                            occupied_boxes, room_spec, chair_boxes, door_buffers,
+                            clearance_boxes=clearance_boxes
                         )
                     if pos_c:
                         cx, cy = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
@@ -787,6 +841,7 @@ class GeneratorEngine:
                         "rotation_deg": 0,
                     })
                     occupied_boxes.append(d_box)
+                    clearance_boxes.append((x, cur_y + d_d, x + d_w, cur_y + d_d + 900))
                     desks_placed += 1
 
                     if is_paired and d_w >= 1600:
@@ -800,7 +855,8 @@ class GeneratorEngine:
                                 pos_c = self._find_valid_placement(
                                     c_w, c_d, boundary,
                                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                                    clearance_boxes=clearance_boxes
                                 )
                                 if pos_c:
                                     px, py = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
@@ -827,7 +883,8 @@ class GeneratorEngine:
                                 pos_c = self._find_valid_placement(
                                     c_w, c_d, boundary,
                                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                                    clearance_boxes=clearance_boxes
                                 )
                                 if pos_c:
                                     c_x, c_y = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
@@ -885,6 +942,7 @@ class GeneratorEngine:
                         "rotation_deg": 0,
                     })
                     occupied_boxes.append(d_box)
+                    clearance_boxes.append((x, cur_y + d_d, x + d_w, cur_y + d_d + 900))
                     desks_placed += 1
 
                     if is_paired and d_w >= 1600:
@@ -898,7 +956,8 @@ class GeneratorEngine:
                                 pos_c = self._find_valid_placement(
                                     c_w, c_d, boundary,
                                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                                    clearance_boxes=clearance_boxes
                                 )
                                 if pos_c:
                                     px, py = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
@@ -925,7 +984,8 @@ class GeneratorEngine:
                                 pos_c = self._find_valid_placement(
                                     c_w, c_d, boundary,
                                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                                    clearance_boxes=clearance_boxes
                                 )
                                 if pos_c:
                                     c_x, c_y = (pos_c[0] // 100) * 100, (pos_c[1] // 100) * 100
@@ -949,7 +1009,11 @@ class GeneratorEngine:
                 pos = self._find_valid_placement(
                     d_w, d_d, boundary,
                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                    clearance_boxes=clearance_boxes,
+                    require_rear_clearance=True,
+                    rear_clearance_mm=900,
+                    rot=0
                 )
                 if not pos:
                     break
@@ -966,6 +1030,7 @@ class GeneratorEngine:
                     "rotation_deg": 0,
                 })
                 occupied_boxes.append(d_box)
+                clearance_boxes.append((dx, dy + d_d, dx + d_w, dy + d_d + 900))
                 desks_placed += 1
 
         # --- Fallback for remaining chairs: only if valid placement is found ---
@@ -973,7 +1038,8 @@ class GeneratorEngine:
             pos = self._find_valid_placement(
                 c_w, c_d, boundary,
                 min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                occupied_boxes, room_spec, chair_boxes, door_buffers
+                occupied_boxes, room_spec, chair_boxes, door_buffers,
+                clearance_boxes=clearance_boxes
             )
             if not pos:
                 break
@@ -1002,7 +1068,8 @@ class GeneratorEngine:
                 pos_s = self._find_valid_placement(
                     s_w, s_d, boundary,
                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                    clearance_boxes=clearance_boxes
                 )
                 if pos_s:
                     sx, sy = (pos_s[0] // 100) * 100, (pos_s[1] // 100) * 100
@@ -1027,7 +1094,8 @@ class GeneratorEngine:
                 pos_col = self._find_valid_placement(
                     cl_w, cl_d, boundary,
                     min_x + 300, max_x - 300, min_y + 300, max_y - 300,
-                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                    clearance_boxes=clearance_boxes
                 )
                 if pos_col:
                     clx, cly = (pos_col[0] // 100) * 100, (pos_col[1] // 100) * 100
@@ -1052,7 +1120,8 @@ class GeneratorEngine:
                 pos_acc = self._find_valid_placement(
                     ac_w, ac_d, boundary,
                     min_x + 200, max_x - 200, min_y + 200, max_y - 200,
-                    occupied_boxes, room_spec, chair_boxes, door_buffers
+                    occupied_boxes, room_spec, chair_boxes, door_buffers,
+                    clearance_boxes=clearance_boxes
                 )
                 if pos_acc:
                     ax, ay = (pos_acc[0] // 100) * 100, (pos_acc[1] // 100) * 100
