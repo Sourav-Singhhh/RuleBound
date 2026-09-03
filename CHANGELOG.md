@@ -4,6 +4,31 @@ All notable changes to the RuleBound project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-09-03 (Targeted Correctness Fix: RB-GEO-001 Walkway Scope & Parser Hardening)
+
+### Added
+- **Focused RB-GEO-001 & Parser Unit Tests**:
+  - `test_geo_001_chair_chair_at_same_workstation_does_not_trigger`: Intra-pod chair spacing is not a public walkway.
+  - `test_geo_001_chairs_around_collaboration_table_do_not_trigger`: Conference seating around shared meeting tables does not trigger false corridor violations.
+  - `test_geo_001_accessory_accessory_does_not_trigger`: Movable whiteboard/acoustic screens standing near each other do not trigger walkway violations.
+  - `test_geo_001_chair_desk_gap_governed_by_other_rules_does_not_trigger`: Orthogonal chair-to-desk gaps are governed by dedicated rules (`RB-GEO-004`/`RB-GEO-008`).
+  - `test_geo_001_genuine_pod_primary_walkway_still_triggers`: Genuine pod-to-pod corridor bottlenecks (< 900 mm) remain strictly enforced.
+  - `test_21_capacity_parser_natural_phrasing`: Supports natural phrases ("for 18 people", "18 employees", "a team of eighteen").
+  - `test_22_desk_negation_parsing`: Distinguishes negative clauses ("with no desks", "without any desks", "zero desks") to prevent false desk counts.
+
+### Changed
+- **RB-GEO-001 Primary Circulation Scope**:
+  - Corrected `RB-GEO-001` in `src/constraints.py` to evaluate circulation clear width across major structural furniture arrangements (`desk`, `storage`, `collaboration`).
+  - Decoupled task seating ergonomics and mobile accessories from architectural corridor checks, eliminating 18 false-positive violations across official challenge rooms.
+  - Allowed `ArbitrationEngine` to naturally discover a **0-violation valid layout for ROOM-02** in 2 iterations, generating a fully priced quote of **₹2,70,933 INR**.
+- **Brief Parser Negation Handling**:
+  - Distinguishes positive workstation requests from negative clauses in `src/generator.py`, preventing false desk allocation when briefs explicitly state "with no desks" or "zero desks".
+- **Canonical Outputs Updated**:
+  - ROOM-02 is now verified `valid` and `priced` (`quote.json`).
+  - ROOM-01, ROOM-03, ROOM-04, and ROOM-05 remain honestly `unsatisfiable` due to physical boundary geometry and egress constraints.
+
+---
+
 ## [3.1.0] - 2026-09-03 (Semantic Hardening: Brief Semantics & Universal Furniture Preservation)
 
 ### Added

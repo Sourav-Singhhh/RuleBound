@@ -37,7 +37,7 @@
       "placement_id": "P005",
       "rotation_deg": 0,
       "sku": "NW-CHA-001",
-      "x_mm": 8400,
+      "x_mm": 8300,
       "y_mm": 4200
     },
     {
@@ -178,68 +178,6 @@
     }
   ],
   "room_id": "ROOM-02",
-  "status": "unsatisfiable",
-  "violations": [
-    {
-      "affected_placement_ids": [
-        "P012",
-        "P014"
-      ],
-      "measured": {
-        "achieved_collaboration_units": 2,
-        "achieved_seating_capacity": 16,
-        "achieved_storage_units": 4,
-        "achieved_workstation_capacity": 0,
-        "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 2,
-        "walkway_gap_mm": 80
-      },
-      "message": "Primary walkways require 900 mm clear width.",
-      "repair_options": [
-        {
-          "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 16/16 seats, 0/0 workstations with 2 unresolved spatial violations."
-        }
-      ],
-      "required": {
-        "min_walkway_gap_mm": 900,
-        "required_collaboration_units": 2,
-        "required_seating_capacity": 16,
-        "required_storage_units": 4,
-        "required_workstation_capacity": 0
-      },
-      "rule_id": "RB-GEO-001",
-      "violation_id": "V001"
-    },
-    {
-      "affected_placement_ids": [
-        "P005"
-      ],
-      "measured": {
-        "achieved_collaboration_units": 2,
-        "achieved_seating_capacity": 16,
-        "achieved_storage_units": 4,
-        "achieved_workstation_capacity": 0,
-        "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 2,
-        "wall_offset_mm": 80
-      },
-      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
-      "repair_options": [
-        {
-          "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 16/16 seats, 0/0 workstations with 2 unresolved spatial violations."
-        }
-      ],
-      "required": {
-        "min_wall_offset_mm": 100,
-        "required_collaboration_units": 2,
-        "required_seating_capacity": 16,
-        "required_storage_units": 4,
-        "required_workstation_capacity": 0
-      },
-      "rule_id": "RB-GEO-005",
-      "violation_id": "V002"
-    }
-  ]
+  "status": "valid",
+  "violations": []
 }

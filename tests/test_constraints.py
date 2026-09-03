@@ -435,6 +435,72 @@ class TestConstraintEngine(unittest.TestCase):
         rule_ids = [v["rule_id"] for v in res["violations"]]
         self.assertNotIn("RB-GEO-001", rule_ids)
 
+    def test_geo_001_chair_chair_at_same_workstation_does_not_trigger(self) -> None:
+        # Two task chairs side-by-side at a desk pod separated by 300mm (< 900mm)
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "C01", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+                {"placement_id": "C02", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 1820, "y_mm": 1000, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_chairs_around_collaboration_table_do_not_trigger(self) -> None:
+        # Conference chairs around a collaboration table separated by 80mm (< 900mm)
+        layout = {
+            "room_id": "ROOM-02",
+            "placements": [
+                {"placement_id": "COL1", "sku": "NW-COL-001", "finish_id": "F01", "x_mm": 2000, "y_mm": 2000, "rotation_deg": 0},
+                {"placement_id": "C01", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 1500, "y_mm": 2200, "rotation_deg": 0},
+                {"placement_id": "C02", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 2100, "y_mm": 2280, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_accessory_accessory_does_not_trigger(self) -> None:
+        # Two mobile whiteboards/screens placed 50mm apart
+        layout = {
+            "room_id": "ROOM-03",
+            "placements": [
+                {"placement_id": "A01", "sku": "NW-ACC-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+                {"placement_id": "A02", "sku": "NW-ACC-001", "finish_id": "F01", "x_mm": 1350, "y_mm": 1000, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_chair_desk_gap_governed_by_other_rules_does_not_trigger(self) -> None:
+        # Chair placed 200mm orthogonal to desk
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "D01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+                {"placement_id": "C01", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 2400, "y_mm": 1100, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertNotIn("RB-GEO-001", rule_ids)
+
+    def test_geo_001_genuine_pod_primary_walkway_still_triggers(self) -> None:
+        # Two major desk pods facing each other across a corridor with only 600mm gap (< 900mm)
+        layout = {
+            "room_id": "ROOM-01",
+            "placements": [
+                {"placement_id": "D01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 1000, "rotation_deg": 0},
+                {"placement_id": "D02", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 1000, "y_mm": 2200, "rotation_deg": 0},
+            ]
+        }
+        res = self.engine.validate_layout(layout, self.room_01)
+        rule_ids = [v["rule_id"] for v in res["violations"]]
+        self.assertIn("RB-GEO-001", rule_ids)
+
 
 if __name__ == "__main__":
     unittest.main()

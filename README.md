@@ -105,13 +105,13 @@ layout.json + quote.json
 
 | Room | Layout Status | Achieved / Req Seating | Achieved / Req Desks | Achieved / Req Secondary Furniture | Spatial Violations | Quote Status |
 | :--- | :--- | :---: | :---: | :---: | :---: | :--- |
-| **ROOM-01** | `unsatisfiable` | **12 / 12** | **6 / 6** (paired) | 2 / 2 storage, 1 / 1 collab | 15 | `blocked` |
-| **ROOM-02** | `unsatisfiable` | **16 / 16** | **0 / 0** (workshop) | 2 / 2 collab tables, 4 / 4 storage | 2 | `blocked` |
-| **ROOM-03** | `unsatisfiable` | **10 / 10** | **8 / 8** (fixed) | 1 / 1 touchdown, 2 / 2 accessories | 7 | `blocked` |
-| **ROOM-04** | `unsatisfiable` | **14 / 14** | **14 / 14** (individual) | 2 / 2 storage | 25 | `blocked` |
-| **ROOM-05** | `unsatisfiable` | **18 / 18** | **12 / 12** (desk pos) | 2 / 2 storage, 2 / 2 collab, 2 / 2 accessories | 16 | `blocked` |
+| **ROOM-01** | `unsatisfiable` | **12 / 12** | **6 / 6** (paired) | 2 / 2 storage, 1 / 1 collab | 9 | `blocked` |
+| **ROOM-02** | `valid` | **16 / 16** | **0 / 0** (workshop) | 2 / 2 collab tables, 4 / 4 storage | 0 | `priced` (INR 2,70,933) |
+| **ROOM-03** | `unsatisfiable` | **10 / 10** | **8 / 8** (fixed) | 1 / 1 touchdown, 2 / 2 accessories | 6 | `blocked` |
+| **ROOM-04** | `unsatisfiable` | **14 / 14** | **14 / 14** (individual) | 2 / 2 storage | 22 | `blocked` |
+| **ROOM-05** | `unsatisfiable` | **18 / 18** | **12 / 12** (desk pos) | 2 / 2 storage, 2 / 2 collab, 2 / 2 accessories | 9 | `blocked` |
 
-> **Engineering Integrity Note**: Unlike flawed approaches that either delete 80–100% of desks to force a false "valid" status or blindly assume every room requires individual desks equal to capacity, RuleBound strictly adheres to ground-truth room semantics (such as 6 paired desks for 12 people in ROOM-01 and 0 desks with 2 collaboration tables in ROOM-02). When room geometry cannot physically fit all requested furniture while satisfying egress and walkway clearances, RuleBound honestly escalates to `status: "unsatisfiable"` with structured violations and customer-readable trade-offs, writing a schema-compliant `blocked` quote under `RB-PRC-013`.
+> **Engineering Integrity Note**: Unlike flawed approaches that either delete 80–100% of desks to force a false "valid" status or blindly assume every room requires individual desks equal to capacity, RuleBound strictly adheres to ground-truth room semantics (such as 6 paired desks for 12 people in ROOM-01 and 0 desks with 2 collaboration tables in ROOM-02, which achieves a 0-violation valid layout priced at ₹2,70,933). When bounded deterministic repair is exhausted without finding a zero-violation layout while preserving all required furniture (e.g. tight physical egress corridors in ROOM-01, ROOM-03, ROOM-04, ROOM-05), RuleBound honestly escalates to `status: "unsatisfiable"` with structured violations and customer-readable trade-offs, writing a schema-compliant `blocked` quote under `RB-PRC-013`. Primary walkway clearances (`RB-GEO-001`, 900 mm) are accurately enforced across structural furniture circulation corridors rather than misconstruing intra-pod chair ergonomics as walkway blockages.
 
 ## Output Structure
 

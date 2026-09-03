@@ -498,20 +498,16 @@ class ConstraintEngine:
                 p1 = prep_placements[i]
                 p2 = prep_placements[j]
 
-                # Exclude paired desk + chair workstation relationship (governed by GEO-004 / GEO-008)
                 f1, f2 = p1["family"], p2["family"]
-                if (f1 == "desk" and f2 == "chair") or (f1 == "chair" and f2 == "desk"):
-                    desk_p = p1 if f1 == "desk" else p2
-                    chair_p = p2 if f1 == "desk" else p1
-
-                    dx1, dy1, dx2, dy2 = desk_p["bbox"]
-                    cx1, cy1, cx2, cy2 = chair_p["bbox"]
-
-                    # Check if chair is aligned horizontally with desk and located in rear/front zone
-                    x_over = max(0, min(dx2, cx2) - max(dx1, cx1))
-                    if x_over > 0:
-                        if (dy2 <= cy1 <= dy2 + 1500) or (cy2 <= dy1 <= cy2 + 1500):
-                            continue
+                # Primary walkways require 900 mm clear width between major structural furniture arrangements
+                # (workstation pods, storage batteries, collaboration tables).
+                # Exclude non-walkway furniture pairs:
+                # - Task chairs are governed by dedicated rules (RB-GEO-004 rear clearance, RB-GEO-008 pull-out zone).
+                # - Inter-chair spacing belongs to intra-workstation or table seating ergonomics, not public walkways.
+                # - Accessories (mobile whiteboards, screens) are movable objects, not permanent architectural corridor walls.
+                walkway_structural_families = {"desk", "storage", "collaboration"}
+                if f1 not in walkway_structural_families or f2 not in walkway_structural_families:
+                    continue
 
                 x1a, y1a, x1b, y1b = p1["bbox"]
                 x2a, y2a, x2b, y2b = p2["bbox"]

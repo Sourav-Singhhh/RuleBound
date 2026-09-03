@@ -196,15 +196,35 @@ class GeneratorEngine:
         """
         Extracts seating capacity requirement from room_spec or brief.
         Priority: room_spec.capacity -> regex extraction from brief -> default 1.
+        Supports natural language forms ('for 18 people', '18 employees', 'a team of eighteen', '18-person').
         """
         if "capacity" in room_spec and isinstance(room_spec["capacity"], int):
             return room_spec["capacity"]
 
-        m = re.search(r"(\d+)-person|team of (\d+)|capacity of (\d+)", brief_text, re.IGNORECASE)
-        if m:
-            for g in m.groups():
-                if g:
-                    return int(g)
+        num_words = {
+            "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+            "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17,
+            "eighteen": 18, "nineteen": 19, "twenty": 20
+        }
+        num_pat = r"(?:a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)"
+
+        patterns = [
+            r"\b(?:capacity of|team of|seating for|room for|for)\s+(" + num_pat + r")\b(?:\s+(?:people|employees|staff|members|persons|seats))?",
+            r"\b(" + num_pat + r")\s*(?:-person|\s+person|\s+people|\s+employees|\s+staff)\b",
+            r"\b(?:team of)\s+(" + num_pat + r")\b",
+        ]
+
+        text_lower = brief_text.lower()
+        for pat in patterns:
+            m = re.search(pat, text_lower)
+            if m:
+                val_str = m.group(1).lower()
+                if val_str in num_words:
+                    return num_words[val_str]
+                if val_str in ("a", "an"):
+                    return 1
+                if val_str.isdigit():
+                    return int(val_str)
 
         return 1
 
@@ -213,6 +233,7 @@ class GeneratorEngine:
         Extracts explicit furniture counts from brief text.
         Distinguishes explicit quantitative requests from unquantified qualitative guidance.
         Conservative: NEVER manufactures a desk requirement from capacity alone.
+        Correctly distinguishes positive requirements from negative clauses ('with no desks', 'zero desks').
         """
         counts = {"desk": 0, "storage": 0, "collaboration": 0, "accessory": 0, "is_paired": False}
         text_lower = brief_text.lower()
@@ -224,13 +245,23 @@ class GeneratorEngine:
         }
         num_pattern = r"(a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|\d+)"
 
-        # 1. Paired desks
+        # Check explicit desk negation first (e.g. "with no desks", "without any desks", "zero desks")
+        has_desk_negation = bool(re.search(
+            r"\b(?:no|without|zero|0)\s+(?:any\s+|individual\s+|fixed\s+)?(?:desks?|workstations?|work\s+positions?|desk\s+positions?)\b",
+            text_lower
+        ))
+
+        # 1. Desk extraction
+        if has_desk_negation:
+            counts["desk"] = 0
+
+        # Paired desks
         # Each physical desk accommodates two work positions / seating positions
-        if re.search(r"\bpaired\s+desks?\b", text_lower):
+        elif re.search(r"\bpaired\s+desks?\b", text_lower):
             counts["is_paired"] = True
             counts["desk"] = (default_capacity + 1) // 2
 
-        # 2. Explicit individual desks / work positions / desk positions
+        # Explicit individual desks / work positions / desk positions
         elif re.search(r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,4}(?:using\s+individual\s+desks?|individual\s+desks?|fixed\s+work\s+positions?|work\s+positions?|desk\s+positions?|desks?|workstations?)\b", text_lower):
             m_desk = re.search(r"\b" + num_pattern + r"\b\s+(?:[a-z-]+\s+){0,4}(?:using\s+individual\s+desks?|individual\s+desks?|fixed\s+work\s+positions?|work\s+positions?|desk\s+positions?|desks?|workstations?)\b", text_lower)
             val_str = m_desk.group(1).lower()

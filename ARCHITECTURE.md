@@ -88,8 +88,10 @@ To prevent **furniture evaporation** (where an algorithm deletes required furnit
    - Differentiates workstation structures based on ground-truth brief specifications rather than assuming capacity equals desks. Paired desks (e.g. ROOM-01) use 1600mm desks (`NW-DES-003`) seating two chairs per physical desk. Collaboration workshops without desk requirements (e.g. ROOM-02) allocate 0 desks and seat users at large collaboration tables (`NW-COL-008`/`003`).
 4. **Clean Non-Overlapping Initial Generation**:
    - The generator strictly places furniture inside boundary polygons and egress corridors without dumping artificial overlapping boxes just to satisfy numeric counters.
-5. **Honest Unsatisfiable Escalation**:
-   - If a room cannot physically accommodate all required furniture without violating spatial rules (e.g., tight egress corridors or door swing clearances), the engine terminates and escalates with `status: "unsatisfiable"` and customer-readable trade-offs. It never silently deletes required furniture.
+5. **Accurate Primary Walkway Circulation (RB-GEO-001)**:
+   - Evaluates the 900 mm walkway clear width across primary circulation corridors bounded by major structural furniture arrangements (`desk`, `storage`, `collaboration`). Intra-workstation chair spacing, conference seating around meeting tables, and mobile accessories are decoupled to prevent false circulation bottlenecks.
+6. **Honest Escalation Under Bounded Repair**:
+   - When bounded deterministic repair is exhausted without finding a zero-violation layout while preserving all required furniture (e.g., tight physical egress corridors or door swing clearances), the engine terminates and escalates with `status: "unsatisfiable"` and customer-readable trade-offs. It never silently deletes required furniture.
 
 ### 2.6 Atomic Composite Operators
 Single-placement repairs frequently become trapped when a workstation is governed by coupled desk/chair clearance geometry:

@@ -287,6 +287,43 @@ class TestGeneratorEngine(unittest.TestCase):
                 f"{r_id}: proposals were not byte-identical across runs"
             )
 
+    def test_21_capacity_parser_natural_phrasing(self) -> None:
+        """Verify parse_capacity handles natural capacity phrasing and word numbers."""
+        test_cases = [
+            ("Design a room for 18 people", 18),
+            ("18 employees", 18),
+            ("18 staff", 18),
+            ("a team of eighteen", 18),
+            ("seating for 18 people", 18),
+            ("18-person open office", 18),
+            ("team of 12", 12),
+            ("capacity of 16", 16),
+        ]
+        for phrase, expected in test_cases:
+            # Without room spec capacity, extracts from text
+            cap = self.generator.parse_capacity({}, phrase)
+            self.assertEqual(cap, expected, f"Failed on phrase: '{phrase}'")
+
+        # room_spec["capacity"] precedence is strictly preserved
+        cap_override = self.generator.parse_capacity({"capacity": 10}, "Design a room for 18 people")
+        self.assertEqual(cap_override, 10)
+
+    def test_22_desk_negation_parsing(self) -> None:
+        """Verify furniture parsing correctly identifies negative requirements and sets desk count to 0."""
+        neg_cases = [
+            ("Provide seating for 10 people with no desks", 0),
+            ("Seating for 10 people without any desks", 0),
+            ("Collaboration lounge with no individual desks", 0),
+            ("Training space with zero desks required", 0),
+            ("10 people, 0 desks", 0),
+        ]
+        for phrase, expected_desks in neg_cases:
+            counts = self.generator.parse_furniture_counts(phrase, default_capacity=10)
+            self.assertEqual(
+                counts["desk"], expected_desks,
+                f"Failed on negation phrase: '{phrase}', got {counts['desk']}"
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
