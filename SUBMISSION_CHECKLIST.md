@@ -7,7 +7,7 @@
 - [x] Standalone DXF floorplan exporter committed and verified (`python tools/export_dxf.py --input data --output OUTPUT --dxf-dir DXF_OUTPUT`).
 - [x] `tools/validate_output.py OUTPUT` reports `OUTPUT VALID` across all layout and quote files.
 - [x] `tools/check_determinism.py` confirms 100% byte-identical outputs across runs.
-- [x] Full unit test suite passes: 98/98 tests passing (`python -m unittest discover tests`).
+- [x] Full unit test suite passes: 105/105 tests passing (`python -m unittest discover tests`).
 - [x] Verified in isolated clean-checkout sandbox with zero external package dependencies.
 - [ ] Final demo video (3.5–4 minutes) recorded and URL added to README.md.
 - [x] Every dependency, asset, and code fragment is original, self-contained, or properly licensed.

@@ -95,7 +95,7 @@ layout.json + quote.json
 
 ## Verification & Status
 
-- **Unittest Suite**: 98/98 tests passing (`python -m unittest discover tests`).
+- **Unittest Suite**: 105/105 tests passing (`python -m unittest discover tests`).
 - **Pack Verification**: Official asset pack verified (`python tools/verify_pack.py data`).
 - **Output Validation**: 100% schema compliant (`python tools/validate_output.py OUTPUT`).
 - **Determinism**: 10 output files are 100% byte-identical across runs.
@@ -106,11 +106,11 @@ layout.json + quote.json
 
 | Room | Layout Status | Achieved / Req Seating | Achieved / Req Desks | Achieved / Req Secondary Furniture | Spatial Violations | Quote Status |
 | :--- | :--- | :---: | :---: | :---: | :---: | :--- |
-| **ROOM-01** | `unsatisfiable` | **12 / 12** | **6 / 6** (paired) | 2 / 2 storage, 1 / 1 collab | 9 | `blocked` |
+| **ROOM-01** | `unsatisfiable` | **12 / 12** | **6 / 6** (paired) | 2 / 2 storage, 1 / 1 collab | 3 | `blocked` |
 | **ROOM-02** | `valid` | **16 / 16** | **0 / 0** (workshop) | 2 / 2 collab tables, 4 / 4 storage | 0 | `priced` (INR 2,70,933) |
-| **ROOM-03** | `unsatisfiable` | **10 / 10** | **8 / 8** (fixed) | 1 / 1 touchdown, 2 / 2 accessories | 5 | `blocked` |
-| **ROOM-04** | `unsatisfiable` | **14 / 14** | **14 / 14** (individual) | 2 / 2 storage | 23 | `blocked` |
-| **ROOM-05** | `unsatisfiable` | **18 / 18** | **12 / 12** (desk pos) | 2 / 2 storage, 2 / 2 collab, 2 / 2 accessories | 9 | `blocked` |
+| **ROOM-03** | `unsatisfiable` | **10 / 10** | **8 / 8** (fixed) | 1 / 1 touchdown, 2 / 2 accessories | 2 | `blocked` |
+| **ROOM-04** | `unsatisfiable` | **14 / 14** | **14 / 14** (individual) | 2 / 2 storage | 6 | `blocked` |
+| **ROOM-05** | `unsatisfiable` | **18 / 18** | **12 / 12** (desk pos) | 2 / 2 storage, 2 / 2 collab, 2 / 2 accessories | 6 | `blocked` |
 
 > **Engineering Integrity Note**: RuleBound preserves all requested furniture and authoritative spatial constraints. When extensive deterministic feasibility search finds no zero-violation arrangement within the evaluated placement and repair search space while retaining all required furniture (such as in ROOM-01, ROOM-03, ROOM-04, and ROOM-05), RuleBound honestly escalates to `status: "unsatisfiable"` with structured violations and customer-readable trade-offs, writing a schema-compliant `blocked` quote under `RB-PRC-013`. The hard boundary safety gate guarantees that no candidate layout placing furniture outside the room polygon is ever accepted, and targeted `RB-GEO-004` repair calculates exact geometric shortfall displacements to directly resolve rear-clearance conflicts.
 

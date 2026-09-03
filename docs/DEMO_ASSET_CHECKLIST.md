@@ -40,7 +40,7 @@ python tools/check_determinism.py --command "python starter/python/runner.py --i
 # 4. Standalone DXF Floorplan Exporter
 python tools/export_dxf.py --input data --output OUTPUT --dxf-dir DXF_OUTPUT
 
-# 5. Full 98-Test Regression Suite
+# 5. Full 105-Test Regression Suite
 python -m unittest discover tests
 ```
 
