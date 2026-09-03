@@ -90,8 +90,12 @@ To prevent **furniture evaporation** (where an algorithm deletes required furnit
    - The generator strictly places furniture inside boundary polygons and egress corridors without dumping artificial overlapping boxes just to satisfy numeric counters.
 5. **Accurate Primary Walkway Circulation (RB-GEO-001)**:
    - Evaluates the 900 mm walkway clear width across primary circulation corridors bounded by major structural furniture arrangements (`desk`, `storage`, `collaboration`). Intra-workstation chair spacing, conference seating around meeting tables, and mobile accessories are decoupled to prevent false circulation bottlenecks.
-6. **Honest Escalation Under Bounded Repair**:
-   - When bounded deterministic repair is exhausted without finding a zero-violation layout while preserving all required furniture (e.g., tight physical egress corridors or door swing clearances), the engine terminates and escalates with `status: "unsatisfiable"` and customer-readable trade-offs. It never silently deletes required furniture.
+6. **Hard Polygon Boundary Safety Invariant**:
+   - `is_layout_inside_boundary(cand_layout, room_spec)` guarantees that invalid geometry is never an accepted repair state. Any candidate repair shifting a furniture placement footprint outside the authoritative room polygon is strictly rejected and marked tabu.
+7. **Targeted Exact-Distance RB-GEO-004 Repair**:
+   - For `RB-GEO-004` (occupied desk 900 mm rear clearance), arbitration computes the exact geometric shortfall to 900 mm and generates deterministic exact-deficit and grid-aligned displacements for the desk, paired pod (`MOVE_WORKSTATION_POD`), and rear obstacle.
+8. **Honest Escalation Under Bounded Repair**:
+   - With the hard boundary and semantic invariants enforced, the bounded deterministic repair process terminates at the best state found within its allowed repair trajectory. When bounded deterministic repair is exhausted without finding a zero-violation layout while preserving required furniture, the engine honestly escalates with `status: "unsatisfiable"` and customer-readable trade-offs. It never silently deletes required furniture.
 
 ### 2.6 Atomic Composite Operators
 Single-placement repairs frequently become trapped when a workstation is governed by coupled desk/chair clearance geometry:

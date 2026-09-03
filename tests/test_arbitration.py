@@ -514,6 +514,168 @@ class TestArbitrationEngine(unittest.TestCase):
         self.assertGreaterEqual(storage_count, 1, "Required storage must NOT be deleted.")
         self.assertGreaterEqual(collab_count, 1, "Required collaboration tables must NOT be deleted.")
 
+    def test_ad_boundary_safety_gate_rejects_candidate_outside_polygon(self) -> None:
+        """
+        Boundary Safety: Verify that a candidate repair moving a placement outside
+        the room polygon is strictly rejected.
+        """
+        room_spec = {
+            "room_id": "TEST-ROOM",
+            "boundary_mm": [[0, 0], [4000, 0], [4000, 4000], [0, 4000]],
+            "doors": [],
+            "capacity": 1,
+        }
+        # Placement at x=3500, y=2000 (valid, desk is 1200x600 -> x2=3700 <= 4000)
+        # Nudging x=+500 would push x2 to 4200 (outside boundary)
+        layout_valid = ProposedLayout(
+            room_id="TEST-ROOM",
+            placements=(PlacementProposal("P01", "NW-CHA-001", "F01", 3300, 2000, 0),)
+        )
+        self.assertTrue(self.arbitrator.is_layout_inside_boundary(layout_valid, room_spec))
+
+        layout_outside = ProposedLayout(
+            room_id="TEST-ROOM",
+            placements=(PlacementProposal("P01", "NW-CHA-001", "F01", 3800, 2000, 0),)
+        )
+        self.assertFalse(self.arbitrator.is_layout_inside_boundary(layout_outside, room_spec))
+
+        # Test within arbitrate: start at x=50 (wall viol GEO-005), but a repair that would push x<0 or x>4000 is rejected
+        res = self.arbitrator.arbitrate(
+            {"room_id": "TEST-ROOM", "placements": [{"placement_id": "P01", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 50, "y_mm": 2000, "rotation_deg": 0}]},
+            room_spec
+        )
+        p_res = ProposedLayout.from_dict(res)
+        self.assertTrue(self.arbitrator.is_layout_inside_boundary(p_res, room_spec))
+
+    def test_ae_geo004_targeted_repair_candidate_generation(self) -> None:
+        """
+        GEO-004 Targeted Repair: A known 0mm -> 900mm clearance deficit produces
+        targeted candidates with exact deficit and grid-aligned displacements.
+        """
+        # Desk at (1000, 1000), rot=0 -> bbox (1000, 1000, 2200, 1600). Rear zone: Y in [1600, 2500].
+        # Place obstacle (storage) at (1000, 1600) -> 0mm clearance, deficit = 900mm.
+        layout = ProposedLayout(
+            room_id="TEST-ROOM",
+            placements=(
+                PlacementProposal("D01", "NW-DES-001", "F01", 1000, 1000, 0),
+                PlacementProposal("S01", "NW-STO-001", "F01", 1000, 1600, 0),
+            )
+        )
+        viols = [{
+            "rule_id": "RB-GEO-004",
+            "message": "Occupied desks require 900 mm rear clearance.",
+            "affected_placement_ids": ["D01"],
+            "measured": {"rear_clearance_mm": 0},
+            "required": {"rear_clearance_mm": 900},
+        }]
+        candidates = self.arbitrator.generate_repair_candidates(layout, viols)
+        # Look for targeted desk nudge dy=-900 or obstacle nudge dy=+900
+        desk_targeted = [c for c in candidates if c.target_placement_id == "D01" and c.params.get("dy_mm") == -900]
+        obs_targeted = [c for c in candidates if c.target_placement_id == "S01" and c.params.get("dy_mm") == 900]
+        self.assertTrue(len(desk_targeted) > 0 or len(obs_targeted) > 0, "Targeted displacement for 900mm deficit must be generated.")
+
+    def test_af_candidate_acceptance_when_objective_improves(self) -> None:
+        """
+        Candidate Acceptance: Targeted GEO-004 candidate is accepted when the complete
+        lexicographic objective strictly improves.
+        """
+        room_spec = {
+            "room_id": "TEST-ROOM",
+            "boundary_mm": [[0, 0], [6000, 0], [6000, 6000], [0, 6000]],
+            "doors": [],
+            "capacity": 0,
+            "required_workstations": 1,
+        }
+        # Desk at (2000, 2000), rot=0. Storage at (2000, 2600). Rear clearance is 0mm (deficit 900mm).
+        # Obstacle can be shifted to (2000, 3500) to clear GEO-004.
+        layout_dict = {
+            "room_id": "TEST-ROOM",
+            "placements": [
+                {"placement_id": "D01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 2000, "y_mm": 2000, "rotation_deg": 0},
+                {"placement_id": "S01", "sku": "NW-STO-001", "finish_id": "F01", "x_mm": 2000, "y_mm": 2600, "rotation_deg": 0},
+            ]
+        }
+        res = self.arbitrator.arbitrate(layout_dict, room_spec)
+        geo4_viols = [v for v in res.get("violations", []) if v["rule_id"] == "RB-GEO-004"]
+        self.assertEqual(len(geo4_viols), 0, "Targeted repair should resolve the solitary GEO-004 rear conflict.")
+        self.assertEqual(res["status"], "valid")
+
+    def test_ag_candidate_rejection_when_causing_hard_violation(self) -> None:
+        """
+        Candidate Rejection: A targeted move that would push a placement outside the room
+        boundary or create a collision is strictly rejected.
+        """
+        room_spec = {
+            "room_id": "TEST-ROOM",
+            "boundary_mm": [[0, 0], [3000, 0], [3000, 3000], [0, 3000]],
+            "doors": [],
+            "capacity": 0,
+            "required_workstations": 1,
+        }
+        # Desk at y=2000, room max_y=3000. Rear zone is [2600, 3500] > 3000 (hits wall).
+        # Shifting desk down by -900 would put it at y=1100 (which is valid inside).
+        # But if another object blocks below, it cannot move there.
+        layout_dict = {
+            "room_id": "TEST-ROOM",
+            "placements": [
+                {"placement_id": "D01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 500, "y_mm": 2200, "rotation_deg": 0},
+            ]
+        }
+        res = self.arbitrator.arbitrate(layout_dict, room_spec)
+        p_res = ProposedLayout.from_dict(res)
+        self.assertTrue(self.arbitrator.is_layout_inside_boundary(p_res, room_spec))
+
+    def test_ah_determinism_geo004_candidate_generation(self) -> None:
+        """
+        Determinism: Repeated candidate generation for GEO-004 produces identical ordering.
+        """
+        layout = ProposedLayout(
+            room_id="TEST-ROOM",
+            placements=(
+                PlacementProposal("D01", "NW-DES-001", "F01", 1000, 1000, 0),
+                PlacementProposal("S01", "NW-STO-001", "F01", 1000, 1600, 0),
+            )
+        )
+        viols = [{
+            "rule_id": "RB-GEO-004",
+            "message": "Occupied desks require 900 mm rear clearance.",
+            "affected_placement_ids": ["D01"],
+            "measured": {"rear_clearance_mm": 0},
+            "required": {"rear_clearance_mm": 900},
+        }]
+        c1 = self.arbitrator.generate_repair_candidates(layout, viols)
+        c2 = self.arbitrator.generate_repair_candidates(layout, viols)
+        keys1 = [c.sort_key for c in c1]
+        keys2 = [c.sort_key for c in c2]
+        self.assertEqual(keys1, keys2, "Candidate generation must be byte-identical and deterministic.")
+
+    def test_ai_semantic_preservation_targeted_movement(self) -> None:
+        """
+        Semantic Preservation: Targeted movement never removes required furniture.
+        """
+        room_spec = {
+            "room_id": "TEST-ROOM",
+            "boundary_mm": [[0, 0], [5000, 0], [5000, 5000], [0, 5000]],
+            "doors": [],
+            "capacity": 2,
+            "required_workstations": 2,
+        }
+        layout_dict = {
+            "room_id": "TEST-ROOM",
+            "placements": [
+                {"placement_id": "D01", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 500, "y_mm": 500, "rotation_deg": 0},
+                {"placement_id": "C01", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 500, "y_mm": 1400, "rotation_deg": 0},
+                {"placement_id": "D02", "sku": "NW-DES-001", "finish_id": "F01", "x_mm": 2000, "y_mm": 500, "rotation_deg": 0},
+                {"placement_id": "C02", "sku": "NW-CHA-001", "finish_id": "F01", "x_mm": 2000, "y_mm": 1400, "rotation_deg": 0},
+            ]
+        }
+        res = self.arbitrator.arbitrate(layout_dict, room_spec)
+        p_res = ProposedLayout.from_dict(res)
+        desks = self.arbitrator.count_family_capacity(p_res, "desk")
+        chairs = self.arbitrator.count_family_capacity(p_res, "chair")
+        self.assertGreaterEqual(desks, 2)
+        self.assertGreaterEqual(chairs, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

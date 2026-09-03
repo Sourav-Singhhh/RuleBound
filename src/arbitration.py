@@ -12,6 +12,8 @@ import math
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
+from src.constraints import check_bbox_overlap, get_placement_bbox, is_box_inside_polygon
+
 
 @dataclass(frozen=True)
 class PlacementProposal:
@@ -175,6 +177,28 @@ class ArbitrationEngine:
             w, d = d, w
         return w, d
 
+    def is_layout_inside_boundary(self, layout: ProposedLayout, room_spec: Dict[str, Any]) -> bool:
+        """
+        Hard safety gate: verifies that every placement in the layout lies strictly
+        within the authoritative room polygon boundary.
+        """
+        boundary_coords = room_spec.get("boundary_mm", [])
+        if boundary_coords:
+            for p in layout.placements:
+                w, d = self._get_placement_dims(p)
+                bbox = get_placement_bbox(p.x_mm, p.y_mm, w, d, p.rotation_deg)
+                if not is_box_inside_polygon(bbox, boundary_coords):
+                    return False
+        else:
+            doors = room_spec.get("doors", [])
+            max_x, max_y = 100000, 100000
+            for p in layout.placements:
+                w, d = self._get_placement_dims(p)
+                bbox = get_placement_bbox(p.x_mm, p.y_mm, w, d, p.rotation_deg)
+                if bbox[0] < 0 or bbox[1] < 0 or bbox[2] > max_x or bbox[3] > max_y:
+                    return False
+        return True
+
     def _find_desk_chair_pairs(self, layout: ProposedLayout) -> Dict[str, Tuple[str, str]]:
         """
         Identifies paired desk and task-chair placements in layout based on
@@ -333,7 +357,8 @@ class ArbitrationEngine:
     def generate_repair_candidates(
         self,
         layout: ProposedLayout,
-        violations: Sequence[Dict[str, Any]]
+        violations: Sequence[Dict[str, Any]],
+        room_spec: Optional[Dict[str, Any]] = None
     ) -> List[RepairCandidate]:
         """
         Generates candidate repair operations for active violations,
@@ -423,6 +448,152 @@ class ArbitrationEngine:
                     dist = max(100, 1100 - clearance)
                     disp = ((dist + 99) // 100) * 100
                     targeted_nudges.extend([(disp, 0), (-disp, 0), (0, disp), (0, -disp)])
+
+                elif rule_id == "RB-GEO-004":
+                    val_004 = 900
+                    rot = target_prop.rotation_deg % 360
+                    if rot == 0:
+                        rear_box = (b1[0], b1[3], b1[2], b1[3] + val_004)
+                    elif rot == 90:
+                        rear_box = (b1[0] - val_004, b1[1], b1[0], b1[3])
+                    elif rot == 180:
+                        rear_box = (b1[0], b1[1] - val_004, b1[2], b1[1])
+                    else:
+                        rear_box = (b1[2], b1[1], b1[2] + val_004, b1[3])
+
+                    geo004_shifts: List[Tuple[int, int]] = []
+
+                    # 1. Other placements overlapping the rear clearance box
+                    for other_p in layout.placements:
+                        if other_p.placement_id == pid:
+                            continue
+                        w2, d2 = self._get_placement_dims(other_p)
+                        b2 = (other_p.x_mm, other_p.y_mm, other_p.x_mm + w2, other_p.y_mm + d2)
+                        if check_bbox_overlap(rear_box, b2):
+                            if rot == 0:
+                                clearance = max(0, b2[1] - b1[3])
+                                shortfall = val_004 - clearance
+                                if shortfall > 0:
+                                    disp = shortfall
+                                    disp_grid = ((shortfall + 99) // 100) * 100
+                                    geo004_shifts.extend([(0, -disp), (0, -disp_grid)])
+                                    for ody in (disp, disp_grid):
+                                        p_str = f"DX_+0_DY_{ody:+d}"
+                                        k = (1, rule_id, other_p.placement_id, p_str)
+                                        if k not in seen_keys:
+                                            seen_keys.add(k)
+                                            candidates.append(RepairCandidate(
+                                                op_type="NUDGE",
+                                                target_placement_id=other_p.placement_id,
+                                                params={"dx_mm": 0, "dy_mm": ody},
+                                                sort_key=k
+                                            ))
+                            elif rot == 90:
+                                clearance = max(0, b1[0] - b2[2])
+                                shortfall = val_004 - clearance
+                                if shortfall > 0:
+                                    disp = shortfall
+                                    disp_grid = ((shortfall + 99) // 100) * 100
+                                    geo004_shifts.extend([(disp, 0), (disp_grid, 0)])
+                                    for odx in (-disp, -disp_grid):
+                                        p_str = f"DX_{odx:+d}_DY_+0"
+                                        k = (1, rule_id, other_p.placement_id, p_str)
+                                        if k not in seen_keys:
+                                            seen_keys.add(k)
+                                            candidates.append(RepairCandidate(
+                                                op_type="NUDGE",
+                                                target_placement_id=other_p.placement_id,
+                                                params={"dx_mm": odx, "dy_mm": 0},
+                                                sort_key=k
+                                            ))
+                            elif rot == 180:
+                                clearance = max(0, b1[1] - b2[3])
+                                shortfall = val_004 - clearance
+                                if shortfall > 0:
+                                    disp = shortfall
+                                    disp_grid = ((shortfall + 99) // 100) * 100
+                                    geo004_shifts.extend([(0, disp), (0, disp_grid)])
+                                    for ody in (-disp, -disp_grid):
+                                        p_str = f"DX_+0_DY_{ody:+d}"
+                                        k = (1, rule_id, other_p.placement_id, p_str)
+                                        if k not in seen_keys:
+                                            seen_keys.add(k)
+                                            candidates.append(RepairCandidate(
+                                                op_type="NUDGE",
+                                                target_placement_id=other_p.placement_id,
+                                                params={"dx_mm": 0, "dy_mm": ody},
+                                                sort_key=k
+                                            ))
+                            else:  # rot == 270
+                                clearance = max(0, b2[0] - b1[2])
+                                shortfall = val_004 - clearance
+                                if shortfall > 0:
+                                    disp = shortfall
+                                    disp_grid = ((shortfall + 99) // 100) * 100
+                                    geo004_shifts.extend([(-disp, 0), (-disp_grid, 0)])
+                                    for odx in (disp, disp_grid):
+                                        p_str = f"DX_{odx:+d}_DY_+0"
+                                        k = (1, rule_id, other_p.placement_id, p_str)
+                                        if k not in seen_keys:
+                                            seen_keys.add(k)
+                                            candidates.append(RepairCandidate(
+                                                op_type="NUDGE",
+                                                target_placement_id=other_p.placement_id,
+                                                params={"dx_mm": odx, "dy_mm": 0},
+                                                sort_key=k
+                                            ))
+
+                    # 2. Room boundary conflict in rear zone
+                    spec_to_use = room_spec or getattr(self, "_active_room_spec", None)
+                    if spec_to_use:
+                        boundary_coords = spec_to_use.get("boundary_mm", [])
+                        if boundary_coords:
+                            max_x = max(pt[0] for pt in boundary_coords)
+                            max_y = max(pt[1] for pt in boundary_coords)
+                            rx1, ry1, rx2, ry2 = rear_box
+                            if rot == 0 and ry2 > max_y:
+                                shortfall = ry2 - max_y
+                                disp = shortfall
+                                disp_grid = ((shortfall + 99) // 100) * 100
+                                geo004_shifts.extend([(0, -disp), (0, -disp_grid)])
+                            elif rot == 90 and rx1 < 0:
+                                shortfall = -rx1
+                                disp = shortfall
+                                disp_grid = ((shortfall + 99) // 100) * 100
+                                geo004_shifts.extend([(disp, 0), (disp_grid, 0)])
+                            elif rot == 180 and ry1 < 0:
+                                shortfall = -ry1
+                                disp = shortfall
+                                disp_grid = ((shortfall + 99) // 100) * 100
+                                geo004_shifts.extend([(0, disp), (0, disp_grid)])
+                            elif rot == 270 and rx2 > max_x:
+                                shortfall = rx2 - max_x
+                                disp = shortfall
+                                disp_grid = ((shortfall + 99) // 100) * 100
+                                geo004_shifts.extend([(-disp, 0), (-disp_grid, 0)])
+
+                    # If desk is part of a paired pod, also emit MOVE_WORKSTATION_POD for pod
+                    if pid in pod_map:
+                        d_pid, c_pid = pod_map[pid]
+                        p_min, p_max = sorted([d_pid, c_pid])
+                        for dx, dy in geo004_shifts:
+                            param_str = f"POD_{p_min}_{p_max}_DX_{dx:+d}_DY_{dy:+d}"
+                            key = (0, rule_id, d_pid, param_str)
+                            if key not in seen_keys:
+                                seen_keys.add(key)
+                                candidates.append(RepairCandidate(
+                                    op_type="MOVE_WORKSTATION_POD",
+                                    target_placement_id=d_pid,
+                                    params={
+                                        "desk_placement_id": d_pid,
+                                        "chair_placement_id": c_pid,
+                                        "dx_mm": dx,
+                                        "dy_mm": dy,
+                                    },
+                                    sort_key=key
+                                ))
+
+                    targeted_nudges.extend(geo004_shifts)
 
                 # 1. NUDGE candidates (standard + targeted)
                 all_nudges = standard_nudges + targeted_nudges
@@ -777,8 +948,10 @@ class ArbitrationEngine:
         best_objective = current_objective
         termination_reason = ""
 
+        self._active_room_spec = room_spec
+
         while step < k_max:
-            candidates = self.generate_repair_candidates(current_layout, current_violations)
+            candidates = self.generate_repair_candidates(current_layout, current_violations, room_spec=room_spec)
 
             # Collect and rank all candidate repairs that produce STRICT LEXICOGRAPHIC IMPROVEMENT
             improving_candidates = []
@@ -802,8 +975,18 @@ class ArbitrationEngine:
                         tabu_candidates.add(tabu_key)
                         continue
 
+                # Hard boundary safety gate: reject any candidate where any placement lies outside the room polygon
+                if not self.is_layout_inside_boundary(cand_layout, room_spec):
+                    tabu_candidates.add(tabu_key)
+                    continue
+
                 cand_val_res = self.constraint_engine.validate_layout(cand_layout.to_dict(), room_spec)
                 cand_violations = cand_val_res.get("violations", [])
+
+                # Secondary safety check: reject candidate if any RB-GEO-007 violation is present
+                if any(v.get("rule_id") == "RB-GEO-007" for v in cand_violations):
+                    tabu_candidates.add(tabu_key)
+                    continue
                 cand_shortfall = calc_total_shortfall(cand_layout)
                 cand_spatial_count = len(cand_violations)
                 cand_disp = calc_displacement(initial_layout, cand_layout)

@@ -6,7 +6,7 @@
       "rotation_deg": 0,
       "sku": "NW-DES-001",
       "x_mm": 8300,
-      "y_mm": -300
+      "y_mm": 300
     },
     {
       "finish_id": "F02",
@@ -118,7 +118,7 @@
       "rotation_deg": 0,
       "sku": "NW-DES-001",
       "x_mm": 7400,
-      "y_mm": 1200
+      "y_mm": 1800
     },
     {
       "finish_id": "F01",
@@ -229,7 +229,7 @@
       "placement_id": "P029",
       "rotation_deg": 0,
       "sku": "NW-STO-001",
-      "x_mm": 8600,
+      "x_mm": 8800,
       "y_mm": 1400
     },
     {
@@ -246,22 +246,22 @@
   "violations": [
     {
       "affected_placement_ids": [
-        "P009",
-        "P015"
+        "P001",
+        "P009"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
-        "walkway_gap_mm": 300
+        "unresolved_spatial_violations": 23,
+        "walkway_gap_mm": 400
       },
       "message": "Primary walkways require 900 mm clear width.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -275,22 +275,22 @@
     },
     {
       "affected_placement_ids": [
-        "P014",
-        "P019"
+        "P001",
+        "P029"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
-        "walkway_gap_mm": 600
+        "unresolved_spatial_violations": 23,
+        "walkway_gap_mm": 500
       },
       "message": "Primary walkways require 900 mm clear width.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -304,6 +304,35 @@
     },
     {
       "affected_placement_ids": [
+        "P014",
+        "P019"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 14,
+        "achieved_storage_units": 2,
+        "achieved_workstation_capacity": 14,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 23,
+        "walkway_gap_mm": 600
+      },
+      "message": "Primary walkways require 900 mm clear width.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "min_walkway_gap_mm": 900,
+        "required_seating_capacity": 14,
+        "required_storage_units": 2,
+        "required_workstation_capacity": 14
+      },
+      "rule_id": "RB-GEO-001",
+      "violation_id": "V003"
+    },
+    {
+      "affected_placement_ids": [
         "P003"
       ],
       "measured": {
@@ -312,41 +341,13 @@
         "achieved_workstation_capacity": 14,
         "egress_clearance_mm": 550,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "The marked egress path requires 1100 mm clear width.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
-        }
-      ],
-      "required": {
-        "min_egress_width_mm": 1100,
-        "required_seating_capacity": 14,
-        "required_storage_units": 2,
-        "required_workstation_capacity": 14
-      },
-      "rule_id": "RB-GEO-002",
-      "violation_id": "V003"
-    },
-    {
-      "affected_placement_ids": [
-        "P005"
-      ],
-      "measured": {
-        "achieved_seating_capacity": 14,
-        "achieved_storage_units": 2,
-        "achieved_workstation_capacity": 14,
-        "egress_clearance_mm": 550,
-        "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
-      },
-      "message": "The marked egress path requires 1100 mm clear width.",
-      "repair_options": [
-        {
-          "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -360,7 +361,7 @@
     },
     {
       "affected_placement_ids": [
-        "P007"
+        "P005"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
@@ -368,13 +369,13 @@
         "achieved_workstation_capacity": 14,
         "egress_clearance_mm": 550,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "The marked egress path requires 1100 mm clear width.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -388,63 +389,63 @@
     },
     {
       "affected_placement_ids": [
-        "P003"
+        "P007"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
-        "rear_clearance_mm": 0,
+        "egress_clearance_mm": 550,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
-      "message": "Occupied desks require 900 mm rear clearance.",
+      "message": "The marked egress path requires 1100 mm clear width.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
-        "rear_clearance_mm": 900,
+        "min_egress_width_mm": 1100,
         "required_seating_capacity": 14,
         "required_storage_units": 2,
         "required_workstation_capacity": 14
       },
-      "rule_id": "RB-GEO-004",
+      "rule_id": "RB-GEO-002",
       "violation_id": "V006"
     },
     {
       "affected_placement_ids": [
-        "P009"
+        "P015"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
-        "rear_clearance_mm": 0,
+        "egress_clearance_mm": 550,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
-      "message": "Occupied desks require 900 mm rear clearance.",
+      "message": "The marked egress path requires 1100 mm clear width.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
-        "rear_clearance_mm": 900,
+        "min_egress_width_mm": 1100,
         "required_seating_capacity": 14,
         "required_storage_units": 2,
         "required_workstation_capacity": 14
       },
-      "rule_id": "RB-GEO-004",
+      "rule_id": "RB-GEO-002",
       "violation_id": "V007"
     },
     {
       "affected_placement_ids": [
-        "P013"
+        "P001"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
@@ -452,13 +453,13 @@
         "achieved_workstation_capacity": 14,
         "rear_clearance_mm": 0,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "Occupied desks require 900 mm rear clearance.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -472,7 +473,7 @@
     },
     {
       "affected_placement_ids": [
-        "P014"
+        "P003"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
@@ -480,13 +481,13 @@
         "achieved_workstation_capacity": 14,
         "rear_clearance_mm": 0,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "Occupied desks require 900 mm rear clearance.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -500,7 +501,7 @@
     },
     {
       "affected_placement_ids": [
-        "P017"
+        "P009"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
@@ -508,13 +509,13 @@
         "achieved_workstation_capacity": 14,
         "rear_clearance_mm": 0,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "Occupied desks require 900 mm rear clearance.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -528,7 +529,7 @@
     },
     {
       "affected_placement_ids": [
-        "P018"
+        "P013"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
@@ -536,13 +537,13 @@
         "achieved_workstation_capacity": 14,
         "rear_clearance_mm": 0,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "Occupied desks require 900 mm rear clearance.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -556,31 +557,87 @@
     },
     {
       "affected_placement_ids": [
-        "P001"
+        "P014"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
+        "rear_clearance_mm": 0,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
-        "wall_offset_mm": -300
+        "unresolved_spatial_violations": 23
       },
-      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
+      "message": "Occupied desks require 900 mm rear clearance.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
-        "min_wall_offset_mm": 100,
+        "rear_clearance_mm": 900,
         "required_seating_capacity": 14,
         "required_storage_units": 2,
         "required_workstation_capacity": 14
       },
-      "rule_id": "RB-GEO-005",
+      "rule_id": "RB-GEO-004",
       "violation_id": "V012"
+    },
+    {
+      "affected_placement_ids": [
+        "P017"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 14,
+        "achieved_storage_units": 2,
+        "achieved_workstation_capacity": 14,
+        "rear_clearance_mm": 0,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 23
+      },
+      "message": "Occupied desks require 900 mm rear clearance.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "rear_clearance_mm": 900,
+        "required_seating_capacity": 14,
+        "required_storage_units": 2,
+        "required_workstation_capacity": 14
+      },
+      "rule_id": "RB-GEO-004",
+      "violation_id": "V013"
+    },
+    {
+      "affected_placement_ids": [
+        "P018"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 14,
+        "achieved_storage_units": 2,
+        "achieved_workstation_capacity": 14,
+        "rear_clearance_mm": 0,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 23
+      },
+      "message": "Occupied desks require 900 mm rear clearance.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "rear_clearance_mm": 900,
+        "required_seating_capacity": 14,
+        "required_storage_units": 2,
+        "required_workstation_capacity": 14
+      },
+      "rule_id": "RB-GEO-004",
+      "violation_id": "V014"
     },
     {
       "affected_placement_ids": [
@@ -591,70 +648,14 @@
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
+        "unresolved_spatial_violations": 23,
         "wall_offset_mm": 80
       },
       "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
-        }
-      ],
-      "required": {
-        "min_wall_offset_mm": 100,
-        "required_seating_capacity": 14,
-        "required_storage_units": 2,
-        "required_workstation_capacity": 14
-      },
-      "rule_id": "RB-GEO-005",
-      "violation_id": "V013"
-    },
-    {
-      "affected_placement_ids": [
-        "P010"
-      ],
-      "measured": {
-        "achieved_seating_capacity": 14,
-        "achieved_storage_units": 2,
-        "achieved_workstation_capacity": 14,
-        "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
-        "wall_offset_mm": 80
-      },
-      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
-      "repair_options": [
-        {
-          "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
-        }
-      ],
-      "required": {
-        "min_wall_offset_mm": 100,
-        "required_seating_capacity": 14,
-        "required_storage_units": 2,
-        "required_workstation_capacity": 14
-      },
-      "rule_id": "RB-GEO-005",
-      "violation_id": "V014"
-    },
-    {
-      "affected_placement_ids": [
-        "P014"
-      ],
-      "measured": {
-        "achieved_seating_capacity": 14,
-        "achieved_storage_units": 2,
-        "achieved_workstation_capacity": 14,
-        "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
-        "wall_offset_mm": 0
-      },
-      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
-      "repair_options": [
-        {
-          "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -668,21 +669,21 @@
     },
     {
       "affected_placement_ids": [
-        "P020"
+        "P010"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
+        "unresolved_spatial_violations": 23,
         "wall_offset_mm": 80
       },
       "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -696,21 +697,21 @@
     },
     {
       "affected_placement_ids": [
-        "P024"
+        "P014"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
-        "wall_offset_mm": 80
+        "unresolved_spatial_violations": 23,
+        "wall_offset_mm": 0
       },
       "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -724,21 +725,21 @@
     },
     {
       "affected_placement_ids": [
-        "P026"
+        "P020"
       ],
       "measured": {
         "achieved_seating_capacity": 14,
         "achieved_storage_units": 2,
         "achieved_workstation_capacity": 14,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
+        "unresolved_spatial_violations": 23,
         "wall_offset_mm": 80
       },
       "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -752,6 +753,62 @@
     },
     {
       "affected_placement_ids": [
+        "P024"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 14,
+        "achieved_storage_units": 2,
+        "achieved_workstation_capacity": 14,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 23,
+        "wall_offset_mm": 80
+      },
+      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "min_wall_offset_mm": 100,
+        "required_seating_capacity": 14,
+        "required_storage_units": 2,
+        "required_workstation_capacity": 14
+      },
+      "rule_id": "RB-GEO-005",
+      "violation_id": "V019"
+    },
+    {
+      "affected_placement_ids": [
+        "P026"
+      ],
+      "measured": {
+        "achieved_seating_capacity": 14,
+        "achieved_storage_units": 2,
+        "achieved_workstation_capacity": 14,
+        "termination_reason": "local_repair_exhausted",
+        "unresolved_spatial_violations": 23,
+        "wall_offset_mm": 80
+      },
+      "message": "Furniture must remain at least 100 mm from a wall unless wall-mounted.",
+      "repair_options": [
+        {
+          "action": "human_escalation",
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
+        }
+      ],
+      "required": {
+        "min_wall_offset_mm": 100,
+        "required_seating_capacity": 14,
+        "required_storage_units": 2,
+        "required_workstation_capacity": 14
+      },
+      "rule_id": "RB-GEO-005",
+      "violation_id": "V020"
+    },
+    {
+      "affected_placement_ids": [
         "P017",
         "P022"
       ],
@@ -761,13 +818,13 @@
         "achieved_workstation_capacity": 14,
         "overlap": true,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "Furniture footprints may not overlap.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -777,39 +834,7 @@
         "required_workstation_capacity": 14
       },
       "rule_id": "RB-GEO-006",
-      "violation_id": "V019"
-    },
-    {
-      "affected_placement_ids": [
-        "P001"
-      ],
-      "measured": {
-        "achieved_seating_capacity": 14,
-        "achieved_storage_units": 2,
-        "achieved_workstation_capacity": 14,
-        "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22,
-        "x_max": 9500,
-        "x_min": 8300,
-        "y_max": 300,
-        "y_min": -300
-      },
-      "message": "Every placement footprint must remain inside the room polygon.",
-      "repair_options": [
-        {
-          "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
-        }
-      ],
-      "required": {
-        "required_seating_capacity": 14,
-        "required_storage_units": 2,
-        "required_workstation_capacity": 14,
-        "room_height": 4200,
-        "room_width": 10200
-      },
-      "rule_id": "RB-GEO-007",
-      "violation_id": "V020"
+      "violation_id": "V021"
     },
     {
       "affected_placement_ids": [
@@ -821,13 +846,13 @@
         "achieved_workstation_capacity": 14,
         "pull_out_zone_mm": 0,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "Task chairs require a 750 mm pull-out zone.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -837,7 +862,7 @@
         "required_workstation_capacity": 14
       },
       "rule_id": "RB-GEO-008",
-      "violation_id": "V021"
+      "violation_id": "V022"
     },
     {
       "affected_placement_ids": [
@@ -849,13 +874,13 @@
         "achieved_workstation_capacity": 14,
         "pull_out_zone_mm": 0,
         "termination_reason": "local_repair_exhausted",
-        "unresolved_spatial_violations": 22
+        "unresolved_spatial_violations": 23
       },
       "message": "Task chairs require a 750 mm pull-out zone.",
       "repair_options": [
         {
           "action": "human_escalation",
-          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 22 unresolved spatial violations."
+          "trade_off": "Unresolvable room requirements: achieved 14/14 seats, 14/14 workstations with 23 unresolved spatial violations."
         }
       ],
       "required": {
@@ -865,7 +890,7 @@
         "required_workstation_capacity": 14
       },
       "rule_id": "RB-GEO-008",
-      "violation_id": "V022"
+      "violation_id": "V023"
     }
   ]
 }
