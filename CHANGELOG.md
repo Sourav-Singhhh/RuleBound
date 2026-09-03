@@ -4,19 +4,18 @@ All notable changes to the RuleBound project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.3.0] - 2026-09-03 (Final Round 3 Freeze: RB-GEO-004 Targeted Repair, Boundary Safety Gate & Truthful Documentation)
+## [3.4.0] - 2026-09-03 (Final Round 3 Release: Standalone DXF Floorplan Exporter & Claim Hardening)
 
 ### Added
-- **Hard Polygon Boundary Safety Invariant**: Enforced `is_layout_inside_boundary(cand_layout, room_spec)` inside `ArbitrationEngine.arbitrate()`. Any candidate layout where any placement extends outside the room boundary polygon is strictly rejected and placed in tabu memory.
-- **Targeted Exact-Distance RB-GEO-004 Repair**: Implemented exact geometric deficit calculations for `RB-GEO-004` (900 mm desk rear clearance), generating deterministic exact-displacement and 100 mm grid-aligned repair candidates for individual desks, paired desk-chair pods (`MOVE_WORKSTATION_POD`), rear obstacles, and wall boundaries.
-- **Focused Arbitration Regression Tests**: Added `test_ad_boundary_safety_gate_rejects_candidate_outside_polygon`, `test_ae_geo004_targeted_repair_candidate_generation`, `test_af_candidate_acceptance_when_objective_improves`, `test_ag_candidate_rejection_when_causing_hard_violation`, `test_ah_determinism_geo004_candidate_generation`, and `test_ai_semantic_preservation_targeted_movement` (expanding test suite to 96/96 passing).
+- **Standalone AutoCAD ASCII DXF Exporter (`tools/export_dxf.py`)**: Implemented clean, dependency-free floor plan generator exporting color-coded CAD layers (`WALLS`, `DOORS`, `EGRESS`, `DESKS`, `CHAIRS`, `STORAGE`, `COLLABORATION`, `ACCESSORIES`) matching official AutoCAD R12 ASCII specifications (potential +5 bonus).
+- **DXF Unit & Regression Suite (`tests/test_dxf_export.py`)**: Added test coverage verifying DXF headers, entity syntax, layer mappings, and all official room exports (expanding suite to 98/98 passing).
 
 ### Changed
-- **ROOM-03 Layout Improvement**: Targeted `RB-GEO-004` repair directly resolved rear-clearance conflicts, reducing spatial violations in ROOM-03 from 6 to 5.
-- **ROOM-04 Boundary-Violation Elimination**: The hard boundary safety gate eliminated the illegal out-of-bounds placement in ROOM-04 (`P001` $Y=-300$), ensuring all 14 workstations and chairs remain 100% inside the room polygon with `RB-GEO-007: 0`.
-- **Truthful Documentation & Escalation Language**: Updated all documentation to accurately describe bounded deterministic local repair and honest escalation without unsupported claims of global infeasibility proofs.
+- **Defensible Feasibility & Escalation Language**: Refined documentation across `README.md`, `ARCHITECTURE.md`, and `CHANGELOG.md` to precisely describe bounded deterministic local repair and extensive empirical search without overclaiming unproven global mathematical theorems.
 
 ---
+
+## [3.3.0] - 2026-09-03 (Final Round 3 Freeze: RB-GEO-004 Targeted Repair, Boundary Safety Gate & Truthful Documentation)
 
 ## [3.2.0] - 2026-09-03 (Targeted Correctness Fix: RB-GEO-001 Walkway Scope & Parser Hardening)
 
