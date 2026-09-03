@@ -701,9 +701,12 @@ class GeneratorEngine:
             total_pod_envelope = pod_depth + pullout_needed
             mid_y = (min_y + max_y) // 2
 
-            candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - total_pod_envelope + 1, 1200))
+            # Deterministic row pitch derived from workstation pod depth and governing 900mm rear clearance
+            row_pitch = pod_depth + 900
+
+            candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - total_pod_envelope + 1, row_pitch))
             if not candidate_y_rows:
-                candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - pod_depth - 100 + 1, 1200))
+                candidate_y_rows = list(range(((min_y + 300) // 100) * 100, max_y - pod_depth - 100 + 1, row_pitch))
 
             row_scores = []
             for cur_y in candidate_y_rows:
