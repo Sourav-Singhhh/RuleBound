@@ -141,6 +141,8 @@ OUTPUT/
 - **Zero LLM in Execution Engine**: Generative text parsing is isolated to initial proposal generation. Constraint validation, arbitration, and pricing contain zero LLM calls, external API dependencies, or non-deterministic operations.
 - **Constraint Authority**: Generator heuristics serve strictly for candidate placement ranking; `src/constraints.py` holds sole authoritative rule validation.
 - **Schema & Determinism Invariant**: Output layout and quote JSONs conform strictly to official schemas with `additionalProperties: false` and render byte-identically across environments.
+- **Dependency & Scope Note**: Azure deployment and Entra ID integration were intentionally left out of this submission to keep the scored deterministic core dependency-free and fully auditable on standard runtime environments.
+
 
 ## Judge Entry Point
 
