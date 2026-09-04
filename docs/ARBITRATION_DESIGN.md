@@ -212,7 +212,6 @@ Therefore:
 - Rule precedence in arbitration is an **implementation-level deterministic tie-break policy**.
 - It is transparent, fully reproducible, and **never presented as an official LV8 rule**.
 
-### 6.2 Deterministic Ranking Key
 ### 6.1 Deterministic Lexicographic Objective Model
 
 Arbitration uses a deterministic **Lexicographic Objective Model** for candidate evaluation, state transitions, and candidate ranking.
@@ -256,6 +255,18 @@ Single-placement repairs can become trapped when a workstation is governed by co
   - Formatted canonically as `POD_P001_P002_DX_+100_DY_+0`.
   - Assigned implementation-level operation rank `0` to prioritize atomic pod moves before single-placement breakdown.
   - Note: `MOVE_WORKSTATION_POD` is an implementation-level arbitration operator, not an official LV8 rule.
+
+### 6.2.2 Targeted Exact-Distance RB-GEO-004 Rear-Clearance Repair
+For `RB-GEO-004` (occupied desk 900 mm rear clearance), arbitration computes the exact geometric shortfall to 900 mm and generates deterministic exact-deficit and grid-aligned displacements for the desk, paired pod (`MOVE_WORKSTATION_POD`), and rear obstacle.
+
+- **Shortfall Calculation**: $\Delta_{\text{clearance}} = 900\text{ mm} - \text{measured\_clearance}$.
+- **Candidate Displacements**: Evaluates exact shortfall $\Delta_{\text{clearance}}$ and integer grid-aligned ceil $\lceil\Delta_{\text{clearance}} / 100\rceil \times 100\text{ mm}$ along the desk orientation axis.
+- **Obstacle & Pod Shifts**: Generates targeted nudges for conflicting rear placements and paired pod shifts to relieve rear clearance bottlenecks without de-synchronizing desk-chair relationships.
+
+### 6.2.3 Hard Polygon Boundary Safety Invariant
+`is_layout_inside_boundary(cand_layout, room_spec)` guarantees that invalid geometry is never an accepted repair state:
+- Any candidate repair shifting a furniture placement footprint outside the authoritative room polygon is strictly rejected and marked tabu.
+- Bounding box checks `is_box_inside_polygon(bbox, boundary_coords)` ensure 100% boundary containment for all rotated furniture envelopes.
 
 ### 6.3 Strict Improvement Gate
 A candidate operation is eligible ONLY if:
