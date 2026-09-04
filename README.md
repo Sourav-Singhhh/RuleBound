@@ -5,7 +5,15 @@ A deterministic room-layout, constraint-validation, arbitration, and pricing eng
 ## Final Demonstration Video
 
 - **Walkthrough Video (approx. 6–7 minutes)**: [Watch the Final Demonstration Video](https://drive.google.com/drive/folders/1D_fuR9CQA3gmWXxntB5tKH4uqOZlc8x4?usp=sharing)
-  *The video includes both the main RuleBound core project demonstration (pipeline execution, constraint validation, bounded arbitration, determinism, integer pricing, DXF floorplan export) and the live Azure deployment with Microsoft Entra ID authentication.*
+  *The walkthrough video provides a complete end-to-end demonstration covering:*
+  - **Core RuleBound Pipeline**: Layout generation, heuristic placement, and pipeline CLI execution
+  - **Constraint Validation**: Authoritative geometric validation across all 8 spatial rules
+  - **Unsatisfiable-Case Handling**: Universal furniture preservation and failure-safe escalation
+  - **Byte-Identical Determinism**: Multi-run and multi-seed byte-identical output verification
+  - **Exact Integer Pricing**: Integer INR arithmetic, basis-point discounts, labor, freight, and rule provenance
+  - **DXF Floorplan Export**: Standalone AutoCAD R12 ASCII DXF generation with semantic layers
+  - **Azure Cloud Deployment**: Azure App Service Linux hosting with zero external dependencies
+  - **Microsoft Entra ID Authentication**: Live Easy Auth v2 gateway verification (unauthenticated challenge & authenticated execution)
 
 ## Overview
 

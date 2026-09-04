@@ -3,8 +3,9 @@
 ## 1. Recording Information
 - **Repository URL**: `https://github.com/Sourav-Singhhh/RuleBound.git`
 - **Release Branch**: `main`
-- **Target Video Duration**: approx. 6–7 minutes (combines core project demo + Azure deployment demo)
+- **Target Video Duration**: approx. 6–7 minutes
 - **Final Demonstration Video Link**: [Watch the Final Demonstration Video](https://drive.google.com/drive/folders/1D_fuR9CQA3gmWXxntB5tKH4uqOZlc8x4?usp=sharing)
+- **Scope Covered**: Core RuleBound pipeline, constraint validation, unsatisfiable-case handling, determinism, integer pricing, DXF floorplan export, Azure App Service deployment, and Microsoft Entra ID authentication.
 
 ---
 
