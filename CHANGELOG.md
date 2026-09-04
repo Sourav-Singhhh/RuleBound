@@ -4,7 +4,25 @@ All notable changes to the RuleBound project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.4.0] - 2026-09-03 (Final Round 3 Release: Standalone DXF Floorplan Exporter & Claim Hardening)
+## [3.5.0] - 2026-09-04 (Final Round 3 Submission Release: Workstation Spacing & Fallback Clearance Hardening)
+
+### Added
+- **Dynamic Workstation Row-Pitch Calculation (`src/generator.py`)**: Workstation row pitch is dynamically derived from physical pod depth plus the mandatory 900 mm rear clearance (`RB-GEO-004`), preventing desk rows from compressing below legal clearance bounds (`tests/test_row_pitch.py`).
+- **Fallback Desk Rear-Clearance Enforcement (`src/generator.py`)**: Enforced `RB-GEO-004` rear-clearance reservations across fallback desk placement and secondary furniture searches via `clearance_boxes`, preventing uncoupled fallback desks from stacking into unreserved rear clearances (`tests/test_fallback_clearance.py`).
+- **Regression Suite Expansion (`tests/test_row_pitch.py`, `tests/test_fallback_clearance.py`)**: Added test coverage verifying dynamic row pitch, fallback clearance bounds, multi-room validation, and deterministic regression (expanding suite from 98 to 105/105 passing).
+
+### Changed
+- **Total Spatial Violations Reduced by 60.5%**: Total spatial violations across the 5 benchmark rooms dropped from 43 to 17, completely eliminating all `RB-GEO-004` violations across the entire room set:
+  - `ROOM-01`: 3 violations (down from 8)
+  - `ROOM-02`: 0 violations (`valid`, priced at ₹2,70,933 INR)
+  - `ROOM-03`: 2 violations (down from 7)
+  - `ROOM-04`: 6 violations (down from 21)
+  - `ROOM-05`: 6 violations (down from 7)
+- **Submission Metric Alignment**: Synchronized `README.md`, `SUBMISSION_CHECKLIST.md`, and demo documentation to reflect 105/105 unit tests, verified 10-file byte-identical determinism, verified DXF floor plan assets (`DXF_OUTPUT/`), and 100% semantic furniture retention.
+
+---
+
+## [3.4.0] - 2026-09-03 (Standalone DXF Floorplan Exporter & Claim Hardening)
 
 ### Added
 - **Standalone AutoCAD ASCII DXF Exporter (`tools/export_dxf.py`)**: Implemented clean, dependency-free floor plan generator exporting color-coded CAD layers (`WALLS`, `DOORS`, `EGRESS`, `DESKS`, `CHAIRS`, `STORAGE`, `COLLABORATION`, `ACCESSORIES`) matching official AutoCAD R12 ASCII specifications (potential +5 bonus).
@@ -15,7 +33,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [3.3.0] - 2026-09-03 (Final Round 3 Freeze: RB-GEO-004 Targeted Repair, Boundary Safety Gate & Truthful Documentation)
+## [3.3.0] - 2026-09-03 (RB-GEO-004 Targeted Repair, Boundary Safety Gate & Truthful Documentation)
+
+### Added
+- **Targeted Clearance Repair (`ArbitrationEngine`)**: Calculates exact geometric shortfall displacements for `RB-GEO-004` rear-clearance conflicts to directly translate offending items into clear space.
+- **Hard Boundary Safety Gate (`ArbitrationEngine`)**: Rejects any candidate repair placement whose bounding box extends outside the room boundary polygon.
+
+### Changed
+- **Boundary & Clearance Preconditions**: Strengthened candidate evaluation preconditions to enforce boundary containment before testing clearance improvements.
+
+---
 
 ## [3.2.0] - 2026-09-03 (Targeted Correctness Fix: RB-GEO-001 Walkway Scope & Parser Hardening)
 
