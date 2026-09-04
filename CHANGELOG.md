@@ -12,12 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Regression Suite Expansion (`tests/test_row_pitch.py`, `tests/test_fallback_clearance.py`)**: Added test coverage verifying dynamic row pitch, fallback clearance bounds, multi-room validation, and deterministic regression (expanding suite from 98 to 105/105 passing).
 
 ### Changed
-- **Total Spatial Violations Reduced by 60.5%**: Total spatial violations across the 5 benchmark rooms dropped from 43 to 17, completely eliminating all `RB-GEO-004` violations across the entire room set:
-  - `ROOM-01`: 3 violations (down from 8)
+- **Zero RB-GEO-004 Violations Across All Rooms**: Eliminated all desk rear-clearance (`RB-GEO-004`) violations across the entire room set, yielding 17 total spatial violations across the 5 benchmark rooms:
+  - `ROOM-01`: 3 violations
   - `ROOM-02`: 0 violations (`valid`, priced at ₹2,70,933 INR)
-  - `ROOM-03`: 2 violations (down from 7)
-  - `ROOM-04`: 6 violations (down from 21)
-  - `ROOM-05`: 6 violations (down from 7)
+  - `ROOM-03`: 2 violations
+  - `ROOM-04`: 6 violations
+  - `ROOM-05`: 6 violations
 - **Submission Metric Alignment**: Synchronized `README.md`, `SUBMISSION_CHECKLIST.md`, and demo documentation to reflect 105/105 unit tests, verified 10-file byte-identical determinism, verified DXF floor plan assets (`DXF_OUTPUT/`), and 100% semantic furniture retention.
 
 ---
