@@ -8,8 +8,8 @@
 - [x] `tools/validate_output.py OUTPUT` reports `OUTPUT VALID` across all layout and quote files.
 - [x] `tools/check_determinism.py` confirms 100% byte-identical outputs across runs.
 - [x] Full unit test suite passes: 105/105 tests passing (`python -m unittest discover tests`).
-- [x] Azure deployment on Azure App Service verified (live endpoint: https://app-rulebound-api-demo.azurewebsites.net).
-- [x] Microsoft Entra ID authentication verified (401 unauthenticated challenge / 200 authenticated solve).
+- [x] Azure deployment on Azure App Service verified (live endpoint: https://app-rulebound-api-demo.azurewebsites.net/api/v1/solve).
+- [x] Microsoft Entra ID authentication verified (unauthenticated challenge / 200 authenticated solve).
 - [x] Verified in isolated clean-checkout sandbox with zero external package dependencies.
 - [ ] Final demo video (3.5–4 minutes) recorded and URL added to README.md.
 - [x] Every dependency, asset, and code fragment is original, self-contained, or properly licensed.

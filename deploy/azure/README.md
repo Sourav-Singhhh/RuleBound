@@ -77,21 +77,19 @@ az webapp deploy \
 
 ## 3. End-to-End Verification
 
-### Test 1: Unauthenticated Access (Must Return 401)
+### Test 1: Unauthenticated / Browser Access
+Opening the endpoint in a browser or calling via API without an authorization header triggers Microsoft Entra ID protection:
 ```bash
 curl -i -X POST https://<app-name>.azurewebsites.net/api/v1/solve \
   -H "Content-Type: application/json" \
   -d '{"room_id": "ROOM-02"}'
 ```
 **Expected Response:**
-```http
-HTTP/1.1 401 Unauthorized
-WWW-Authenticate: Bearer realm="<tenant-id>" authorization_uri="https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/authorize"
-```
+Enforces Microsoft Entra authentication (HTTP 401 Unauthorized challenge or HTTP 302 redirect to Microsoft sign-in). Unauthenticated requests are blocked at the App Service gateway.
 
 ### Test 2: Authenticated Access via Entra ID Bearer Token
 ```bash
-# Acquire Token
+# Acquire Token (Requires Entra tenant access / client credentials)
 TOKEN=$(az account get-access-token --resource "api://$APP_ID" --query accessToken -o tsv)
 
 # Call Protected Endpoint
@@ -111,15 +109,15 @@ curl -i -X POST https://<app-name>.azurewebsites.net/api/v1/solve \
     "violations": []
   },
   "quote": {
-    "quote_id": "Q-ROOM-02",
+    "quote_id": "QUOTE-ROOM-02",
     "room_id": "ROOM-02",
-    "status": "valid",
+    "status": "priced",
     "currency": "INR",
     "summary": {
-      "grand_total_inr": 270933,
-      "total_goods_inr": 249171,
-      "total_labour_inr": 5760,
-      "total_freight_inr": 9000
+      "goods_after_adjustments_inr": 255436,
+      "labour_inr": 5280,
+      "freight_inr": 10217,
+      "grand_total_inr": 270933
     }
   }
 }

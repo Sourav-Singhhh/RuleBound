@@ -147,13 +147,13 @@ RuleBound provides a verified, zero-dependency cloud deployment layer on **Azure
 
 - **Live Endpoint**: `https://app-rulebound-api-demo.azurewebsites.net/api/v1/solve`
 - **Authentication**: Protected by Microsoft Entra ID (App Service Authentication v2).
-  - Unauthenticated requests receive `HTTP 401 Unauthorized`.
-  - Authenticated requests bearing a valid Microsoft Entra OAuth2 bearer token execute the RuleBound pipeline and return schema-valid JSON.
+  - Unauthenticated / browser access triggers the Microsoft Entra authentication flow (redirecting unauthenticated users to Microsoft login or returning a 401/302 challenge).
+  - Authenticated POST requests bearing a valid Microsoft Entra OAuth2 bearer token execute the live RuleBound pipeline and return schema-valid JSON.
 - **Verified Execution**: Verified end-to-end against `ROOM-02` resulting in status `valid`, 0 spatial violations, and exact quote `₹270,933`.
 - **Deployment Artifacts**: Self-contained Bicep infrastructure-as-code and pure Python WSGI service wrapper reside under `deploy/azure/`.
 - **Architecture Isolation**: The cloud layer is a strictly isolated wrapper around the deterministic local core, adding zero dependencies to the root execution path.
 
-> **Access & Verification Note**: Azure deployment is protected by Microsoft Entra ID through App Service Authentication. The public endpoint is reachable, while solve requests require valid Entra authentication. The deployment has been verified end-to-end with a real OAuth2 bearer token. Azure + Microsoft Entra ID deployment is implemented and end-to-end verified; submitted as a bonus-track implementation.
+> **Access & Verification Note**: The live endpoint is an Entra-protected backend API endpoint, not a public browser demo page. Opening the URL in a browser or calling without authorization triggers the Microsoft Entra ID authentication flow. Authenticated API execution requires a valid OAuth2 bearer token issued for the tenant. For frictionless independent evaluation, judges should use the local CLI runner and test suite (`python starter/python/runner.py --input data --output OUTPUT`), while the Azure deployment demonstrates the deployed authenticated service for the Azure + Entra ID bonus track.
 
 ## Judge Entry Point
 
@@ -163,7 +163,7 @@ Judges can quickly evaluate the implementation using these key touchpoints:
 3. **Determinism Checker**: `python tools/check_determinism.py --command "python starter/python/runner.py --input {input} --output {output}" --input data --work-dir det_work`
 4. **Interactive Trace Demo**: `python demo_trace.py`
 5. **Standalone DXF Exporter (Bonus Track)**: `python tools/export_dxf.py --input data --output OUTPUT --dxf-dir DXF_OUTPUT`
-6. **Azure + Entra ID Deployment (Bonus Track)**: [deploy/azure/README.md](deploy/azure/README.md) (Live endpoint: `https://app-rulebound-api-demo.azurewebsites.net`)
+6. **Azure + Entra ID Deployment (Bonus Track)**: [deploy/azure/README.md](deploy/azure/README.md) (Live protected endpoint: `https://app-rulebound-api-demo.azurewebsites.net/api/v1/solve`)
 7. **Detailed Architecture Document**: [ARCHITECTURE.md](ARCHITECTURE.md)
 8. **Project Changelog**: [CHANGELOG.md](CHANGELOG.md)
 9. **Committed Output Artifacts**: [OUTPUT/](OUTPUT/)
