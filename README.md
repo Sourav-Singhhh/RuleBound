@@ -2,9 +2,10 @@
 
 A deterministic room-layout, constraint-validation, arbitration, and pricing engine for the RuleBound Sealed Build Challenge.
 
-## Demonstration Video
+## Final Demonstration Video
 
-- **Walkthrough Video**: [Demo video — replace with final hosted URL]
+- **Walkthrough Video (approx. 6–7 minutes)**: [Watch the Final Demonstration Video](https://drive.google.com/drive/folders/1D_fuR9CQA3gmWXxntB5tKH4uqOZlc8x4?usp=sharing)
+  *The video includes both the main RuleBound core project demonstration (pipeline execution, constraint validation, bounded arbitration, determinism, integer pricing, DXF floorplan export) and the live Azure deployment with Microsoft Entra ID authentication.*
 
 ## Overview
 

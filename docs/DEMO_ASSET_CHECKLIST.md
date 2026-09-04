@@ -3,8 +3,8 @@
 ## 1. Recording Information
 - **Repository URL**: `https://github.com/Sourav-Singhhh/RuleBound.git`
 - **Release Branch**: `main`
-- **Target Video Duration**: 3.5 – 4.0 minutes (max 5 minutes)
-- **README Link Placeholder**: Line 7 in `README.md` (`- **Walkthrough Video**: [Demo video — replace with final hosted URL]`)
+- **Target Video Duration**: approx. 6–7 minutes (combines core project demo + Azure deployment demo)
+- **Final Demonstration Video Link**: [Watch the Final Demonstration Video](https://drive.google.com/drive/folders/1D_fuR9CQA3gmWXxntB5tKH4uqOZlc8x4?usp=sharing)
 
 ---
 
@@ -21,7 +21,7 @@
 - [ ] No private information or local path leaks visible
 - [ ] Terminal font and screen resolution clean and legible
 - [ ] No extraneous background apps or notifications visible
-- [ ] Video duration strictly within 3.5–4.0 minutes
+- [x] Video duration approx. 6–7 minutes (combines core project demo + Azure deployment demo)
 
 ---
 

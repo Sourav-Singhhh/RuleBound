@@ -11,6 +11,6 @@
 - [x] Azure deployment on Azure App Service verified (live endpoint: https://app-rulebound-api-demo.azurewebsites.net/api/v1/solve).
 - [x] Microsoft Entra ID authentication verified (unauthenticated challenge / 200 authenticated solve).
 - [x] Verified in isolated clean-checkout sandbox with zero external package dependencies.
-- [ ] Final demo video (3.5–4 minutes) recorded and URL added to README.md.
+- [x] Final demo video (approx. 6–7 minutes, covering core project + Azure deployment) recorded: [Watch the Final Demonstration Video](https://drive.google.com/drive/folders/1D_fuR9CQA3gmWXxntB5tKH4uqOZlc8x4?usp=sharing).
 - [x] Every dependency, asset, and code fragment is original, self-contained, or properly licensed.
 
